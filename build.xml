@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<project name="Build CASL" default="make" xmlns:ac="antlib:net.sf.antcontrib">
+
+	<property file="casl.properties" />
+
+	<property name="CASL_DISTDIR" value="dist" />
+	<property name="CASL_BUILDDIR" value="${CASL_DISTDIR}/tmp" />
+	<property name="CASL_TARGETDIR" value="${CASL_DISTDIR}/target" />
+	<property name="CASL_NAME" value="casl" />
+	<property name="CASL_VERSION" value="0.1" />
+	<property name="CASL_PLUGINLIST" value="adct-autogen,schema-converter,schema-reorganizer,sddl-autogen,uuid-autogen" />
+
+	<property name="COMPILE.DEBUG" value="false" />
+	<property name="COMPILE.DEPRECATION" value="false" />
+	<property name="COMPILE.OPTIMIZE" value="true" />
+	<property name="COMPILE.ENCODING" value="UTF8" />
+
+        <path id="compile.classpath">
+                <pathelement path="${CASL_BUILDDIR}/main" />
+                <fileset dir="lib">
+                        <include name="**/*.jar"/>
+                </fileset>
+        </path>
+
+        <pathconvert property="manifest.classpath" pathsep=" ">
+		<path>
+			<fileset dir="lib">
+				<include name="**/*.jar"/>
+			</fileset>
+		</path>
+		<flattenmapper />
+        </pathconvert>
+
+	<typedef  uri="antlib:net.sf.antcontrib">
+		 <classpath refid="compile.classpath" />
+	</typedef>
+
+	<target name="clean">
+		<delete dir="${CASL_DISTDIR}" failonerror="false" />
+		<delete dir="${CASL_BUILDDIR}" failonerror="false" />
+	</target>
+
+	<target name="prepare">
+		<mkdir dir="${CASL_TARGETDIR}/bin" />
+		<mkdir dir="${CASL_TARGETDIR}/lib/plugin" />
+		<mkdir dir="${CASL_TARGETDIR}/share" />
+		<mkdir dir="${CASL_BUILDDIR}/main" />
+		<mkdir dir="${CASL_BUILDDIR}/plugin" />
+		<ac:for list="${CASL_PLUGINLIST}" param="plugin">
+			<sequential>
+				<mkdir dir="${CASL_BUILDDIR}/plugin/@{plugin}" />
+			</sequential>
+		</ac:for>
+	</target>
+
+	<target name="compile" depends="prepare">
+		<javac srcdir="src/main"
+			destdir="${CASL_BUILDDIR}/main"
+			debug="${COMPILE.DEBUG}"
+			deprecation="${COMPILE.DEPRECATION}"
+			encoding="${COMPILE.ENCODING}"
+			optimize="${COMPILE.OPTIMIZE}"
+			verbose="false">
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<ac:for list="${CASL_PLUGINLIST}" param="plugin" keepgoing="true">
+			<sequential>
+				<javac srcdir="src/plugin/@{plugin}"
+					destdir="${CASL_BUILDDIR}/plugin/@{plugin}"
+					debug="${COMPILE.DEBUG}"
+					deprecation="${COMPILE.DEPRECATION}"
+					encoding="${COMPILE.ENCODING}"
+					optimize="${COMPILE.OPTIMIZE}"
+					verbose="false">
+					<classpath refid="compile.classpath"/>
+				</javac>
+			</sequential>
+		</ac:for>
+	</target>
+
+	<target name="makejar" depends="clean,compile">
+		<jar destfile="${CASL_TARGETDIR}/${CASL_NAME}-${CASL_VERSION}.jar">
+			<manifest>
+				<attribute name="Main-Class" value="net.aepik.casl.ui.Main" />
+				<attribute name="Class-Path" value="${manifest.classpath}" />
+				<!--
+				<attribute name="Class-Path" value="jdic.jar uuid-2.1.1.jar" />
+				-->
+			</manifest>
+			<fileset dir="${CASL_BUILDDIR}/main">
+				<include name="**/*.class" />
+			</fileset>
+		</jar>
+		<ac:for list="${CASL_PLUGINLIST}" param="plugin" keepgoing="true">
+			<sequential>
+				<jar destfile="${CASL_TARGETDIR}/lib/plugin/@{plugin}-${CASL_VERSION}.jar">
+					<fileset dir="${CASL_BUILDDIR}/plugin/@{plugin}">
+						<include name="**/*.class" />
+					</fileset>
+				</jar>
+			</sequential>
+		</ac:for>
+	</target>
+
+	<target name="make" depends="makejar">
+		<move file="${CASL_TARGETDIR}/${CASL_NAME}-${CASL_VERSION}.jar" todir="${CASL_TARGETDIR}/lib" />
+		<copy todir="${CASL_TARGETDIR}/lib">
+			<fileset dir="lib"/>
+		</copy>
+		<copy todir="${CASL_TARGETDIR}/lib/resources">
+			<fileset dir="src/resources"/>
+		</copy>
+		<copy todir="${CASL_TARGETDIR}/share">
+			<fileset dir="misc"/>
+		</copy>
+		<copy todir="${CASL_TARGETDIR}/bin">
+			<fileset dir="src/install"/>
+		</copy>
+		<chmod file="${CASL_TARGETDIR}/bin/casl.sh" perm="755"/>
+	</target>
+
+</project>
+

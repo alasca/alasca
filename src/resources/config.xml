@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>CASL v0.1</comment>
+<entry key="FrameTitle">CASL</entry>
+<entry key="FrameStatus">Tapez F1 pour obtenir l'aide</entry>
+<entry key="IconFile">./lib/resources/casl.png</entry>
+<entry key="PluginDir">./lib/plugin</entry>
+<entry key="Version">0.1</entry>
+</properties>

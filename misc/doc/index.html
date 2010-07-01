@@ -1,0 +1,423 @@
+<html>
+
+<head>
+	<title>Documentation CASL : Manuel utilisateur</title>
+	<link rel="stylesheet" type="text/css" href="screen.css" media="screen" />
+</head>
+
+<body>
+
+
+<div class="titre">
+	<a name="top"></a>
+	<img src="logo.png" />
+	<h1>Documentation CASL : Manuel utilisateur</h1>
+	- <strong>C</strong>onvertisseur <strong>A</strong>utomatique de <strong>S</strong>chéma <strong>L</strong>dap -
+</div>
+<p>
+	Cette documentation décrit une utilisation basique du logiciel, ainsi que les options
+	et possibilités proposées.
+</p>
+<p>
+	<h3>Sommaire</h3>
+</p>
+<p>
+	<ul>
+		<li>1. <a href="#introduction">Introduction</a></li>
+		<li>2. <a href="#utilisation_logicielle">Utilisation globale du logiciel</a></li>
+		<li>3. <a href="#visualiser_schema">Visualiser un schéma LDAP</a></li>
+		<ul>
+			<li>3.1. <a href="#proprietes_generales">Les propriétés générales</a></li>
+			<li>3.2. <a href="#operations_objets">Opérations sur les objets et attributs</a></li>
+		</ul>
+		<li>4. <a href="#manipuler_schema">Manipuler un schéma</a></li>
+		<ul>
+			<li>4.1. <a href="#reorganiser_schema">Réorganiser un schéma</a></li>
+			<li>4.2. <a href="#convertir_schema">Convertir un schéma</a></li>
+		</ul>
+		<li>5. <a href="#plugins">Plugins</a></li>
+		<ul>
+			<li>5.1. <a href="#plugins_ad">Active Directory</a></li>
+		</ul>
+		<li>6. <a href="#licence">Licence</a></li>
+	</ul>
+</p>
+
+<p>
+	<a name="introduction"></a>
+	<h2>1. Introduction</h2>
+</p>
+<p>
+	Ce logiciel a été développé à la base pour répondre un besoin spécifique : migrer une partie
+	des données d'un schéma d'un annuaire IBM Directory Server vers l'annuaire propriétaire de
+	Microsoft, à savoir Active Directory. Pour l'utilisation basique que nous en avons fait,
+	ce logiciel a répondu aux attentes.
+</p>
+<p>
+	Le logiciel a été dévéloppé autour d'une idée principale : la modularité. En effet, il nous
+	a paru évident de pouvoir proposer un système permettant de mettre à jour facilement les
+	fonctionnalités du logiciel. Ainsi, l'idée d'utiliser un système de gestion de plugins s'est
+	imposée d'elle même. CASL dispose donc à la base de fonctionnalités relativement réduites
+	(gestion des fichiers ouverts, renommage de fichiers, visualisation/modifications des
+	propriétés et objets d'un schéma, aide). Par la suite, l'ensemble des fonctionnalitées
+	supplémentaires se trouve être des modules bien spécifiques, ayant des points d'entrées
+	réduits dans l'application principale.
+</p>
+<p>
+	Enfin, nous nous appuyons sur les recommendations fournies par la <a href="http://www.rfc-editor.org/rfc/rfc2252.txt" target="_blank">
+	RFC 2252</a> (ou le <a href="datas/rfc2252_fr.pdf" target="_blank">document PDF en français</a>).
+	Vous y trouverez toutes les informations sur le standard utilisé, les mots-clés et syntaxes
+	utilisées pour les déclarations d'objets et attributs d'un schéma LDAP.
+</p>
+<p>
+	[<a href="#top">sommaire</a>]
+</p>
+<p>
+	<a name="utilisation_logicielle"></a>
+	<h2>2. Utilisation globale du logiciel</h2>
+</p>
+<p>
+	CASL dispose d'une interface graphique relativement intuitive. Une barre de menu
+	classique est visible, elle permet d'accéder aux différentes fonctions du logiciel.
+</p>
+<p>
+	Le but du logiciel est avant tout de pouvoir manipuler des fichiers spécifiques, contenant
+	des informations propres aux schémas des différents annuaires pris en charge, avec des
+	syntaxes différentes. C'est pourquoi, l'ouverture/fermeture	multiples de fichier est
+	facilitée grâce à l'utilisation d'un système d'onglets. Ainsi, chaque fichier ouvert est
+	représenté par un onglet mis en évidence, quand le fichier concerné dispose du focus.
+</p>
+<p class="image">
+	<img src="images/openFile1.png" />
+	<br/>
+	Figure 01 - Manipulation de fichiers
+</p>
+<p>
+	Lorsqu'il s'agit d'ouvrir un fichier, il faut spécifier quelle syntaxe utilisée pour lire
+	le fichier. Qu'est ce qu'une syntaxe ? Il faut bien comprendre que le fichier que nous
+	tentons d'ouvrir est un fichier spécifique, écrit dans un language propre à l'annuaire
+	LDAP qui l'utilise, ce fichier peut donc être lisible ou non. La sélection de la syntaxe
+	va permettre au logiciel de savoir comment récupérer toutes les informations importantes
+	de ce fichier : un fichier propre à IBM étant structuré vraiment différemment d'un fichier
+	propre à Microsoft. Nous proposons essentiellement trois syntaxes différentes :
+	<ul>
+		<li>la syntaxe comme décrit dans la RFC 2252</li>
+		<li>la syntaxe utilisé par IBM Directory Server</li>
+		<li>la syntaxe utilisé par Microsoft Active Directory</li>
+	</ul>
+	Cependant, malgré que ces trois syntaxes soient proposées, en réalité, seules les deux
+	premières peuvent être utilisées en lecture de fichier (ces deux syntaxes sont en effet
+	très proches, contrairement à la troisième).
+</p>
+<p>
+	[<a href="#top">sommaire</a>]
+</p>
+
+<p>
+	<a name="visualiser_schema"></a>
+	<h2>3. Visualiser un schéma LDAP</h2>
+</p>
+<p>
+	La figure 1 nous montre qu'il est aussi possible de visualiser les données d'un schéma. Il
+	est ainsi possible d'accéder à quelques informations. Nous pouvons les séparer essentiellement
+	en deux catégories : les propriétés générales et les propriétés des objets.
+</p>
+<p>
+	[<a href="#top">sommaire</a>]
+</p>
+<p>
+	<a name="proprietes_generales"></a>
+	<h3>3.1. Les propriétés générales</h3>
+</p>
+<p>
+	Il est possible d'accéder aux propriétés du schéma de deux façons. Soit par la barre de menu
+	standard en haut de l'application (<em>Edition - Propriétées</em>), soit en faisant un clic
+	droit sur l'onglet adéquate. Vous accéderez alors un menu vous proposant plusieurs choix, dont
+	accéder aux propriétés du schéma.
+</p>
+<p class="image">
+	<img src="images/viewSchemaProperties1.png" />
+	<br/>
+	Figure 02 - Les propriétés du schéma
+</p>
+<p>
+	Les propriétés du schéma permettent de fixer des paramêtres globaux aux objets qu'il contient.
+	Par exemple, il est possible de fixer le DN (Distinguished Name) global. Il est vous est possible
+	de fixer autant de paramêtres que vous le souhaitiez, pour le peu que les syntaxes du logiciel
+	les prennent en compte.
+</p>
+<p>
+	<strong>Paramêtres de propriétés RFC et IBM</strong>
+	<ul>
+		<li>
+			<u>DN</u>
+			<p>
+				exemple: <em>"DN: cn=Schema,cn=Configuration,dc=domaine,dc=com"</em>
+			</p>
+		</li>
+	</ul>
+	<strong>Paramêtres de propriétés Active Directory</strong>
+	<ul>
+		<li>
+			<u>DN</u>
+			<p>
+				exemple: <em>"DN: cn=Schema,cn=Configuration,dc=domaine,dc=com"</em>
+			</p>
+		</li>
+		<li>
+			<u>defaultObjectCategory</u>
+			<p>
+				exemple: <em>"defaultObjectCategory: cn=Attribute-Schema,cn=Schema,cn=Configuration,dc=domaine,dc=com"</em>
+			</p>
+		</li>
+		<li>
+			<u>objectClassCategory</u>
+			<p>
+				Le paramêtre <em>objectClassCategory</em> prend au choix trois valeurs possibles, et aucune autre. Les valeurs
+				sont "1" pour indiquer que l'objet concerné est structurel (STRUCTURAL), "2" pour abstrait (ABSTRACT) et "3"
+				pour auxiliaire (AUXILIARY). Pour plus d'informations, veuillez vous référer à la documentation en ligne de
+				Microsoft (<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/ad/ad/characteristics_of_object_classes.asp" target="_blank">voir les caractéristiques des classes d'objets</a>).
+			</p>
+		</li>
+		<li>
+			<u>subClassOf</u>
+			<p>
+				exemple: <em>"subClassOf: top"</em>
+			</p>
+		</li>
+		<li>
+			<u>attributeSyntax</u>
+			<p>
+				Microsoft a tenu à distinguer les données qui sont stockées dans son annuaire. C'est pourquoi il existe une bonne
+				centaine de références d'après sa documentation. Notre logiciel n'en connaît qu'une dizaine par défaut, celles
+				indiquées explicitement dans la documentation de Microsoft (mais il est toutefois possible de lui renseigner
+				une autre référence, mais dans ce cas la valeur oMSyntax des objets ne sera pas renseignée automatiquement):
+				<table cellpadding="0" cellspacing="0">
+					<th>Nom</th>
+					<th>Identifiant</th>
+					<th>Valeur oMSyntax</th>
+					</th>
+					<tr>
+						<td>String(octet)</td>
+						<td>2.5.5.10</td>
+						<td>4</td>
+					</tr>
+					<tr>
+						<td>Object(DN-Binary)</td>
+						<td>2.5.5.7</td>
+						<td>127</td>
+					</tr>
+					<tr>
+						<td>Boolean</td>
+						<td>2.5.5.8</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>Object(DS-DN)</td>
+						<td>2.5.5.1</td>
+						<td>127</td>
+					</tr>
+					<tr>
+						<td>Integer</td>
+						<td>2.5.5.9</td>
+						<td>2</td>
+					</tr>
+					<tr>
+						<td>LargeInteger</td>
+						<td>2.5.5.16</td>
+						<td>65</td>
+					</tr>
+					<tr>
+						<td>String(NT-Sec-Desc)</td>
+						<td>2.5.5.15</td>
+						<td>66</td>
+					</tr>
+					<tr>
+						<td>String(Sid)</td>
+						<td>2.5.5.17</td>
+						<td>4</td>
+					</tr>
+					<tr>
+						<td>String(Unicode)</td>
+						<td>2.5.5.12</td>
+						<td>64</td>
+					</tr>
+					<tr>
+						<td>String(Generalized-Time)</td>
+						<td>2.5.5.11</td>
+						<td>24</td>
+					</tr>
+				</table>
+			</p>
+		</li>
+	</ul>
+</p>
+<p>
+	[<a href="#top">sommaire</a>]
+</p>
+<p>
+	<a name="operations_objets"></a>
+	<h3>3.2. Opérations sur les objets et attributs</h3>
+</p>
+<p>
+	Ce logiciel vous donne la possibilité de manipuler les objets et attributs du schéma déjà présent.
+	C'est à dire qu'il ne vous est pas encore possible, tout du moins dans la version présente, d'ajouter
+	des données au schéma ouvert. Vous pouvez ainsi supprimer des objets ou attributs, et même modifier
+	les données qu'ils contiennent à votre convenance.
+</p>
+<p class="image">
+	<img src="images/modifyObjectValues1.png" />
+	<br/>
+	Figure 03 - Modifier des valeurs d'un élément du schéma
+</p>
+<p>
+	L'arborescence sur le côté gauche de la fenêtre vous permet d'accéder aux données du schéma. Nous
+	distinguons deux catégories : objets du schéma et attributs du schéma (appelé différement en fonction
+	de la syntaxe du schéma). Si vous cliquez sur une entrée quelconque du schéma, vous pourrez visualiser
+	les données qu'elle contient dans le panneau de droite. Vous pouvez accéder de deux manières différentes
+	à la fenêtre d'édition de ces données :
+	<ul>
+		<li>
+			Dans l'arborescence de gauche, en cliquant avec le bouton droit de la souris sur un élément
+			de cette arborescence, un menu apparaît vous indiquant toutes les actions possibles sur cet élément.
+			En cliquant sur "Modifier", vous pourrez accéder à la fenêtre d'édition.
+		</li>
+		<li>
+			Quand les données d'un élément de l'arborescence de gauche sont affichées dans le panneau
+			de droite, vous avec la possibilité de cliquer avec le bouton droit de la souris puis cliquer sur
+			"Modifier" pour accéder à la fenêtre d'édition.
+		</li>
+	</ul>
+	Une fois dans la fenêtre d'édition, principalement trois régles sont à comprendre :
+	<ul>
+		<li>
+			Une valeur non cochée à gauche ne sera pas rajoutée dans les données de l'élément édité.
+		</li>
+		<li>
+			Un champs de saisie grisé signifie qu'il accepte une ou plusieurs valeurs, dans un format
+			spécifique. Dans la dernière version de CASL, l'utilisateur n'a plus à se soucier de ce format,
+			le bouton à droite du champs de signifie lui permet d'accéder à une seconde fenêtre d'édition.
+		</li>
+		<li>
+			Un champs de saisie non-grisé accepte deux types de valeurs : soit un identifiant, dans ce cas
+			la valeur n'est pas quotée (aucun guillemet); soit une valeur quelconque, dans ce cas celle-ci
+			est quotée (entourée de guillemets). Pour savoir quel type adopté, nous vous conseillons de lire
+			<a href="#introduction">la RFC fournit dans l'introduction</a> de cette documentation, ainsi que
+			les aides disponibles sur les syntaxes particulière (<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/ad/ad/active_directory_schema.asp" target="_blank">Schéma de Microsoft Active Directory</a>).
+		</li>
+	</ul>
+</p>
+<p>
+	[<a href="#top">sommaire</a>]
+</p>
+
+<p>
+	<a name="manipuler_schema"></a>
+	<h2>4. Manipuler un schéma</h2>
+</p>
+<p>
+	Par défaut, deux outils non spécifique aux syntaxes sont présent dans notre application : le réorganisateur
+	des données d'un schéma et la conversion des données d'un schéma.
+</p>
+<p>
+	[<a href="#top">sommaire</a>]
+</p>
+<p>
+	<a name="reorganiser_schema"></a>
+	<h3>4.1. Réorganiser un schéma</h3>
+</p>
+<p>
+	Tout objet ou attribut d'un schéma sont déclarés dans un certain ordre. En effet, le serveur LDAP
+	lit une à une les entrées du fichier pour constituer sa base d'objets et d'attributs. Cependant, un objet
+	ou un attribut peut être dépendant d'un ou plusieurs autres objets ou attributs. C'est ici que l'ordre de
+	déclaration des données devient important. En effet, si un objet ou un attribut dépend d'un autre objet
+	ou d'un autre attribut, celui-ci doit être déclaré avant. Mais alors qu'est ce qu'une réorganisation de schéma ?
+</p>
+<p>
+	La réorganisation d'un schéma consiste donc à refabriquer l'ordre dans lequel les objets et attributs
+	doivent être déclarés. Cela ne modifie en rien l'affichage à proprement parlé des données du schéma
+	(vous ne verrez aucune différence par l'interface graphique). Cependant, au moment de l'écriture du fichier,
+	cet ordre sera pris en compte pour écrire toutes les données.
+</p>
+<p>
+	[<a href="#top">sommaire</a>]
+</p>
+<p>
+	<a name="convertir_schema"></a>
+	<h3>4.2. Convertir un schéma</h3>
+</p>
+<p>
+	Une des autres fonctionnalités de bases de CASL est de pouvoir convertir un schéma d'une certaine syntaxe vers
+	ce même schéma mais dans une syntaxe différente. Cela ce fait donc par le biais d'une extention qui applique
+	la conversion sur le schéma couramment sélectionné.
+</p>
+<p class="image">
+	<img src="images/schemaConverter1.png" />
+	<img src="images/schemaConverter2.png" />
+	<br/>
+	Figure 04 - Convertir un schéma
+</p>
+<p>
+	Ce convertisseur s'appuie sur deux données cruciales. Tout d'abord, il dispose d'un fichier au format XML
+	dans lequel sont définis tous les dictionnaires de conversion. Ce fichier est dans le répertoire racine de
+	l'application et se nomme "traduc.xml". Ensuite, le convertisseur s'appuie sur CASL pour connaître la liste
+	des syntaxes disponibles. Un algorithme permet alors de ne proposer à l'utilisateur que les dictionnaires
+	de conversion pour le schéma sélectionné, ainsi que les syntaxes de destination.
+</p>
+<p>
+	[<a href="#top">sommaire</a>]
+</p>
+
+<p>
+	<a name="plugins"></a>
+	<h2>5. Plugins</h2>
+</p>
+<p>
+	Comme nous l'avons dit, CASL a été développé de façon modulaire. De cette façon, il devient très facile
+	d'étendre les fonctionnalités du logiciel en créant d'autres plugins. Pour démarrer un plugin, il suffit
+	alors de ce rendre dans le menu principal en haut de l'application. Ainsi, le menu "Outils" propose la
+	liste des plugins organisée par catégorie.
+</p>
+<p class="image">
+	<img src="images/extentionList1.png" />
+	<br/>
+	Figure 05 - Les plugins dans CASL
+</p>
+<p>
+	[<a href="#top">sommaire</a>]
+</p>
+<p>
+	<a name="plugins_ad"></a>
+	<h3>5.1. Active Directory</h3>
+</p>
+<p>
+	[<a href="#top">sommaire</a>]
+</p>
+
+<p>
+	<a name="licence"></a>
+	<h2>6. Licence</h2>
+</p>
+<div class="licence">
+	<pre>Copyright (C) 2006 Thomas Chemineau
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</pre>
+</div>
+<p>
+	[<a href="#top">sommaire</a>]
+</p>
+
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+/****************************************************************
+    GENERAL
+****************************************************************/
+
+body, div, td {
+	color: #333;
+}
+
+body {
+	padding: 10em;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	font-size: 14px;
+}
+
+p, li {
+	text-align: justify;
+}
+
+h2 {
+	color: #000;
+	padding-top: 20px;
+	border-bottom: 1px solid #000;
+}
+
+table {
+	margin: 20px 0px 20px 0px;
+	border-collapse: collapse;
+}
+
+table th,
+table td {
+	color: #000;
+	text-align: left;
+	padding: 1px 5px 1px 5px;
+	border: 1px solid #000;
+}
+
+table th {
+	color: #fff;
+	background-color: #000;
+}
+
+a,
+a:visited,
+a:active {
+	color: #00c;
+	text-decoration: none;
+	margin: 0px 2px 0px 2px;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+/****************************************************************
+    TITRE
+****************************************************************/
+
+.titre {
+	font-variant: small-caps;
+	border-bottom: 1px solid #000;
+}
+
+.titre h1 {
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
+
+/****************************************************************
+    IMAGE
+****************************************************************/
+
+.image {
+	text-align: center;
+	font-style: italic;
+	font-size: 90%;
+	padding: 10px;
+}
+
+/****************************************************************
+    LICENCE
+****************************************************************/
+
+.licence {
+	border: 1px solid #bbb;
+	padding: 5px;
+	background-color: #f4f4f4;
+	color: #000;
+}
