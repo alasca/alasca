@@ -129,8 +129,6 @@ public class OidList implements SchemaValue {
 		if( value==null || value.length()==0 )
 			return false;
 
-		System.out.println(value);
-
 		// On regarde si il y a une parenthèse ouvrante dans la chaîne. Si ca
 		// n'est pas le cas, on regarde si la chaîne vérifie la méthode
 		// isWoid. Alors si elle n'est pas vérifie, cette chaîne est
@@ -149,9 +147,9 @@ public class OidList implements SchemaValue {
 			// uniquement d'espaces, et la chaîne après la parenthèse fermante
 			// l'est aussi. Si c'est le cas, on teste si le contenu entre les
 			// parenthèses est vérifie isOidList.
-			if( SchemaSyntax.isWhsp( value.substring( 0, firstBracket ) )
+			/*if( SchemaSyntax.isWhsp( value.substring( 0, firstBracket ) )
 					&& SchemaSyntax.isWhsp(
-						value.substring( secondBracket+1 ) ) ) {
+						value.substring( secondBracket+1 ) ) ) {*/
 				ok = true ;
 				StringTokenizer strtok = new StringTokenizer(
 					value.substring( firstBracket+1, secondBracket ), "$" );
@@ -162,16 +160,10 @@ public class OidList implements SchemaValue {
 					if( ok = Oid.isValidFormat( tmp ) )
 						newListe.add( new Oid( tmp ) );
 				}
-			}
+			/*}*/
 		}
 
-		System.out.println("ok = " + ok);
-
 		if( ok ) {
-			Iterator<Oid> i = newListe.iterator();
-			while( i.hasNext() ) {
-				System.out.println("  ->" + i.next());
-			}
 			liste = newListe ;
 		}
 
