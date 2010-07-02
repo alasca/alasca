@@ -78,6 +78,6 @@ public class SUNDSSyntax extends RFCSyntax {
 		super.attributeDefinitionType = SUNDS_ATTRIBUTE.substring( 0, SUNDS_ATTRIBUTE.length()-1 );
 		super.objectDefinitionType = SUNDS_OBJECT.substring( 0, SUNDS_OBJECT.length()-1 );
 		super.RFC_ATTRIBUTE_PARAMETERS = SUNDS_ATTRIBUTE_PARAMETERS;
-		super.RFC_OBJECT_PARAMETERS = SUNDS_ATTRIBUTE_PARAMETERS;
+		super.RFC_OBJECT_PARAMETERS = SUNDS_OBJECT_PARAMETERS;
 	}
 }

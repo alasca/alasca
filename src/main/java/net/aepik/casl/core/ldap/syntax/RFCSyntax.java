@@ -547,11 +547,13 @@ public class RFCSyntax extends SchemaSyntax {
 	 * comprends les paramêtres, la seconde les valeurs associées sous forme
 	 * de chaîne de caractères.
 	**/
-	public String[][] searchSchemaObjectValues( String type, String initStr ) {
-
+	public String[][] searchSchemaObjectValues( String type, String initStr )
+	{
 		String[] params_name = getParameters( type );
-		if( params_name==null )
+		if (params_name == null)
+		{
 			return null;
+		}
 
 		// Dans un premier temps, on regarde si l'ordre des paramêtres est
 		// correct. Si ce n'est pas le cas, erreur de syntaxe !
@@ -568,9 +570,17 @@ public class RFCSyntax extends SchemaSyntax {
 		// On récupère toutes les positions.
 		// La position 0 est reservé à l'id.
 
-		for( int i=0; i<params_name.length; i++ ) {
-			params_index[i] = initStr.indexOf( params_name[i], pos_str_begin );
-			pos_str_begin = params_index[i] + params_name[i].length();
+		System.out.println(initStr);
+
+		for( int i=0; i<params_name.length; i++ )
+		{
+			int index = initStr.indexOf(params_name[i], pos_str_begin);
+			if (index != -1)
+			{
+				pos_str_begin = index + params_name[i].length();
+			}
+			System.out.println(" " + params_name[i] + " = " + index);
+			params_index[i] = index;
 		}
 
 		// On vérifie l'ordre en regardant si l'index
