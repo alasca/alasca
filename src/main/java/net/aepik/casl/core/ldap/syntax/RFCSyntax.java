@@ -94,35 +94,35 @@ public class RFCSyntax extends SchemaSyntax {
 ////////////////////////////////
 
 	private static final String RFC_ATTRIBUTE = "AttributeTypeDescription =";
-	private static final String[][] RFC_ATTRIBUTE_PARAMETERS = {
-		{ "1",	"NAME",					""		},
-		{ "2",	"DESC",					""		},
-		{ "3",	"OBSOLETE",				null	},
-		{ "4",	"SUP",					""		},
-		{ "5",	"EQUALITY",				""		},
-		{ "6",	"ORDERING",				""		},
-		{ "7",	"SUBSTR",				""		},
-		{ "8",	"SYNTAX",				""		},
-		{ "9",	"SINGLE-VALUE",			null	},
-		{ "10",	"COLLECTIVE",			null	},
-		{ "11",	"NO-USER-MODIFICATION",	null	},
-		{ "12",	"USAGE",				"userApplications"		},
-		{ "12",	"USAGE",				"directoryOperation"	},
-		{ "12",	"USAGE",				"distributedOperation"	},
-		{ "12",	"USAGE",				"dSAOperation"			}
+	protected String[][] RFC_ATTRIBUTE_PARAMETERS = {
+		{ "1",	"NAME",			"" },
+		{ "2",	"DESC",			"" },
+		{ "3",	"OBSOLETE",		null },
+		{ "4",	"SUP",			"" },
+		{ "5",	"EQUALITY",		"" },
+		{ "6",	"ORDERING",		"" },
+		{ "7",	"SUBSTR",		"" },
+		{ "8",	"SYNTAX",		"" },
+		{ "9",	"SINGLE-VALUE",		null },
+		{ "10",	"COLLECTIVE",		null },
+		{ "11",	"NO-USER-MODIFICATION",	null },
+		{ "12",	"USAGE",		"userApplications" },
+		{ "12",	"USAGE",		"directoryOperation" },
+		{ "12",	"USAGE",		"distributedOperation" },
+		{ "12",	"USAGE",		"dSAOperation" }
 	};
 
 	private static final String RFC_OBJECT = "ObjectClassDescription =";
-	private static final String[][] RFC_OBJECT_PARAMETERS = {
-		{ "1",	"NAME",			""		},
-		{ "2",	"DESC",			""		},
-		{ "3",	"OBSOLETE",		null	},
-		{ "4",	"SUP",			""		},
-		{ "5",	"ABSTRACT",		null	},
-		{ "5",	"STRUCTURAL",	null	},
-		{ "5",	"AUXILIARY",	null	},
-		{ "6",	"MUST",			""		},
-		{ "7",	"MAY",			""		}
+	protected String[][] RFC_OBJECT_PARAMETERS = {
+		{ "1",	"NAME",		"" },
+		{ "2",	"DESC",		"" },
+		{ "3",	"OBSOLETE",	null },
+		{ "4",	"SUP",		"" },
+		{ "5",	"ABSTRACT",	null },
+		{ "5",	"STRUCTURAL",	null },
+		{ "5",	"AUXILIARY",	null },
+		{ "6",	"MUST",		"" },
+		{ "7",	"MAY",		"" }
 	};
 
 ////////////////////////////////
@@ -195,9 +195,9 @@ public class RFCSyntax extends SchemaSyntax {
 
 				if( param.equals( RFC_ATTRIBUTE_PARAMETERS[0][1] ) ) {
 					if( tmp!=null )
-						valeur = new QDescription( tmp );
+						valeur = new QDescriptionList( tmp );
 					else
-						valeur = new QDescription();
+						valeur = new QDescriptionList();
 
 				} else if( param.equals( RFC_ATTRIBUTE_PARAMETERS[1][1] ) ) {
 					if( tmp!=null )
@@ -611,9 +611,13 @@ public class RFCSyntax extends SchemaSyntax {
 
 				// On récupère la valeur.
 				if( indexOfEnd!=-1 )
+				{
 					param_value = initStr.substring( indexOfBegin, indexOfEnd );
+				}
 				else
+				{
 					param_value = initStr.substring( indexOfBegin );
+				}
 
 				param_value.trim();
 			}
