@@ -117,6 +117,7 @@
 			<fileset dir="src/install"/>
 		</copy>
 		<chmod file="${CASL_TARGETDIR}/bin/casl.sh" perm="755"/>
+		<chmod file="${CASL_TARGETDIR}/bin/caslconv.sh" perm="755"/>
 	</target>
 
 </project>
