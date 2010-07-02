@@ -104,18 +104,20 @@ public class Oid implements SchemaValue {
 	 * 		du paramêtre, cette chaîne doit être quotée.
 	 * @return boolean True si la modification a réussi, false sinon.
 	**/
-	public boolean setValue( String value ) {
-
-		if( SchemaSyntax.isNumericOid( value ) ) {
+	public boolean setValue ( String value )
+	{
+		boolean ret = false;
+		if (SchemaSyntax.isNumericOid(value))
+		{
 			this.value = value ;
-			return true ;
-
-		} else if( SchemaSyntax.isKeyString( value ) ) {
-			this.value = value ;
-			return true ;
+			ret = true ;
 		}
-
-		return false ;
+		else if (SchemaSyntax.isKeyString(value))
+		{
+			this.value = value ;
+			ret = true ;
+		}
+		return ret ;
 	}
 
 	/**

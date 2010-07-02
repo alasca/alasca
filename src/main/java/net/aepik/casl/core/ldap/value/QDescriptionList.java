@@ -174,9 +174,7 @@ public class QDescriptionList implements SchemaValue {
 					// Tout est ok, on récupère la sous-chaîne et on la teste.
 					} else {
 						String tmp = value2.substring( firstQuote, secondQuote+1 );
-						System.out.println(tmp);
 						if( ok = QDescription.isValidFormat( tmp ) ) {
-							System.out.println(ok);
 							newListe.add( new QDescription( tmp ) );
 						}
 					}
@@ -234,6 +232,11 @@ public class QDescriptionList implements SchemaValue {
 				str += " ";
 			}
 			pos++;
+		}
+
+		if (pos > 1)
+		{
+			str = "( " + str + " )";
 		}
 
 		return str ;
