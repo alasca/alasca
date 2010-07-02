@@ -78,7 +78,7 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 	public LoadFileFrame( JFrame f, SchemaManager m ) {
 
 		super( f, "Ouvrir un fichier Schema", true );
-		setSize( 400, 350 );
+		setSize( 400, 380 );
 		setResizable( false );
 		setLocationRelativeTo( f );
 

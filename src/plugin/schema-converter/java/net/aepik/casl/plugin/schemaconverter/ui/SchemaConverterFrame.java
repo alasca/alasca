@@ -100,7 +100,7 @@ public class SchemaConverterFrame extends JFrame {
 		super();
 		setTitle( "Convertir le schéma " + nomSchema );
 		//setModal( true );
-		setSize( 400, 350 );
+		setSize( 400, 380 );
 		setResizable( false );
 		setLocationRelativeTo( f );
 
