@@ -96,7 +96,7 @@ public class SchemaPropertiesFrame extends JDialog
 		super();
 		setTitle( "Propriétés Schéma [" + sName + "]" );
 		setModal( true );
-		setSize( 400, 350 );
+		setSize( 400, 360 );
 		setResizable( false );
 		setLocationRelativeTo( parent );
 
