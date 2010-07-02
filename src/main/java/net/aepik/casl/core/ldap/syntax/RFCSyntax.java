@@ -570,8 +570,6 @@ public class RFCSyntax extends SchemaSyntax {
 		// On récupère toutes les positions.
 		// La position 0 est reservé à l'id.
 
-		System.out.println(initStr);
-
 		for( int i=0; i<params_name.length; i++ )
 		{
 			int index = initStr.indexOf(params_name[i], pos_str_begin);
@@ -579,7 +577,6 @@ public class RFCSyntax extends SchemaSyntax {
 			{
 				pos_str_begin = index + params_name[i].length();
 			}
-			System.out.println(" " + params_name[i] + " = " + index);
 			params_index[i] = index;
 		}
 
