@@ -146,20 +146,21 @@ public class QDescriptionList implements SchemaValue {
 			int begin=0, firstQuote=0, secondQuote=-1;
 			boolean fin = false ;
 			ok = true ;
+			String value2 = value.substring( firstBracket+1, secondBracket ).trim();
 
 			try {
 				do {
 					begin = secondQuote+1;
 		
 					// Fin de chaîne.
-					if( begin>=value.length() ) {
+					if( begin>=value2.length() ) {
 						fin = true;
 
 					// Sinon on cherche le premier quote
 					// Si il n'y en a pas, on teste si le reste est une chaîne
 					// comportant uniquement des espaces.
-					} else if( ( firstQuote = value.indexOf( 39, begin ) )<0 ) {
-						if( !SchemaSyntax.isWhsp( value.substring( begin ) ) ) {
+					} else if( ( firstQuote = value2.indexOf( 39, begin ) )<0 ) {
+						if( !SchemaSyntax.isWhsp( value2.substring( begin ) ) ) {
 							ok = false ;
 						} else {
 							fin = true ;
@@ -167,22 +168,28 @@ public class QDescriptionList implements SchemaValue {
 
 					// Sinon, on regarde si on peut avoir un second quote
 					// Si on en a pas, il y a une erreur de syntaxe.
-					} else if( ( secondQuote = value.indexOf( 39, firstQuote+1 ) )<0 ) {
+					} else if( ( secondQuote = value2.indexOf( 39, firstQuote+1 ) )<0 ) {
 						ok = false ;
 
-					// Tout est ok, on récupère la sous-chaîne est on la teste.
+					// Tout est ok, on récupère la sous-chaîne et on la teste.
 					} else {
-						String tmp = value.substring( begin, secondQuote+1 );
-						if( ok = QDescription.isValidFormat( tmp ) )
+						String tmp = value2.substring( firstQuote, secondQuote+1 );
+						System.out.println(tmp);
+						if( ok = QDescription.isValidFormat( tmp ) ) {
+							System.out.println(ok);
 							newListe.add( new QDescription( tmp ) );
+						}
 					}
 		
 				} while( ok && !fin );
 			} catch( Exception e ) { return false; }
 		}
 
-		if( ok )
+		if (ok)
+		{
 			liste = newListe ;
+		}
+
 		return ok;
 	}
 
