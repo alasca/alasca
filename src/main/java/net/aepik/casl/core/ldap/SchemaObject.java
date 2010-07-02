@@ -160,7 +160,7 @@ public class SchemaObject {
 		if( isKeyExists( keyname ) ) {
 			String tmp = getValue( keyname ).toString();
 			
-			if( QDescription.isValidFormat( tmp ) ) {
+			if( QDescriptionList.isValidFormat( tmp ) ) {
 				int firstQuote = tmp.indexOf( 39 );
 				int secondQuote = tmp.indexOf( 39, firstQuote+1 );
 				tmp = tmp.substring( firstQuote+1, secondQuote );
@@ -170,6 +170,26 @@ public class SchemaObject {
 		}
 
 		return null ;
+	}
+
+	/**
+	 * Retourne la première valeur du nom usuel de cet objet si elle existe.
+	 * @return String Le nom usuel, sinon null.
+	**/
+	public String getNameFirstValue ()
+	{
+		String keyname = syntax.getDisplayNameParameter( type );
+		if (!isKeyExists(keyname))
+		{
+			return null;
+		}
+		String keyvalue = getValue(keyname).toString();
+		if (!QDescriptionList.isValidFormat(keyvalue))
+		{
+			return null;
+		}
+		QDescriptionList qdescrs = new QDescriptionList(keyvalue);
+		return qdescrs.getValues()[0];
 	}
 
 	/**

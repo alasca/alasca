@@ -318,7 +318,7 @@ public class SchemaPanel extends JPanel {
 
 		for( int i=0; i<attributs.length; i++ ) {
 			String id = attributs[i].getId() ;
-			String name = attributs[i].getName();
+			String name = attributs[i].getNameFirstValue();
 
 			if( name!=null )
 				id += " " + name ;
