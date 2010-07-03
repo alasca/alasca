@@ -21,12 +21,11 @@ package net.aepik.casl.plugin.schemaconverter;
 
 import net.aepik.casl.plugin.schemaconverter.core.SchemaConverter;
 import net.aepik.casl.plugin.schemaconverter.core.Translator;
-import net.aepik.casl.plugin.schemaconverter.ui.SchemaConverterFrame;
-import net.aepik.casl.plugin.schemaconverter.ui.SchemaConverterListener;
 import net.aepik.casl.core.ldap.Schema;
+import net.aepik.casl.core.ldap.SchemaFile;
+import net.aepik.casl.core.ldap.SchemaFileWriter;
 import net.aepik.casl.core.ldap.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaSyntax;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -67,11 +66,10 @@ public class SCTool {
 		return schema;
 	}
 
-	private static Schema convertSchema ( Schema schema, String syntaxName )
+	private static String findDictionnary ( String syntaxFrom, String syntaxName )
 	{
 		String dictionnary = null;
 		String syntaxTo    = null;
-		String syntaxFrom  = schema.getSyntax().toString();
 		Translator traduc  = Translator.create("./lib/resources/traduc.xml");
 
 		String[] dictionnaries = traduc.getAvailableDictionnaries();
@@ -101,9 +99,21 @@ public class SCTool {
 			}
 		}
 
-		System.out.println(dictionnary);
-		System.out.println(syntaxTo);
+		return dictionnary;
+	}
 
+	private static Schema convertSchema ( Schema schema, String dictionnary, String outSyntax )
+	{
+		Translator traduc = Translator.create("./lib/resources/traduc.xml");
+		SchemaConverter converter = new SchemaConverter(schema, traduc);
+		try
+		{
+			converter.convertTo(dictionnary, outSyntax);
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 		return schema;
 	}
 
@@ -127,7 +137,7 @@ public class SCTool {
 			}
 			if (cmdOptions.hasOption("insyntax"))
 			{
-				inSyntax = cmdOptions.getOptionValue("inSyntax");
+				inSyntax = cmdOptions.getOptionValue("insyntax");
 			}
 			if (cmdOptions.hasOption("out"))
 			{
@@ -135,7 +145,7 @@ public class SCTool {
 			}
 			if (cmdOptions.hasOption("outsyntax"))
 			{
-				outSyntax = cmdOptions.getOptionValue("outSyntax");
+				outSyntax = cmdOptions.getOptionValue("outsyntax");
 			}
 			if (cmdOptions.getOptions().length != 4)
 			{
@@ -152,18 +162,55 @@ public class SCTool {
 		//
 		// Launch schema.
 		//
-		/*try
-		{*/
-			SchemaSyntax inSchemaSyntax = createSchemaSyntax(inSyntax);
-			Schema inSchema = createSchema(inSchemaSyntax, inFile);
-			Schema outSchema = convertSchema(inSchema, outSyntax);
-		/*}
-		catch (Exception e)
+		String dictionnary = findDictionnary(inSyntax, outSyntax);
+		if (dictionnary == null)
 		{
-			System.out.println("Unable to convert schema");
+			System.out.println("Can't find valid translation dictionnary");
 			System.exit(1);
-		}*/
+		}
+		SchemaSyntax inSchemaSyntax = createSchemaSyntax(inSyntax);
+		if (inSchemaSyntax == null)
+		{
+			System.out.println("Unknow input syntax (" + inSyntax + ")");
+			System.exit(1);
+		}
+		SchemaSyntax outSchemaSyntax = createSchemaSyntax(outSyntax);
+		if (outSchemaSyntax == null)
+		{
+			System.out.println("Unknow output syntax (" + outSyntax + ")");
+			System.exit(1);
+		}
+		Schema inSchema = createSchema(inSchemaSyntax, inFile);
+		if (inSchema == null)
+		{
+			System.out.println("Failed to read input schema file (" + inFile + ")");
+			System.exit(1);
+		}
 
+		//
+		// Convert schema.
+		//
+		Schema outSchema = convertSchema(inSchema, dictionnary, outSyntax);
+		if (outSchema == null)
+		{
+			System.out.println("Failed to convert input schema");
+			System.exit(1);
+		}
+
+		//
+		// Write schema.
+		//
+
+		SchemaFileWriter schemaWriter = outSchemaSyntax.createSchemaWriter();
+		SchemaFile schemaFile = new SchemaFile( outFile, null, schemaWriter );
+		schemaFile.setSchema( outSchema );
+		if (!schemaFile.write())
+		{
+			System.out.println("Failed to write output schema file");
+			System.exit(1);
+		}
+
+		System.exit(0);
 	}
 
 }
