@@ -32,7 +32,9 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.cli.ParseException;
+import java.util.Properties;
 
 public class SCTool {
 
@@ -40,15 +42,22 @@ public class SCTool {
 
 	static {
 		options.addOption("i", "input-schema", true, "Input file");
-		options.addOption("is", "input-syntax", true, "Input schema syntax");
+		options.addOption("I", "input-syntax", true, "Input schema syntax");
 		options.addOption("o", "output-schema", true, "Output file");
-		options.addOption("os", "output-syntax", true, "Output schema syntax");
+		options.addOption("O", "output-syntax", true, "Output schema syntax");
 		options.addOption("c", "clear-properties", false, "Do not convert schema properties");
+		options.addOption("l", "list-syntaxes", false, "List available syntaxes");
 		options.getOption("i").setRequired(true);
-		options.getOption("is").setRequired(true);
-		options.getOption("os").setRequired(true);
+		options.getOption("I").setRequired(true);
+		options.getOption("o").setRequired(true);
+		options.getOption("O").setRequired(true);
 	}
 
+	/**
+	 * Create a SchemaSyntax object from a valid syntax name.
+	 * @param String syntaxName A valid syntax name.
+	 * @return SchemaSyntax
+	 */
 	private static SchemaSyntax createSchemaSyntax ( String syntaxName )
 	{
 		SchemaSyntax syntax = null;
@@ -61,6 +70,12 @@ public class SCTool {
 		return syntax;
 	}
 
+	/**
+	 * Create a Schema object from a SchemaSyntax object and a schema file.
+	 * @param SchemaSyntax syntax A SchemaSyntax object.
+	 * @param String fileName The file name of the schema to parse.
+	 * @return Schema
+	 */
 	private static Schema createSchema ( SchemaSyntax syntax, String fileName )
 	{
 		Schema schema = null;
@@ -72,6 +87,12 @@ public class SCTool {
 		return schema;
 	}
 
+	/**
+	 * Find a valid dictionnary.
+	 * @param String syntaxFrom The input syntax.
+	 * @param String syntaxName The output syntax.
+	 * @return String
+	 */
 	private static String findDictionnary ( String syntaxFrom, String syntaxName )
 	{
 		String dictionnary = null;
@@ -108,6 +129,13 @@ public class SCTool {
 		return dictionnary;
 	}
 
+	/**
+	 * Convert a schema.
+	 * @param Schema schema The Schema object to convert.
+	 * @param String dictionnary The dictionnary to use.
+	 * @param String outSyntax The syntax used to convert the schema.
+	 * @return Schema
+	 */
 	private static Schema convertSchema ( Schema schema, String dictionnary, String outSyntax )
 	{
 		Translator traduc = Translator.create(Config.getResourcesPath() + "/traduc.xml");
@@ -123,12 +151,30 @@ public class SCTool {
 		return schema;
 	}
 
+	/**
+	 * Print available syntaxes.
+	 */
+	private static void displayAvailableSyntaxes ()
+	{
+		for (String syntax : Schema.getSyntaxes())
+		{
+			System.out.println(syntax);
+		}
+	}
+
+	/**
+	 * Print usage.
+	 */
 	private static void displayHelp ()
 	{
 		HelpFormatter h = new HelpFormatter();
+		h.setLeftPadding(4);
 		h.printHelp("caslconv", options, true);
 	}
 
+	/**
+	 * Launch this tool.
+	 */
 	public static void main ( String[] args )
 	{
 		String inFile    = null;
@@ -136,6 +182,7 @@ public class SCTool {
 		String outFile   = null;
 		String outSyntax = null;
 		boolean clear    = false;
+		boolean list     = false;
 
 		//
 		// Parsing options.
@@ -143,30 +190,18 @@ public class SCTool {
 		CommandLineParser parser = new GnuParser();
 		try
 		{
-			int cmdOptionsRequiredNumber = 0;
 			CommandLine cmdOptions = parser.parse(options, args);
-			if (cmdOptions.hasOption("i"))
-			{
-				inFile = cmdOptions.getOptionValue("i");
-				cmdOptionsRequiredNumber++;
-			}
-			if (cmdOptions.hasOption("is"))
-			{
-				inSyntax = cmdOptions.getOptionValue("is");
-				cmdOptionsRequiredNumber++;
-			}
-			if (cmdOptions.hasOption("o"))
-			{
-				outFile = cmdOptions.getOptionValue("o");
-			}
-			if (cmdOptions.hasOption("os"))
-			{
-				outSyntax = cmdOptions.getOptionValue("os");
-				cmdOptionsRequiredNumber++;
-			}
+			inFile    = cmdOptions.getOptionValue("i");
+			inSyntax  = cmdOptions.getOptionValue("I");
+			outFile   = cmdOptions.getOptionValue("o");
+			outSyntax = cmdOptions.getOptionValue("O");
 			if (cmdOptions.hasOption("c"))
 			{
 				clear = true;
+			}
+			if (cmdOptions.hasOption("l"))
+			{
+				list = true;
 			}
 			if (cmdOptions.getOptions().length == 0)
 			{
@@ -174,11 +209,26 @@ public class SCTool {
 				System.exit(2);
 			}
 		}
-		catch (ParseException e)
+		catch (MissingArgumentException e)
 		{
-			System.out.println("Wrong arguments");
+			System.out.println("Missing arguments\n");
 			displayHelp();
 			System.exit(2);
+		}
+		catch (ParseException e)
+		{
+			System.out.println("Wrong arguments\n");
+			displayHelp();
+			System.exit(2);
+		}
+
+		//
+		// Print query options.
+		//
+		if (list)
+		{
+			displayAvailableSyntaxes();
+			System.exit(0);
 		}
 
 		//
@@ -218,11 +268,14 @@ public class SCTool {
 			System.out.println("Failed to convert input schema");
 			System.exit(1);
 		}
+		if (clear)
+		{
+			outSchema.setProperties(new Properties());
+		}
 
 		//
 		// Write schema.
 		//
-
 		SchemaFileWriter schemaWriter = outSchemaSyntax.createSchemaWriter();
 		SchemaFile schemaFile = new SchemaFile( outFile, null, schemaWriter );
 		schemaFile.setSchema( outSchema );
