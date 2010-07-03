@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ import net.aepik.casl.core.ldap.SchemaFile;
 import net.aepik.casl.core.ldap.SchemaFileWriter;
 import net.aepik.casl.core.ldap.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaSyntax;
+import net.aepik.casl.core.util.Config;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -36,6 +37,7 @@ import org.apache.commons.cli.ParseException;
 public class SCTool {
 
 	private static Options options = new Options();
+
 	static {
 		options.addOption("in", true, "Input file");
 		options.addOption("insyntax", true, "Input schema syntax");
@@ -70,7 +72,7 @@ public class SCTool {
 	{
 		String dictionnary = null;
 		String syntaxTo    = null;
-		Translator traduc  = Translator.create("./lib/resources/traduc.xml");
+		Translator traduc  = Translator.create(Config.getResourcesPath() + "/traduc.xml");
 
 		String[] dictionnaries = traduc.getAvailableDictionnaries();
 
@@ -104,7 +106,7 @@ public class SCTool {
 
 	private static Schema convertSchema ( Schema schema, String dictionnary, String outSyntax )
 	{
-		Translator traduc = Translator.create("./lib/resources/traduc.xml");
+		Translator traduc = Translator.create(Config.getResourcesPath() + "/traduc.xml");
 		SchemaConverter converter = new SchemaConverter(schema, traduc);
 		try
 		{

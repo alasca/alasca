@@ -22,6 +22,7 @@
 package net.aepik.casl.ui;
 
 import net.aepik.casl.core.Manager;
+import net.aepik.casl.core.util.Config;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -53,7 +54,7 @@ public class CreditsFrame extends JDialog {
 
 		// - Le Logo du header -
 
-		Image imageTmp = Toolkit.getDefaultToolkit().getImage( "./lib/resources/casl.png" );
+		Image imageTmp = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() +  "/casl.png" );
 		ImageIcon image = new ImageIcon( imageTmp );
 		image = new ImageIcon( imageTmp.getScaledInstance(
 				image.getIconWidth()*3/4, image.getIconHeight()*3/4, Image.SCALE_SMOOTH ) );

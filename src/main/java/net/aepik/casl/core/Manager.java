@@ -1,7 +1,5 @@
 /*
- * Manager.java		0.1		20/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +19,7 @@
 package net.aepik.casl.core;
 
 import net.aepik.casl.core.ldap.SchemaManager;
-
+import net.aepik.casl.core.util.Config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,103 +27,111 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
 /**
- * Permet de gÃ©rer les diffÃ©rents composants de l'application.
- * Pilote le manager de schÃ©ma et le manager de plugins, charge
- * les paramÃªtres de configuration depuis un fichier XML.
-**/
+ * Permet de gérer les différents composants de l'application.
+ * Pilote le manager de schéma et le manager de plugins.
+ */
 
-public class Manager {
+public class Manager
+{
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * Manager properties.
+	 */
+	private Properties properties;
 
-	/** Les propriÃ©tÃ©s du manager **/
-	private Properties properties ;
+	/**
+	 * Schema manager.
+	 */
+	private SchemaManager schemas;
 
-	/** Le gestionnaire de schÃ©ma **/
-	private SchemaManager schemas ;
-	/** Le gestionnaire de plugins **/
-	private PluginManager plugins ;
+	/**
+	 * Plugin manager.
+	 */
+	private PluginManager plugins;
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
-
-	public Manager( String configFile ) throws IOException {
-
+	/**
+	 * Create a new Manager object.
+	 * @param String configFile The XML configuration file.
+	 */
+	public Manager (String configFile) throws IOException
+	{
+		schemas = new SchemaManager(this);
+		plugins = new PluginManager(this, Config.getPluginPath());
 		properties = new Properties();
-		schemas = new SchemaManager( this );
-
-		if( loadProperties( configFile ) ) {
-			plugins = new PluginManager( this, properties.getProperty( "PluginDir" ) );
-		}
+		loadProperties(configFile);
 	}
-
-////////////////////////////////
-// MÃ©thodes publiques
-////////////////////////////////
 
 	/**
 	 * Retourne le manager de plugins.
 	 * @return PluginManager Le manager de plugins.
-	**/
-	public PluginManager getPluginManager() { return plugins ; }
+	 */
+	public PluginManager getPluginManager ()
+	{
+		return plugins;
+	}
 
 	/**
 	 * Retourne la valeur de la propriÃ©tÃ© de clef key.
 	 * @param key Une clef.
 	 * @return String La valeur correspondant Ã  la clef.
-	**/
-	public String getProperty( String key ) {
-
-		if( key!=null )
-			return properties.getProperty( key );
+	 */
+	public String getProperty (String key)
+	{
+		if (key != null)
+		{
+			return properties.getProperty(key);
+		}
 		return null;
 	}
 
 	/**
 	 * Retourne le manager de schÃ©mas.
 	 * @return SchemaManager Le manager de schÃ©mas de cette classe.
-	**/
-	public SchemaManager getSchemaManager() { return schemas; }
+	 */
+	public SchemaManager getSchemaManager ()
+	{
+		return schemas;
+	}
 
 	/**
-	 * Charge les plugins en mÃ©moire.
-	**/
-	public void loadPluginManager() {
-
-		if( properties.getProperty( "PluginDir" )!=null ) {
+	 * Load plugins.
+	 */
+	public void loadPluginManager ()
+	{
+		File pluginDir = new File(Config.getPluginPath());
+		if (pluginDir.exists())
+		{
 			plugins.loadPlugins();
-
-			Plugin[] tab = plugins.getPlugins();
-			for( int i=0; tab!=null && i<tab.length; i++ )
-				tab[i].setSchemaManager( schemas );
+			for (Plugin plugin : plugins.getPlugins())
+			{
+				plugin.setSchemaManager(schemas);
+			}
 		}
 	}
-
-////////////////////////////////
-// MÃ©thodes privÃ©es
-////////////////////////////////
 
 	/**
-	 * Charge les paramÃªtres de l'application en mÃ©moire.
-	**/
-	private boolean loadProperties( String configFile ) throws IOException {
-
-		try {
-			FileInputStream in = new FileInputStream( new File( configFile ) );
-			properties.loadFromXML( in );
+	 * Load properties.
+	 * @param String configFile The XML configuration file path.
+	 */
+	private boolean loadProperties (String configFile) throws IOException
+	{
+		try
+		{
+			FileInputStream in = new FileInputStream(new File(configFile));
+			properties.loadFromXML(in);
 			in.close();
-			return true ;
-
-		} catch( InvalidPropertiesFormatException e ) {
-			throw new IOException( "Error loading configuration file:\nFormat error [" + e + "]" );
-		} catch( Exception e ) {
-			e.printStackTrace();
-			throw new IOException( "Error loading configuration file:\nGeneral error [" + e + "]" );
+			return true;
 		}
-
-		//return false ;
+		catch (InvalidPropertiesFormatException e)
+		{
+			throw new IOException("Error loading configuration file:\nFormat error [" + e + "]");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new IOException("Unexpected error on loading configuration file");
+		}
 	}
+
 }
+
