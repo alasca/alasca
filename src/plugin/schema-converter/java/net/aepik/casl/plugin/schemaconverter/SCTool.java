@@ -39,10 +39,14 @@ public class SCTool {
 	private static Options options = new Options();
 
 	static {
-		options.addOption("in", true, "Input file");
-		options.addOption("insyntax", true, "Input schema syntax");
-		options.addOption("out", true, "Output file");
-		options.addOption("outsyntax", true, "Output schema syntax");
+		options.addOption("i", "input-schema", true, "Input file");
+		options.addOption("is", "input-syntax", true, "Input schema syntax");
+		options.addOption("o", "output-schema", true, "Output file");
+		options.addOption("os", "output-syntax", true, "Output schema syntax");
+		options.addOption("c", "clear-properties", false, "Do not convert schema properties");
+		options.getOption("i").setRequired(true);
+		options.getOption("is").setRequired(true);
+		options.getOption("os").setRequired(true);
 	}
 
 	private static SchemaSyntax createSchemaSyntax ( String syntaxName )
@@ -119,12 +123,19 @@ public class SCTool {
 		return schema;
 	}
 
+	private static void displayHelp ()
+	{
+		HelpFormatter h = new HelpFormatter();
+		h.printHelp("caslconv", options, true);
+	}
+
 	public static void main ( String[] args )
 	{
 		String inFile    = null;
 		String inSyntax  = null;
 		String outFile   = null;
 		String outSyntax = null;
+		boolean clear    = false;
 
 		//
 		// Parsing options.
@@ -132,32 +143,41 @@ public class SCTool {
 		CommandLineParser parser = new GnuParser();
 		try
 		{
+			int cmdOptionsRequiredNumber = 0;
 			CommandLine cmdOptions = parser.parse(options, args);
-			if (cmdOptions.hasOption("in"))
+			if (cmdOptions.hasOption("i"))
 			{
-				inFile = cmdOptions.getOptionValue("in");
+				inFile = cmdOptions.getOptionValue("i");
+				cmdOptionsRequiredNumber++;
 			}
-			if (cmdOptions.hasOption("insyntax"))
+			if (cmdOptions.hasOption("is"))
 			{
-				inSyntax = cmdOptions.getOptionValue("insyntax");
+				inSyntax = cmdOptions.getOptionValue("is");
+				cmdOptionsRequiredNumber++;
 			}
-			if (cmdOptions.hasOption("out"))
+			if (cmdOptions.hasOption("o"))
 			{
-				outFile = cmdOptions.getOptionValue("out");
+				outFile = cmdOptions.getOptionValue("o");
 			}
-			if (cmdOptions.hasOption("outsyntax"))
+			if (cmdOptions.hasOption("os"))
 			{
-				outSyntax = cmdOptions.getOptionValue("outsyntax");
+				outSyntax = cmdOptions.getOptionValue("os");
+				cmdOptionsRequiredNumber++;
 			}
-			if (cmdOptions.getOptions().length != 4)
+			if (cmdOptions.hasOption("c"))
 			{
-				System.out.println("Wrong number of arguments");
+				clear = true;
+			}
+			if (cmdOptions.getOptions().length == 0)
+			{
+				displayHelp();
 				System.exit(2);
 			}
 		}
 		catch (ParseException e)
 		{
 			System.out.println("Wrong arguments");
+			displayHelp();
 			System.exit(2);
 		}
 
