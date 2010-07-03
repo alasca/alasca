@@ -37,13 +37,11 @@
 
 	<target name="clean">
 		<delete dir="${CASL_DISTDIR}" failonerror="false" />
-		<delete dir="${CASL_BUILDDIR}" failonerror="false" />
 	</target>
 
 	<target name="prepare">
 		<mkdir dir="${CASL_TARGETDIR}/bin" />
 		<mkdir dir="${CASL_TARGETDIR}/lib/plugin" />
-		<mkdir dir="${CASL_TARGETDIR}/share" />
 		<mkdir dir="${CASL_BUILDDIR}/main" />
 		<mkdir dir="${CASL_BUILDDIR}/plugin" />
 		<ac:for list="${CASL_PLUGINLIST}" param="plugin">
@@ -111,15 +109,22 @@
 			<fileset dir="src/main/resources"/>
 			<fileset dir="src/plugin/resources"/>
 		</copy>
-		<copy todir="${CASL_TARGETDIR}/share">
-			<fileset dir="misc"/>
-		</copy>
 		<copy todir="${CASL_TARGETDIR}/bin">
 			<fileset dir="src/install"/>
 		</copy>
 		<chmod perm="755">
 			<fileset dir="${CASL_TARGETDIR}/bin"/>
 		</chmod>
+	</target>
+
+	<target name="package" depends="make">
+		<tar destfile="${CASL_DISTDIR}/${CASL_NAME}-${CASL_VERSION}.tar.gz" compression="gzip">
+			<tarfileset prefix="/${CASL_NAME}-${CASL_VERSION}/bin" dir="${CASL_TARGETDIR}/bin" filemode="755" />
+			<tarfileset prefix="/${CASL_NAME}-${CASL_VERSION}/lib" dir="${CASL_TARGETDIR}/lib"/>
+			<tarfileset prefix="/${CASL_NAME}-${CASL_VERSION}/share" dir="misc"/>
+		</tar>
+		<delete dir="${CASL_BUILDDIR}" failonerror="false" />
+		<delete dir="${CASL_TARGETDIR}" failonerror="false" />
 	</target>
 
 </project>
