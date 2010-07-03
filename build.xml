@@ -108,7 +108,8 @@
 			<fileset dir="lib"/>
 		</copy>
 		<copy todir="${CASL_TARGETDIR}/lib/resources">
-			<fileset dir="src/resources"/>
+			<fileset dir="src/main/resources"/>
+			<fileset dir="src/plugin/resources"/>
 		</copy>
 		<copy todir="${CASL_TARGETDIR}/share">
 			<fileset dir="misc"/>
