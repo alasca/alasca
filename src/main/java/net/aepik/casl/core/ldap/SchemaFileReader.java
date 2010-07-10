@@ -1,7 +1,5 @@
 /*
- * SchemaFileReader.java		0.1		23/05/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,26 +40,35 @@ import java.io.IOException;
  * grammaires BNF proposées.
 **/
 
-public abstract class SchemaFileReader {
+public abstract class SchemaFileReader
+{
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * La syntaxe d'entrée
+	 */
+	protected SchemaSyntax syntax;
 
-	/** La syntaxe d'entrée **/
-	protected SchemaSyntax syntax ;
-	/** L'entrée sur laquelle le parser lit **/
-	protected BufferedReader input ;
+	/**
+	 * L'entrée sur laquelle le parser lit
+	 */
+	protected BufferedReader input;
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	/**
+	 * Error message
+	 */
+	protected String errorMessage;
+
+	/**
+	 * Error line
+	 */
+	protected int errorLine;
 
 	/**
 	 * Construit un nouveau parser sans entrée.
 	 * @param syntax La syntaxe.
-	**/
-	public SchemaFileReader( SchemaSyntax syntax ) {
+	 */
+	public SchemaFileReader (SchemaSyntax syntax)
+	{
 		this.syntax = syntax ;
 		this.input = null ;
 	}
@@ -70,32 +77,74 @@ public abstract class SchemaFileReader {
 	 * Construit un nouveau parser à partir d'une entrée.
 	 * @param syntax La syntaxe.
 	 * @param in Un objet Reader.
-	**/
-	public SchemaFileReader( BufferedReader in ) {
+	 */
+	public SchemaFileReader (BufferedReader in)
+	{
 		this.syntax = syntax ;
 		this.input = in ;
 	}
 
-////////////////////////////////
-// Methodes publiques
-////////////////////////////////
+	/**
+	 * Return an error line.
+	 * @return int
+	 */
+	public int getErrorLine ()
+	{
+		return this.errorLine;
+	}
+
+	/**
+	 * Return an error message.
+	 * @return String
+	 */
+	public String getErrorMessage ()
+	{
+		return this.errorMessage;
+	}
 
 	/**
 	 * Retourne le flux d'entrée du parseur.
 	 * @return Reader Un flux.
-	**/
-	public BufferedReader getInput() { return input; }
+	 */
+	public BufferedReader getInput ()
+	{
+		return this.input;
+	}
 
 	/**
 	 * Parcourt l'entrée et retourne l'ensemble des objets schéma lus.
 	 * @retour Le schéma lu.
-	**/
-	public abstract Schema read() throws IOException;
+	 */
+	public abstract Schema read () throws IOException;
 
 	/**
-	 * Modifie le flux d'entrée du parseur.
-	 * @param in Le nouveau flux d'entrée.
-	**/
-	public void setInput( BufferedReader in ) { this.input = in; }
+	 * Set the error line.
+	 * @param int errorLine
+	 * @return void
+	 */
+	protected void setErrorLine (int errorLine)
+	{
+		this.errorLine = errorLine;
+	}
+
+	/**
+	 * Set an error message.
+	 * @param String errorMessage
+	 * @return void
+	 */
+	protected void setErrorMessage (String errorMessage)
+	{
+		this.errorMessage = errorMessage;
+	}
+
+	/**
+	 * Set buffer reader.
+	 * @param BufferedReader input The new buffer reader.
+	 */
+	public void setInput (BufferedReader input)
+	{
+		this.input = input;
+	}
 
 }
+

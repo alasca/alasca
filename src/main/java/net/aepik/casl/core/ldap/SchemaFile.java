@@ -1,7 +1,5 @@
 /*
- * SchemaFile.java		0.1		23/05/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +21,6 @@ package net.aepik.casl.core.ldap;
 
 import net.aepik.casl.core.ldap.Schema;
 import net.aepik.casl.core.ldap.SchemaFileReader;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -36,115 +33,161 @@ import java.util.Vector;
 /**
  * Cet objet ouvre une fichier et créé un flux pour ce fichier. Il utilise
  * un parseur pour obtenir tous les objets de type SchemaObject.
-**/
+ */
+public class SchemaFile
+{
 
-public class SchemaFile {
+	/**
+	 * Indicate an error.
+	 */
+	private boolean error;
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * Le nom du fichier schema
+	 */
+	private String filename;
 
-	/** Le nom du fichier schema **/
-	private String filename ;
-	/** Le schéma lu **/
-	protected Schema schema ;
-	/** Le reader associé au fichier **/
-	private SchemaFileReader reader ;
-	/** Le writer associé au fichier **/
-	private SchemaFileWriter writer ;
+	/**
+	 * Le schéma lu
+	 */
+	protected Schema schema;
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	/**
+	 * Le reader associé au fichier
+	 */
+	private SchemaFileReader reader;
+
+	/**
+	 * Le writer associé au fichier
+	 */
+	private SchemaFileWriter writer;
 
 	/**
 	 * Construit un objet SchemaFile.
 	 * @param filename Le nom du fichier schema.
 	 * @param reader L'interface d'entrée.
-	**/
-	public SchemaFile( String filename,
-			SchemaFileReader reader,
-			SchemaFileWriter writer ) {
-
-		schema = null ;
+	 */
+	public SchemaFile (String filename, SchemaFileReader reader, SchemaFileWriter writer)
+	{
+		this.error    = false;
+		this.schema   = null ;
 		this.filename = filename ;
-		this.reader = reader ;
-		this.writer = writer ;
+		this.reader   = reader ;
+		this.writer   = writer ;
 	}
-
-////////////////////////////////
-// Methodes publiques
-////////////////////////////////
 
 	/**
 	 * Indique si le fichier existe vraiment.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
-	public boolean exists() { return ( new File( filename ) ).exists() ; }
+	 */
+	public boolean exists ()
+	{
+		return (new File(filename)).exists();
+	}
+
+	/**
+	 * Return an error line.
+	 * @return int
+	 */
+	public int getErrorLine ()
+	{
+		return this.reader.getErrorLine();
+	}
+
+	/**
+	 * Return an error message.
+	 * @return String
+	 */
+	public String getErrorMessage ()
+	{
+		return this.reader.getErrorMessage();
+	}
 
 	/**
 	 * Retourne le schéma.
 	 * @return Schema Le schéma associé au fichier.
-	**/
-	public Schema getSchema() { return schema; }
+	 */
+	public Schema getSchema ()
+	{
+		return schema;
+	}
+
+	/**
+	 * Indicate if there was an error.
+	 * @return boolean
+	 */
+	public boolean isError ()
+	{
+		return this.error;
+	}
 
 	/**
 	 * Parcourt le fichier est créer les objets correspondant.
 	 * @return boolean True si l'opération a réussi, false sinon.
-	**/
-	public boolean read() {
-
-		if( !exists() )
+	 */
+	public boolean read ()
+	{
+		if (!this.exists())
+		{
 			return false;
-
-		try{
-			BufferedReader entree = new BufferedReader( new FileReader( new File( filename ) ) );
-			reader.setInput( entree );
-
-			Schema s = reader.read();
+		}
+		try
+		{
+			BufferedReader entree = new BufferedReader(
+				new FileReader(new File(this.filename)));
+			this.reader.setInput(entree);
+			Schema s = this.reader.read();
 			entree.close();
-
-			if( s!=null ) {
-				schema = s;
+			if (s != null)
+			{
+				this.schema = s;
 				return true ;
 			}
-
-        } catch( Exception e ) { System.out.println( e ); }
-
+			this.error = true;
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}
 		return false;
 	}
 
 	/**
 	 * Modifie le schéma.
 	 * @param newSchema Le nouveau schéma à prendre en compte.
-	**/
-	public void setSchema( Schema newSchema ) { schema = newSchema ; }
+	 */
+	public void setSchema (Schema newSchema)
+	{
+		this.schema = newSchema;
+	}
 
 	/**
 	 * Ecrit les objets vers l'interface de sortie.
 	 * Si le fichier de sortie existe déjà, l'opération échoue.
 	 * @return boolean True si l'opération a réussi, false sinon.
-	**/
-	public boolean write() {
-
-		if( exists() )
+	 */
+	public boolean write ()
+	{
+		if (this.exists())
+		{
 			return false;
-
-		try{
-			File f = new File( filename );
+		}
+		try
+		{
+			File f = new File(this.filename);
 			f.createNewFile();
-
-			BufferedWriter sortie = new BufferedWriter( new FileWriter( f ) );
-			writer.setOutput( sortie );
-
-			writer.write( schema ) ;
+			BufferedWriter sortie = new BufferedWriter(new FileWriter(f));
+			writer.setOutput(sortie);
+			writer.write(schema) ;
 			sortie.flush();
 			sortie.close();
-
 			return true;
-
-        } catch( Exception e ) { System.out.println( e ); }
-
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}
 		return false;
 	}
+
 }
