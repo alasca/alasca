@@ -81,7 +81,8 @@ public class SCTool {
 		Schema schema = null;
 		try
 		{
-			schema = Schema.create(syntax, fileName);
+			SchemaFile schemaFile = Schema.createAndLoad(syntax, fileName, true);
+			schema = schemaFile.getSchema();
 		}
 		catch (Exception e){};
 		return schema;
