@@ -21,10 +21,10 @@
 package net.aepik.casl.ui;
 
 import net.aepik.casl.core.ldap.Schema;
+import net.aepik.casl.core.ldap.SchemaFile;
 import net.aepik.casl.core.ldap.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.ui.util.DescriptiveInternalFrame;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -48,11 +48,8 @@ import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.TableColumn;
 
-public class LoadFileFrame extends JDialog implements ActionListener, WindowListener {
-
-////////////////////////////////
-// Attributs
-////////////////////////////////
+public class LoadFileFrame extends JDialog implements ActionListener, WindowListener
+{
 
 	/** La fenêtre appelante **/
 	private JFrame mainFrame ;
@@ -139,11 +136,20 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 							Schema.getSyntaxPackageName() + "." + syntaxName )).newInstance();
 
 					// On charge.
-					Schema schema = Schema.create( syntax, filename.getText() );
+					SchemaFile schemaFile = Schema.createAndLoad(syntax, filename.getText(), true);
+					Schema schema = schemaFile.getSchema();
 
-					// Si le chargement du fichier réussi, ne réussi pas, le format est incorrect.
-					if( schema==null ) {
-						JOptionPane.showMessageDialog( this, "Le format du fichier est incorrect.", "Erreur", JOptionPane.ERROR_MESSAGE );
+					// Si le chargement du fichier ne réussi pas, le format est incorrect.
+					if( schema==null )
+					{
+						String message = "Le format du fichier est incorrect.";
+						if (schemaFile.isError())
+						{
+							message += "\n\n";
+							message += "Line " + schemaFile.getErrorLine() + ":\n";
+							message += schemaFile.getErrorMessage();
+						}
+						JOptionPane.showMessageDialog( this, message, "Erreur", JOptionPane.ERROR_MESSAGE );
 
 					// Sinon si l'ajout echoue, le fichier est déjà ouvert.
 					} else if( !manager.addSchema( (new File( filename.getText() )).getName(), schema ) ) {
