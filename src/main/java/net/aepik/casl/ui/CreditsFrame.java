@@ -46,7 +46,7 @@ public class CreditsFrame extends JDialog {
 	public CreditsFrame( JFrame p, Manager m, JComponent footerComponent, boolean licence ) {
 
 		super();
-		setSize( 300, 350 );
+		setSize( 400, 350 );
 		setLocationRelativeTo( p );
 		setTitle( "A propos..." );
 
@@ -95,7 +95,7 @@ public class CreditsFrame extends JDialog {
 		if( licence ) {
 			JTextArea licenceLabel = new JTextArea(
 				      "CASL version " + m.getProperty( "Version" ) + "\n"
-					+ "Copyright (C) 2006 Thomas Chemineau\n\n"
+					+ "Copyright (C) 2006-2010 Thomas Chemineau\n\n"
 					+ "This program is free software; you can redistribute it and/or "
 					+ "modify it under the terms of the GNU General Public License "
 					+ "as published by the Free Software Foundation; either version 2 "
