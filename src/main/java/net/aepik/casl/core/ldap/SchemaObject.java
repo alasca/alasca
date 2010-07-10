@@ -153,8 +153,31 @@ public class SchemaObject {
 	 * Retourne le nom usuel de cet objet si il existe.
 	 * @return String Le nom usuel, sinon null.
 	**/
-	public String getName() {
+	public String getName()
+	{
+		String keyname = syntax.getDisplayNameParameter( type );
+		if (!isKeyExists(keyname))
+		{
+			return null;
+		}
+		String keyvalue = getValue(keyname).toString();
+		if (!QDescriptionList.isValidFormat(keyvalue))
+		{
+			return null;
+		}
+		String values = "";
+		for (String value : (new QDescriptionList(keyvalue)).getValues())
+		{
+			values += value + " ";
+		}
+		values = values.trim();
+		if (values.length() == 0)
+		{
+			return null;
+		}
+		return values.replaceAll("'","");
 
+		/*
 		String keyname = syntax.getDisplayNameParameter( type );
 
 		if( isKeyExists( keyname ) ) {
@@ -170,6 +193,7 @@ public class SchemaObject {
 		}
 
 		return null ;
+		*/
 	}
 
 	/**
@@ -189,7 +213,7 @@ public class SchemaObject {
 			return null;
 		}
 		QDescriptionList qdescrs = new QDescriptionList(keyvalue);
-		return qdescrs.getValues()[0];
+		return qdescrs.getValues()[0].replaceAll("'","");
 	}
 
 	/**

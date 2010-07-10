@@ -1,7 +1,5 @@
 /*
- * SUNDSSyntax.java		0.1		23/05/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +23,11 @@ package net.aepik.casl.core.ldap.syntax;
  * SUN Directory Server syntax definition.
 **/
 
-public class SUNDSSyntax extends RFCSyntax {
-
-////////////////////////////////
-// Constantes
-////////////////////////////////
+public class SUNDSSyntax extends RFCSyntax
+{
 
 	public final static String SUNDS_ATTRIBUTE = "attributeTypes:";
+
 	protected String[][] SUNDS_ATTRIBUTE_PARAMETERS = {
 		{ "1",	"NAME",			"" },
 		{ "2",	"DESC",			"" },
@@ -53,6 +49,7 @@ public class SUNDSSyntax extends RFCSyntax {
 	};
 
 	public final static String SUNDS_OBJECT = "objectClasses:";
+
 	protected String[][] SUNDS_OBJECT_PARAMETERS = {
 		{ "1",	"NAME",		"" },
 		{ "2",	"DESC",		"" },
@@ -67,11 +64,8 @@ public class SUNDSSyntax extends RFCSyntax {
 		{ "9",	"X-ORIGIN",	"" }
 	};
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
-
-	public SUNDSSyntax() {
+	public SUNDSSyntax ()
+	{
 		super();
 		super.attributeDefinitionHeader = SUNDS_ATTRIBUTE ;
 		super.objectDefinitionHeader = SUNDS_OBJECT ;
@@ -80,4 +74,23 @@ public class SUNDSSyntax extends RFCSyntax {
 		super.RFC_ATTRIBUTE_PARAMETERS = SUNDS_ATTRIBUTE_PARAMETERS;
 		super.RFC_OBJECT_PARAMETERS = SUNDS_OBJECT_PARAMETERS;
 	}
+
+	public boolean isAttributeDefinitionHeader (String str)
+	{
+		if (this.attributeDefinitionHeader == null)
+		{
+			return false;
+		}
+		return str.trim().toLowerCase().startsWith( attributeDefinitionType.toLowerCase() );
+	}
+
+	public boolean isObjectDefinitionHeader (String str)
+	{
+		if (this.objectDefinitionHeader == null)
+		{
+			return false;
+		}
+		return str.trim().toLowerCase().startsWith( objectDefinitionType.toLowerCase() );
+	}
+
 }

@@ -183,18 +183,22 @@ public class Schema extends Observable {
 
 
 	/**
-	 * CrÃ©er un schÃ©ma et charge les objets lu Ã  partir d'un fichier dans ce
-	 * nouveau schÃ©ma.
-	 * @param file Un objet SchemaFile permettant de loader les objets.
+	 * Créer un schéma et charge les objets lu à partir d'un fichier dans ce
+	 * nouveau schéma.
+	 * @param SchemaSyntax syntax
+	 * @param String filename
+	 * @param boolean load
+	 * @return SchemaFile Un objet SchemaFile contenant les objets.
 	**/
-	public static Schema create( SchemaSyntax syntax, String filename ) {
-
+	public static SchemaFile createAndLoad (SchemaSyntax syntax, String filename, boolean load)
+	{
 		SchemaFileReader sReader = syntax.createSchemaReader();
-		SchemaFile sFile = new SchemaFile( filename, sReader, null );
-
-		if( sFile.read() )
-			return sFile.getSchema();
-		return null ;
+		SchemaFile sFile = new SchemaFile(filename,sReader, null);
+		if (load)
+		{
+			sFile.read();
+		}
+		return sFile;
 	}
 
 	/**
