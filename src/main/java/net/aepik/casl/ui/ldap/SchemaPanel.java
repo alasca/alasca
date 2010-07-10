@@ -298,7 +298,8 @@ public class SchemaPanel extends JPanel {
 
 		String objetTypeName = schema.getSyntax().getObjectDefinitionType() ;
 		SchemaObject[] objets = schema.getObjects( objetTypeName );
-		DefaultMutableTreeNode objetNodes = new DefaultMutableTreeNode( objetTypeName );
+		String objetNodeName = objetTypeName + " (" + objets.length + ")";
+		DefaultMutableTreeNode objetNodes = new DefaultMutableTreeNode(objetNodeName);
 
 		for( int i=0; i<objets.length; i++ ) {
 			String id = objets[i].getId() ;
@@ -314,7 +315,8 @@ public class SchemaPanel extends JPanel {
 
 		String attributTypeName = schema.getSyntax().getAttributeDefinitionType() ;
 		SchemaObject[] attributs = schema.getObjects( attributTypeName );
-		DefaultMutableTreeNode attributNodes = new DefaultMutableTreeNode( attributTypeName );
+		String attributNodeName = attributTypeName + " (" + attributs.length + ")";
+		DefaultMutableTreeNode attributNodes = new DefaultMutableTreeNode(attributNodeName);
 
 		for( int i=0; i<attributs.length; i++ ) {
 			String id = attributs[i].getId() ;
