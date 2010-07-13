@@ -1,7 +1,5 @@
 /*
- * SchemaFileFrame.java		0.1		06/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package net.aepik.casl.ui;
+package net.aepik.casl.ui.util;
 
 import net.aepik.casl.core.ldap.Schema;
 import net.aepik.casl.core.ldap.SchemaFile;
@@ -26,6 +24,7 @@ import net.aepik.casl.core.ldap.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.ui.util.DescriptiveInternalFrame;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -204,7 +203,7 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 		textAreaFilename.setWrapStyleWord( true );
 		textAreaFilename.setFont( (new JLabel()).getFont() );
 		textAreaFilename.setBorder( BorderFactory.createEmptyBorder( 7, 6, 12, 6 ) );
-		textAreaFilename.setBackground( (new JLabel()).getBackground() );
+		textAreaFilename.setBackground( new Color(240, 235, 226) );
 
 		boutonOpenFile.setBorder( BorderFactory.createCompoundBorder(
 				BorderFactory.createMatteBorder( 0, 5, 0, 0, boutonsPanel.getBackground() ),
@@ -230,7 +229,7 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 		textAreaSyntaxes.setWrapStyleWord( true );
 		textAreaSyntaxes.setFont( (new JLabel()).getFont() );
 		textAreaSyntaxes.setBorder( BorderFactory.createEmptyBorder( 7, 6, 12, 6 ) );
-		textAreaSyntaxes.setBackground( (new JLabel()).getBackground() );
+		textAreaSyntaxes.setBackground( new Color(240, 235, 226) );
 
 		JPanel syntaxesPanel = new JPanel( new BorderLayout() );
 		syntaxesPanel.add( textAreaSyntaxes, BorderLayout.NORTH );
