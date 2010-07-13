@@ -1,7 +1,5 @@
 /*
- * SchemaPanel.java		0.1		02/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,11 +24,11 @@ import net.aepik.casl.core.ldap.SchemaObject;
 import net.aepik.casl.core.ldap.SchemaValue;
 import net.aepik.casl.ui.util.NoEditableTableModel;
 import com.jgoodies.uif_lite.panel.SimpleInternalFrame;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
+import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -56,168 +54,182 @@ import javax.swing.event.TreeSelectionListener;
  * Sur le côté droit se trouve l'arbre pour naviguer dans les éléments
  * du schéma, sur le côté gauche se trouve une table affichant les
  * propriétées d'un élément séléctionné dans l'arbre.
-**/
+ */
+public class SchemaPanel extends JPanel
+{
 
-public class SchemaPanel extends JPanel {
-
-////////////////////////////////
-// Constantes
-////////////////////////////////
-
-	/** L'item de suppression **/
+	/**
+	 * L'item de suppression
+	 */
 	public JMenuItem item_supprimer = new JMenuItem( "Supprimer" );
-	/** L'item propriété **/
+
+	/**
+	 * L'item propriété
+	 */
 	public JMenuItem item_propriete = new JMenuItem( "Modifier..." );
-	/** L'item propriété 2 (pour la table) **/
+
+	/**
+	 * L'item propriété 2 (pour la table)
+	 */
 	public JMenuItem item_propriete2 = new JMenuItem( "Modifier..." );
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * Le schema
+	 */
+	private Schema schema;
 
-	/** Le schema **/
-	private Schema schema ;
-	/** L'arbre affiché **/
-	private JTree arbre ;
-	/** Le model de données de l'arbre **/
-	private DefaultTreeModel arbreModel ;
-	/** La JTable affichant les informations **/
-	private JTable table ;
-	/** Le menu Popup pour l'arbre **/
-	private JPopupMenu popupMenuArbre ;
-	/** Le menu Popup pour la table **/
+	/**
+	 * L'arbre affiché
+	 */
+	private JTree arbre;
+
+	/**
+	 * Le model de données de l'arbre
+	 */
+	private DefaultTreeModel arbreModel;
+
+	/**
+	 * La JTable affichant les informations
+	 */
+	private JTable table;
+
+	/**
+	 * Le menu Popup pour l'arbre
+	 */
+	private JPopupMenu popupMenuArbre;
+
+	/**
+	 * Le menu Popup pour la table
+	 */
 	private JPopupMenu popupMenuTable ;
 
-	/** Le panel de l'arbre **/
-	private SimpleInternalFrame arbrePanel ;
-	/** Le panel de la table **/
-	private SimpleInternalFrame tablePanel ;
+	/**
+	 * Le panel de l'arbre
+	 */
+	private SimpleInternalFrame arbrePanel;
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	/**
+	 * Le panel de la table
+	 */
+	private SimpleInternalFrame tablePanel;
 
-	public SchemaPanel( Schema schema ) {
-
+	/**
+	 * Build a new graphical SchemaPanel object.
+	 * @param Schema schema The Schema object.
+	 */
+	public SchemaPanel (Schema schema)
+	{
 		super();
-
 		this.schema = schema ;
 		this.arbre = new JTree();
-		this.arbreModel = new DefaultTreeModel( null );
+		this.arbreModel = new DefaultTreeModel(null);
 		this.table = new JTable();
 		this.popupMenuArbre = new JPopupMenu();
 		this.popupMenuTable = new JPopupMenu();
-
 		initPanel();
-		setNewSchema( schema );
+		setNewSchema(schema);
 	}
-
-////////////////////////////////
-// Methodes publiques
-////////////////////////////////
 
 	/**
 	 * Ajoute un listener pour cet objet.
 	 * @param listener Un objet SchemaListener.
-	**/
-	public void addSchemaListener( SchemaListener l ) {
-
-		arbre.addTreeSelectionListener( l );
-		arbre.addMouseListener( l );
-		item_supprimer.addActionListener( l );
-		item_supprimer.addMouseListener( l );
-		item_propriete.addActionListener( l );
-		item_propriete.addMouseListener( l );
-
-		table.addMouseListener( l );
-		item_propriete2.addActionListener( l );
-		item_propriete2.addMouseListener( l );
+	 */
+	public void addSchemaListener (SchemaListener l)
+	{
+		arbre.addTreeSelectionListener(l);
+		arbre.addMouseListener(l);
+		item_supprimer.addActionListener(l);
+		item_supprimer.addMouseListener(l);
+		item_propriete.addActionListener(l);
+		item_propriete.addMouseListener(l);
+		table.addMouseListener(l);
+		item_propriete2.addActionListener(l);
+		item_propriete2.addMouseListener(l);
 	}
 
 	/**
 	 * Retourne l'object schema pour le noeud en cours de sélection.
 	 * @return SchemaObject L'objet attaché au noeud en cours de séléction.
-	**/
-	public SchemaObject getCurrentSelectedObject() {
-
+	 */
+	public SchemaObject getCurrentSelectedObject ()
+	{
 		String id = getCurrentSelectedObjectId();
-		return schema.getObject( id );
+		return schema.getObject(id);
 	}
 
 	/**
 	 * Retourne le path de l'abre pour le noeud en cours de sélection.
 	 * @return TreePath Le chemin du noeud en cours de sélection.
-	**/
-	public TreePath getCurrentSelectedPath() {
+	 */
+	public TreePath getCurrentSelectedPath ()
+	{
 		return arbre.getSelectionPath();
 	}
 
 	/**
 	 * Supprime le dernier noeud sélectionné dans l'arbre.
 	 * @return boolean True si la suppression a réussi, false sinon.
-	**/
-	public boolean removeCurrentSelectedNode() {
-
+	 */
+	public boolean removeCurrentSelectedNode ()
+	{
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) arbre.getLastSelectedPathComponent();
-
-		if( node!=null ) {
-			arbreModel.removeNodeFromParent( node );
+		if (node != null)
+		{
+			arbreModel.removeNodeFromParent(node);
 			return true ;
 		}
-
 		return false ;
 	}
 
 	/**
 	 * Rafraichit le noeud parent du noeud sélectionné.
 	 * @return boolean True si le rafraichissement a réussi, false sinon.
-	**/
-	public boolean refreshParentSelectedNode() {
-
+	 */
+	public boolean refreshParentSelectedNode ()
+	{
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) arbre.getLastSelectedPathComponent();
-
-		if( node!=null ) {
+		if (node != null)
+		{
 			DefaultMutableTreeNode nodeParent = (DefaultMutableTreeNode) node.getParent();
-			arbreModel.reload( nodeParent);
+			arbreModel.reload(nodeParent);
 			return true ;
 		}
-
 		return false ;
 	}
 
 	/**
 	 * Supprime un listener pour cet objet.
 	 * @param listener Un objet SchemaListener.
-	**/
-	public void removeSchemaListener( SchemaListener l ) {
-
-		arbre.removeTreeSelectionListener( l );
-		arbre.removeMouseListener( l );
-		item_supprimer.removeActionListener( l );
-		item_supprimer.removeMouseListener( l );
-		item_propriete.removeActionListener( l );
-		item_propriete.removeMouseListener( l );
-
-		table.removeMouseListener( l );
-		item_propriete2.removeActionListener( l );
-		item_propriete2.removeMouseListener( l );
+	 */
+	public void removeSchemaListener (SchemaListener l)
+	{
+		arbre.removeTreeSelectionListener(l);
+		arbre.removeMouseListener(l);
+		item_supprimer.removeActionListener(l);
+		item_supprimer.removeMouseListener(l);
+		item_propriete.removeActionListener(l);
+		item_propriete.removeMouseListener(l);
+		table.removeMouseListener(l);
+		item_propriete2.removeActionListener(l);
+		item_propriete2.removeMouseListener(l);
 	}
 
 	/**
 	 * Sélectionne un objet particulier grâce au chemin spécifié
 	 * @param path Un objet TreePath qui renseigne le schéma.
-	**/
-	public void setSelectedPath( TreePath path ) {
-		arbre.setSelectionPath( path );
+	 */
+	public void setSelectedPath (TreePath path)
+	{
+		arbre.setSelectionPath(path);
 	}
 
 	/**
 	 * Modifie les données du panel. On modifie par conséquent les données
 	 * de l'arbre et on remet à jour la table.
 	 * @param s Le nouveau schéma.
-	**/
-	public void setNewSchema( Schema s ) {
-
+	 */
+	public void setNewSchema (Schema s)
+	{
 		schema = s ;
 		updateTree();
 		updateTable();
@@ -228,138 +240,123 @@ public class SchemaPanel extends JPanel {
 	 * @param e Le composant sur lequel afficher le menu popup.
 	 * @param x La coordonnée x du menu popup.
 	 * @param y La coordonnée y du menu popup.
-	**/
-	public void showPopupMenu( Component e, int x, int y ) {
-
-		if( e==table ) {
-			try {
-				if( schema.contains( getCurrentSelectedObjectId() ) ) {
-					popupMenuTable.show( table, x, y );
+	 */
+	public void showPopupMenu (Component e, int x, int y)
+	{
+		if (e == table)
+		{
+			try
+			{
+				if (schema.contains(getCurrentSelectedObjectId()))
+				{
+					popupMenuTable.show(table, x, y);
 				}
-			} catch( NullPointerException ex ) {}
-
-		} else if( e==arbre ) {
-			try {
-				TreePath objPath = arbre.getPathForLocation( x, y ) ;
-				setSelectedPath( objPath );
-
-				if( schema.contains( getCurrentSelectedObjectId() ) ) {
-					popupMenuArbre.show( arbre, x, y );
+			}
+			catch (NullPointerException ex) {}
+		}
+		if (e == arbre)
+		{
+			try
+			{
+				TreePath objPath = arbre.getPathForLocation(x, y);
+				setSelectedPath(objPath);
+				if (schema.contains(getCurrentSelectedObjectId()))
+				{
+					popupMenuArbre.show(arbre, x, y);
 				}
-			} catch( NullPointerException ex ) {}
+			}
+			catch (NullPointerException ex) {}
 		}
 	}
 
 	/**
 	 * Met à jour les données de la table en fonction du noeud sélectionné
 	 * dans l'arbre.
-	**/
-	public void updateTable() {
+	 */
+	public void updateTable ()
+	{
+		SchemaObject object = getCurrentSelectedObject();
+		String[][] dataObject = null;
 
-		String[] columnName = { "Variable", "Valeur" };
-		String[][] datas = null;
-		SchemaObject objet = getCurrentSelectedObject();
-
-		// Aucun noeud sélectionné.
-		// On affiche un table vide.
-		if( objet==null ) {
-			datas = new String[0][2];
-
-			// Modifie le titre du panel de la table.
-			tablePanel.setTitle( "Aucun noeud sélectionné" );
-
-		// Un noeud est sélectionné.
-		} else {
-			if( objet!=null ) {
-				String[] keys = objet.getKeys();
-				SchemaValue[] values = objet.getValues();
-				datas = new String[keys.length][2];
-		
-				for( int i=0; i<datas.length; i++ ) {
-					datas[i][0] = keys[i];
-					datas[i][1] = values[i].toString();
-				}
+		if (object == null)
+		{
+			tablePanel.setTitle("Aucun noeud sélectionné");
+			dataObject = new String[0][2];
+		}
+		else
+		{
+			tablePanel.setTitle("Noeud sélectionné : " + object.getName() + " (" + object.getId() + ")");
+			String[] keys = object.getKeys();
+			dataObject = new String[keys.length][2];
+			for (int i = 0; i < keys.length; i++)
+			{
+				SchemaValue value = object.getValue(keys[i]);
+				dataObject[i][0] = keys[i];
+				dataObject[i][1] = value.toString();
 			}
-
-			// Modifie le titre du panel de la table.
-			tablePanel.setTitle( "Noeud sélectionné : " + objet.getId() );
 		}
 
-		NoEditableTableModel model = new NoEditableTableModel( datas, columnName );
-		table.setModel( model );
+		String[] columnNames = { "Variable", "Valeur" };
+		table.setModel(new NoEditableTableModel(dataObject, columnNames));
 	}
 
 	/**
 	 * Met à jour les données de l'arbre.
-	**/
-	public void updateTree() {
+	 */
+	public void updateTree ()
+	{
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Objets du schema");
+		String[] types = {
+			schema.getSyntax().getObjectDefinitionType(),
+			schema.getSyntax().getAttributeDefinitionType()
+		};
 
-		// On créé le noeud pour les objets.
+		for (String type : types)
+		{
+			SchemaObject[] objects = schema.getObjectsInOrder(type);
+			String rootNodeId = type + " (" + objects.length + ")";
+			DefaultMutableTreeNode typeNode = new DefaultMutableTreeNode(rootNodeId);
+			HashMap<String,DefaultMutableTreeNode> map = new HashMap<String,DefaultMutableTreeNode>();
 
-		String objetTypeName = schema.getSyntax().getObjectDefinitionType() ;
-		SchemaObject[] objets = schema.getObjects( objetTypeName );
-		String objetNodeName = objetTypeName + " (" + objets.length + ")";
-		DefaultMutableTreeNode objetNodes = new DefaultMutableTreeNode(objetNodeName);
+			for (SchemaObject object : objects)
+				{
+				String nodeId = object.getNameFirstValue();
+				DefaultMutableTreeNode node = new DefaultMutableTreeNode(nodeId);
+				DefaultMutableTreeNode parentNode = null;
+				SchemaObject parent = object.getParent();
+				if (parent != null)
+				{
+					String parentNodeId = parent.getNameFirstValue();
+					parentNode = map.get(parentNodeId);
+				}
+				if (parentNode == null)
+				{
+					parentNode = typeNode;
+				}
+				map.put(nodeId,node);
+				parentNode.add(node);
+			}
 
-		for( int i=0; i<objets.length; i++ ) {
-			String id = objets[i].getId() ;
-			String name = objets[i].getName();
-
-			if( name!=null )
-				id += " " + name ;
-
-			objetNodes.add( new DefaultMutableTreeNode( id ) );
+			rootNode.add(typeNode);
 		}
 
-		// On créé le noeud pour les attributs.
-
-		String attributTypeName = schema.getSyntax().getAttributeDefinitionType() ;
-		SchemaObject[] attributs = schema.getObjects( attributTypeName );
-		String attributNodeName = attributTypeName + " (" + attributs.length + ")";
-		DefaultMutableTreeNode attributNodes = new DefaultMutableTreeNode(attributNodeName);
-
-		for( int i=0; i<attributs.length; i++ ) {
-			String id = attributs[i].getId() ;
-			String name = attributs[i].getNameFirstValue();
-
-			if( name!=null )
-				id += " " + name ;
-
-			attributNodes.add( new DefaultMutableTreeNode( id ) );
-		}
-
-		// On met à jour l'arbre
-
-		DefaultMutableTreeNode arbreRootNode = new DefaultMutableTreeNode(
-				"Objets du schema" ) ;
-		arbreRootNode.add( objetNodes );
-		arbreRootNode.add( attributNodes );
-		arbreModel = new DefaultTreeModel( arbreRootNode );
-		arbre.setModel( arbreModel );
-
-		// On modifie le titre du panel de l'abre.
+		arbreModel = new DefaultTreeModel(rootNode);
+		arbre.setModel(arbreModel);
 		arbrePanel.setTitle( "Schéma de syntaxe " + schema.getSyntax().toString() );
 	}
 
-////////////////////////////////
-// Methodes privées
-////////////////////////////////
-
-	private String getCurrentSelectedObjectId() {
-
+	private String getCurrentSelectedObjectId ()
+	{
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) arbre.getLastSelectedPathComponent();
-		if( node!=null ) {
-
-			// Il se peut qu'on est inséré le nom derrière l'id,
-			// on cherche si il existe un espace.
-			String str = node.getUserObject().toString();
-			int firstSpaceIndex = str.indexOf( ' ' );
-			if( firstSpaceIndex!=-1 )
-				str = str.substring( 0, firstSpaceIndex );
-
-			return str ;
+		if (node != null)
+		{
+			String nodeName = node.getUserObject().toString();
+			SchemaObject object = schema.getObjectByName(nodeName);
+			if (object != null)
+			{
+				return object.getId();
+			}
 		}
-
 		return null;
 	}
 
