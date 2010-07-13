@@ -486,10 +486,26 @@ public class Schema extends Observable {
 	/**
 	 * Permet de notifier que les donnÃ©es ont changÃ©es.
 	 * Tous les objets observant le schema verront la notification.
-	**/
-	public void notifyUpdates() {
-		setChanged() ;
-		notifyObservers() ;
+	 */
+	public void notifyUpdates ()
+	{
+		this.notifyUpdates(false);
+	}
+
+	/**
+	 * Permet de notifier que les donnÃ©es ont changÃ©es.
+	 * Tous les objets observant le schema verront la notification.
+	 * @param boolean force Indicates wheter or not to force the update.
+	 */
+	public void notifyUpdates (boolean force)
+	{
+		setChanged();
+		Boolean b = new Boolean(false);
+		if (force)
+		{
+			b = new Boolean(true);
+		}
+		notifyObservers(b);
 	}
 
 	/**
