@@ -1,7 +1,5 @@
 /*
- * Main.java		0.2		07/07/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +21,6 @@ package net.aepik.casl.ui;
 
 import net.aepik.casl.core.Manager;
 import net.aepik.casl.core.util.Config;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -69,7 +66,7 @@ public class CreditsFrame extends JDialog {
 		Font texteGras = new Font( (new JLabel()).getFont().getName(), Font.BOLD, 14 );
 		JLabel titreLabel = new JLabel( "CASL" );
 		titreLabel.setFont( texteGras );
-		titreLabel.setForeground( Color.red );
+		//titreLabel.setForeground( Color.red );
 
 		JTextArea descriptionLabel = new JTextArea(
 				"Version : " + m.getProperty( "Version" ) + "\n"
@@ -116,9 +113,7 @@ public class CreditsFrame extends JDialog {
 			licenceLabel.setWrapStyleWord( true );
 	
 			licenceScroller = new JScrollPane( licenceLabel );
-			licenceScroller.setBorder( BorderFactory.createCompoundBorder(
-					BorderFactory.createEmptyBorder( 10, 6, 6, 6 ),
-					BorderFactory.createTitledBorder( " Licence " ) ) );
+			licenceScroller.setBorder(BorderFactory.createEmptyBorder( 10, 6, 6, 6 ));
 			licenceScroller.setOpaque( false );
 		}
 
