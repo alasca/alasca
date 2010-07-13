@@ -1,7 +1,5 @@
 /*
- * SchemaObject.java		0.1		23/05/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +20,6 @@
 package net.aepik.casl.core.ldap;
 
 import net.aepik.casl.core.ldap.value.*;
-
 import java.lang.NullPointerException;
 import java.lang.String;
 import java.util.Enumeration;
@@ -41,64 +38,69 @@ import java.util.Hashtable;
  * utiliserons une syntaxe.
 **/
 
-public class SchemaObject {
-
-////////////////////////////////
-// Constantes
-////////////////////////////////
+public class SchemaObject
+{
 
 	public static final int TYPE_OBJECT = 0;
+
 	public static final int TYPE_ATTRIBUTE = 1;
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * La syntaxe utilisé par l'objet.
+	 */
+	private SchemaSyntax syntax;
 
-	/** La syntaxe utilisé par l'objet **/
-	private SchemaSyntax syntax ;
-	/** Indique le type de l'objet, dépend de la syntaxe **/
-	private String type ;
-	/** Une table d'entrée <parametre-valeur> **/
-	private Hashtable<String,SchemaValue> values ;
-	/** L'identifiant unique de cet objet **/
-	private String id ;
+	/**
+	 * Une table d'entrée <parametre-valeur>.
+	 */
+	private Hashtable<String,SchemaValue> values;
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	/**
+	 * Indique le type de l'objet, dépend de la syntaxe.
+	 */
+	private String type;
+
+	/**
+	 * L'identifiant unique de cet objet.
+	 */
+	private String id;
+
+	/**
+	 * L'objet parent.
+	 */
+	private SchemaObject parent;
 
 	/**
 	 * Construit un nouvel objet SchemaObject vide.
 	 * @param syntax Une syntaxe pour cette objet.
 	 * @param type Le type de l'objet.
-	**/
-	public SchemaObject( SchemaSyntax syntax, String type, String id ) {
-
+	 */
+	public SchemaObject (SchemaSyntax syntax, String type, String id)
+	{
 		this.syntax = syntax;
 		this.type = type;
 		this.values = new Hashtable<String,SchemaValue>();
 		this.id = id;
+		this.parent = null;
 	}
-
-////////////////////////////////
-// Methodes
-////////////////////////////////
 
 	/**
 	 * Ajoute une entrée à l'objet.
 	 * @param key La clef pour l'entrée.
 	 * @param value La valeur à ajouter.
 	 * @return boolean True si l'entrée n'existe pas déjà, false sinon.
-	**/
-	public boolean addValue( String key, SchemaValue value ) {
-
-		try {
-			if( !isKeyExists( key ) ) {
-				values.put( key, value );
+	 */
+	public boolean addValue (String key, SchemaValue value)
+	{
+		try
+		{
+			if (!isKeyExists(key))
+			{
+				values.put(key, value);
 				return true;
 			}
-		} catch( NullPointerException e ) {}
-
+		}
+		catch (NullPointerException e) {}
 		return false;
 	}
 
@@ -224,8 +226,16 @@ public class SchemaObject {
 	public String[] getObjectsReferences() {
 
 		String[] result = null ;
-
 		return result ;
+	}
+
+	/**
+	 * Retourne l'objet parent, s'il existe.
+	 * @return SchemaObject
+	 */
+	public SchemaObject getParent ()
+	{
+		return this.parent;
 	}
 
 	/**
@@ -340,6 +350,15 @@ public class SchemaObject {
 		} catch( NullPointerException e ) {}
 
 		return false;
+	}
+
+	/**
+	 * Positionne l'objet parent.
+	 * @param SchemaObject parent L'objet parent.
+	 */
+	public void setParent (SchemaObject parent)
+	{
+		this.parent = parent;
 	}
 
 	/**

@@ -23,6 +23,7 @@ import net.aepik.casl.core.ldap.Schema;
 import net.aepik.casl.core.ldap.SchemaFileReader;
 import net.aepik.casl.core.ldap.SchemaObject;
 import net.aepik.casl.core.ldap.SchemaSyntax;
+import net.aepik.casl.core.ldap.SchemaValue;
 import java.io.IOException;
 import java.lang.StringBuffer;
 import java.util.Iterator;
@@ -220,6 +221,30 @@ public class RFCReader extends SchemaFileReader
 			this.setErrorMessage("Empty schema");
 			return null;
 		}
+
+		//
+		// Optional: specify hierarchy if we could.
+		//
+		for (SchemaObject o : objets)
+		{
+			SchemaValue parentNameValue = o.getValue("SUP");
+			if (parentNameValue == null)
+			{
+				continue;
+			}
+			String parentName = parentNameValue.getValue();
+			if (parentName == null)
+			{
+				continue;
+			}
+			SchemaObject parent = schema.getObjectByName(parentName);
+			if (parent == null)
+			{
+				continue;
+			}
+			o.setParent(parent);
+		}
+
 		return schema ;
 	}
 
