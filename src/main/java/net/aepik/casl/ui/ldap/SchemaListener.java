@@ -140,16 +140,21 @@ public class SchemaListener
 	 * @param changed L'objet Observable qui soulève la notification
 	 *		de changement.
 	 * @param arg Les arguments divers pour la mise à jour.
-	**/
-	public void update( Observable changed, Object arg ) {
+	 */
+	public void update (Observable changed, Object arg)
+	{
 		schemaPanel.refreshParentSelectedNode();
-
-		if( lastSelectedPath!=null ) {
-			schemaPanel.setSelectedPath( lastSelectedPath );
+		if (lastSelectedPath != null)
+		{
+			schemaPanel.setSelectedPath(lastSelectedPath);
 			schemaPanel.updateTable();
 		}
-
-		if( schema.isSyntaxChangedSinceLastTime() ) {
+		if (schema.isSyntaxChangedSinceLastTime())
+		{
+			schemaPanel.updateTree();
+		}
+		else if (arg instanceof Boolean && ((Boolean) arg).booleanValue())
+		{
 			schemaPanel.updateTree();
 		}
 	}
