@@ -59,11 +59,15 @@ public class SchemaManagerPanel extends JPanel {
 	public JMenuItem item_saveFile = new JMenuItem( "Enregistrer..." );
 	/** L'item de menu Renommer **/
 	public JMenuItem item_renameFile = new JMenuItem( "Renommer..." );
+	/** L'item de menu Chercher **/
+	public JMenuItem item_search = new JMenuItem("Chercher");
 	/** L'item de menu Propriété **/
 	public JMenuItem item_propriety = new JMenuItem( "Propriétés" );
 
 	/** L'item de menu Renommer pour le popup **/
 	public JMenuItem item_renameFile2 = new JMenuItem( "Renommer..." );
+	/** L'item de menu Chercher pour le popup **/
+	public JMenuItem item_search2 = new JMenuItem("Chercher");
 	/** L'item de menu Convertir pour le popup **/
 	public JMenuItem item_propriety2 = new JMenuItem( "Propriétés" );
 	/** L'item de menu fermer pour le popup **/
@@ -116,11 +120,13 @@ public class SchemaManagerPanel extends JPanel {
 		item_saveFile.addActionListener( l );
 		item_propriety.addActionListener( l );
 		item_renameFile.addActionListener( l );
+		item_search.addActionListener(l);
 
 		item_closeFile2.addActionListener( l );
 		item_propriety2.addActionListener( l );
 		item_renameFile2.addActionListener( l );
 		item_saveFile2.addActionListener( l );
+		item_search2.addActionListener(l);
 
 		onglets.addChangeListener( l );
 		onglets.addMouseListener( l );
@@ -171,11 +177,13 @@ public class SchemaManagerPanel extends JPanel {
 		item_saveFile.removeActionListener( l );
 		item_propriety.removeActionListener( l );
 		item_renameFile.removeActionListener( l );
+		item_search.removeActionListener(l);
 
 		item_closeFile2.removeActionListener( l );
 		item_propriety2.removeActionListener( l );
 		item_renameFile2.removeActionListener( l );
 		item_saveFile2.removeActionListener( l );
+		item_search2.removeActionListener(l);
 
 		onglets.removeChangeListener( l );
 		onglets.removeMouseListener( l );
@@ -234,6 +242,7 @@ public class SchemaManagerPanel extends JPanel {
 			item_saveFile.setEnabled( true );
 			item_propriety.setEnabled( true );
 			item_renameFile.setEnabled( true );
+			item_search.setEnabled(true);
 
 		} else if( onglets.getTabCount()==1 ) {
 			item_closeFile.setEnabled( true );
@@ -241,6 +250,7 @@ public class SchemaManagerPanel extends JPanel {
 			item_saveFile.setEnabled( true );
 			item_propriety.setEnabled( true );
 			item_renameFile.setEnabled( true );
+			item_search.setEnabled(true);
 
 		} else {
 			item_closeFile.setEnabled( false );
@@ -248,6 +258,7 @@ public class SchemaManagerPanel extends JPanel {
 			item_saveFile.setEnabled( false );
 			item_propriety.setEnabled( false );
 			item_renameFile.setEnabled( false );
+			item_search.setEnabled(false);
 		}
 	}
 
@@ -294,6 +305,7 @@ public class SchemaManagerPanel extends JPanel {
 		popupMenu.add( item_saveFile2 );
 		popupMenu.add( item_closeFile2 );
 		popupMenu.addSeparator();
+		popupMenu.add(item_search2);
 		popupMenu.add( item_propriety2 );
 
 		// - Onglets -
