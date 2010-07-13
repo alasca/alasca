@@ -56,7 +56,7 @@ public class SRPlugin extends PluginImpl {
 	 * @return String Une catégorie.
 	**/
 	public String getCategory() {
-		return "";
+		return "Organisation";
 	}
 
 	/**
@@ -150,6 +150,7 @@ public class SRPlugin extends PluginImpl {
 					"La structure du schéma " + id + "\na été réorganisée avec succès.",
 					"Succès",
 					JOptionPane.INFORMATION_MESSAGE );
+				s.notifyUpdates(true);
 			}
 		}
 	}
