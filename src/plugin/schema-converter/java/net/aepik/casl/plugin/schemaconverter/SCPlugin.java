@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ import net.aepik.casl.plugin.schemaconverter.ui.SchemaConverterListener;
 import net.aepik.casl.core.PluginImpl;
 import net.aepik.casl.core.util.Config;
 import net.aepik.casl.core.ldap.Schema;
-import net.aepik.casl.core.ldap.SchemaManager;
+import net.aepik.casl.core.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;

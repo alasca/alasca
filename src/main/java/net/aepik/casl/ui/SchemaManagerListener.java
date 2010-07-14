@@ -22,7 +22,7 @@ package net.aepik.casl.ui.ldap;
 import net.aepik.casl.core.ldap.Schema;
 import net.aepik.casl.core.ldap.SchemaFile;
 import net.aepik.casl.core.ldap.SchemaFileWriter;
-import net.aepik.casl.core.ldap.SchemaManager;
+import net.aepik.casl.core.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaObject;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.ui.util.LoadFileFrame;

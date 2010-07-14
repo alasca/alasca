@@ -24,7 +24,7 @@ import net.aepik.casl.plugin.schemaconverter.core.Translator;
 import net.aepik.casl.core.ldap.Schema;
 import net.aepik.casl.core.ldap.SchemaFile;
 import net.aepik.casl.core.ldap.SchemaFileWriter;
-import net.aepik.casl.core.ldap.SchemaManager;
+import net.aepik.casl.core.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.core.util.Config;
 import org.apache.commons.cli.CommandLine;

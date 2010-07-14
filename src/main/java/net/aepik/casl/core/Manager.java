@@ -18,7 +18,6 @@
 
 package net.aepik.casl.core;
 
-import net.aepik.casl.core.ldap.SchemaManager;
 import net.aepik.casl.core.util.Config;
 import java.io.File;
 import java.io.FileInputStream;

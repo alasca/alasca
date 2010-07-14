@@ -15,21 +15,21 @@
 	<property name="COMPILE.OPTIMIZE" value="true" />
 	<property name="COMPILE.ENCODING" value="UTF8" />
 
-        <path id="compile.classpath">
-                <pathelement path="${CASL_BUILDDIR}/main" />
-                <fileset dir="lib">
-                        <include name="**/*.jar"/>
-                </fileset>
-        </path>
+	<path id="compile.classpath">
+		<pathelement path="${CASL_BUILDDIR}/main" />
+		<fileset dir="lib">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
 
-        <pathconvert property="manifest.classpath" pathsep=" ">
+	<pathconvert property="manifest.classpath" pathsep=" ">
 		<path>
 			<fileset dir="lib">
 				<include name="**/*.jar"/>
 			</fileset>
 		</path>
 		<flattenmapper />
-        </pathconvert>
+	</pathconvert>
 
 	<typedef  uri="antlib:net.sf.antcontrib">
 		 <classpath refid="compile.classpath" />
@@ -109,6 +109,13 @@
 			<fileset dir="src/main/resources"/>
 			<fileset dir="src/plugin/resources"/>
 		</copy>
+		<ac:for list="${CASL_PLUGINLIST}" param="plugin" keepgoing="true">
+			<sequential>
+				<copy todir="${CASL_TARGETDIR}/lib/resources" failonerror="false">
+					<fileset dir="src/plugin/@{plugin}/resources" />
+				</copy>
+			</sequential>
+		</ac:for>
 		<copy todir="${CASL_TARGETDIR}/bin">
 			<fileset dir="src/install"/>
 		</copy>

@@ -1,7 +1,5 @@
 /*
- * Plugin.java		0.2		19/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,86 +18,91 @@
 
 package net.aepik.casl.core;
 
-import net.aepik.casl.core.ldap.SchemaManager;
-
 import javax.swing.JFrame;
 import java.lang.Runnable;
 
-public abstract class PluginImpl implements Plugin {
+public abstract class PluginImpl implements Plugin
+{
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * Le manager de schÃ©ma Ã  prendre en compte.
+	 */
+	protected SchemaManager schemaManager;
 
-	/** Le manager de schÃ©ma Ã  prendre en compte **/
-	protected SchemaManager schemaManager ;
-	/** La fenÃªtre mÃ¨re **/
+	/**
+	 * La fenÃªtre mÃ¨re.
+	 */
 	protected JFrame parentFrame ;
-
-////////////////////////////////
-// Methodes abstraites
-////////////////////////////////
 
 	/**
 	 * Indique si le plugin peut-Ãªtre Ã©xÃ©cutÃ©.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
-	public abstract boolean canRun();
+	 */
+	public abstract boolean canRun ();
 
 	/**
 	 * Retourne une catÃ©gorie.
 	 * @return String Une catÃ©gorie.
-	**/
-	public abstract String getCategory();
+	 */
+	public abstract String getCategory ();
 
 	/**
 	 * Retourne une description du plugin.
 	 * @return String Une description.
-	**/
-	public abstract String getDescription();
+	 */
+	public abstract String getDescription ();
 
 	/**
 	 * Retourne le nom du plugin.
 	 * @return String Un nom sous forme de chaÃ®ne de caractÃ¨res.
-	**/
-	public abstract String getName();
+	 */
+	public abstract String getName ();
 
 	/**
 	 * Permet de lancer le plugin dans un thread particulier.
-	**/
-	public abstract void run();
-
-////////////////////////////////
-// Methodes publiques
-////////////////////////////////
+	 */
+	public abstract void run ();
 
 	/**
 	 * Compare ce plugin Ã  un autre.
 	 * @return int Le retour habituel de la methode compareTo.
-	**/
-	public int compareTo( Plugin p ) {
-		if( p!=null )
-			return this.toString().compareTo( p.toString() );
-		return 1 ;
+	 */
+	public int compareTo (Plugin p)
+	{
+		if (p != null)
+		{
+			return this.toString().compareTo(p.toString());
+		}
+		return 1;
 	}
 
 	/**
 	 * Indique la fenÃªtre par rapport Ã  laquelle l'Ã©ventuelle fenÃªtre
 	 * du plugin doit se positionner.
 	 * @param f Un objet de type JFrame.
-	**/
-	public void setRelativeTo( JFrame f ) { parentFrame = f ; }
+	 */
+	public void setRelativeTo (JFrame f)
+	{
+		parentFrame = f;
+	}
 
 	/**
 	 * Passe un manager de schÃ©mas en paramÃªtre.
 	 * @param m Le manager de schÃ©mas.
-	**/
-	public void setSchemaManager( SchemaManager m ) { schemaManager = m; }
+	 */
+	public void setSchemaManager (SchemaManager m)
+	{
+		schemaManager = m;
+	}
 
 	/**
 	 * Cet objet sous forme de chaÃ®ne de caractÃ¨re.
 	 * @return String Une chaÃ®ne de caractÃ¨res.
-	**/
-	public String toString() { return getName(); }
+	 */
+	public String toString ()
+	{
+		return getName();
+	}
 
 }
+

@@ -1,7 +1,5 @@
 /*
- * SchemaManager.java		0.1		08/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,10 +17,9 @@
  */
 
 
-package net.aepik.casl.core.ldap;
+package net.aepik.casl.core;
 
-import net.aepik.casl.core.Manager;
-
+import net.aepik.casl.core.ldap.Schema;
 import java.io.File;
 import java.net.URL;
 import java.util.Enumeration;

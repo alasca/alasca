@@ -300,6 +300,21 @@ public class Schema extends Observable {
 	}
 
 	/**
+	 * Get objects sorted.
+	 * @return SchemaObject[] All schema objects sorted.
+	 */
+	public SchemaObject[] getObjectsSorted ()
+	{
+		SchemaObject[] objects = new SchemaObject[objets.size()];
+		int position = 0;
+		for (Enumeration<SchemaObject> e = objets.elements(); e.hasMoreElements(); position++)
+		{
+			objects[position] = (SchemaObject) e.nextElement();
+		}
+		return objects;
+	}
+
+	/**
 	 * Retourne l'ensemble des objets du schema d'un certain type.
 	 * @param type Le type des objets Ã  selectionner.
 	 * @return SchemaObject[] L'ensemble des objets du schema.

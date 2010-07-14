@@ -1,7 +1,5 @@
 /*
- * Plugin.java		0.2		19/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,8 +17,6 @@
  */
 
 package net.aepik.casl.core;
-
-import net.aepik.casl.core.ldap.SchemaManager;
 
 import java.lang.Comparable;
 import java.lang.Runnable;

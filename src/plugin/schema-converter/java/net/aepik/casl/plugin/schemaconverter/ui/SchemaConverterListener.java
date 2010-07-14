@@ -1,7 +1,5 @@
 /*
- * SchemaConverterListener.java		0.1		16/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +21,12 @@ package net.aepik.casl.plugin.schemaconverter.ui;
 
 import net.aepik.casl.plugin.schemaconverter.core.SchemaConverter;
 import net.aepik.casl.plugin.schemaconverter.core.Translator;
-
 import net.aepik.casl.core.ldap.Schema;
 import net.aepik.casl.core.ldap.SchemaFile;
 import net.aepik.casl.core.ldap.SchemaFileWriter;
-import net.aepik.casl.core.ldap.SchemaManager;
+import net.aepik.casl.core.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import org.jdesktop.jdic.desktop.Desktop;
-
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

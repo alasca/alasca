@@ -319,7 +319,7 @@ public class SchemaPanel extends JPanel
 			HashMap<String,DefaultMutableTreeNode> map = new HashMap<String,DefaultMutableTreeNode>();
 
 			for (SchemaObject object : objects)
-				{
+			{
 				String nodeId = object.getNameFirstValue();
 				DefaultMutableTreeNode node = new DefaultMutableTreeNode(nodeId);
 				DefaultMutableTreeNode parentNode = null;

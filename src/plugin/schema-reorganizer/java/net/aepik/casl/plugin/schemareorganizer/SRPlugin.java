@@ -1,7 +1,5 @@
 /*
- * SRPlugin.java		0.1		23/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,10 +23,9 @@ import net.aepik.casl.core.History;
 import net.aepik.casl.core.PluginImpl;
 import net.aepik.casl.core.ldap.Schema;
 import net.aepik.casl.core.ldap.SchemaObject;
-import net.aepik.casl.core.ldap.SchemaManager;
+import net.aepik.casl.core.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.core.ldap.SchemaValue;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 

@@ -1,7 +1,5 @@
 /*
- * ADCTAutoGen.java		0.1		22/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +21,7 @@ package net.aepik.casl.plugin.adctautogen;
 
 import net.aepik.casl.core.PluginImpl;
 import net.aepik.casl.core.ldap.Schema;
-import net.aepik.casl.core.ldap.SchemaManager;
+import net.aepik.casl.core.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 
 import javax.swing.JFrame;
