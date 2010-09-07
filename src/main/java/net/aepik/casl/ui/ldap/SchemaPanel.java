@@ -28,6 +28,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
+import java.util.Enumeration;
 import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -44,6 +45,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.event.TreeSelectionEvent;
@@ -215,12 +217,82 @@ public class SchemaPanel extends JPanel
 	}
 
 	/**
+	 * Select an node into the tree by its schema object.
+	 * @param fromObject A SchemaObject object.
+	 */
+	public void setSelectedPath (SchemaObject fromObject)
+	{
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Objets du schema");
+		DefaultMutableTreeNode searchNode = null;
+		String[] types = {
+			schema.getSyntax().getObjectDefinitionType(),
+			schema.getSyntax().getAttributeDefinitionType()
+		};
+
+		for (String type : types)
+		{
+			SchemaObject[] objects = schema.getObjectsInOrder(type);
+			String rootNodeId = type + " (" + objects.length + ")";
+			DefaultMutableTreeNode typeNode = new DefaultMutableTreeNode(rootNodeId);
+			HashMap<String,DefaultMutableTreeNode> map = new HashMap<String,DefaultMutableTreeNode>();
+
+			for (SchemaObject object : objects)
+			{
+				String nodeId = object.getNameFirstValue();
+				DefaultMutableTreeNode node = new DefaultMutableTreeNode(nodeId);
+				DefaultMutableTreeNode parentNode = null;
+				SchemaObject parent = object.getParent();
+				if (parent != null)
+				{
+					String parentNodeId = parent.getNameFirstValue();
+					parentNode = map.get(parentNodeId);
+				}
+				if (parentNode == null)
+				{
+					parentNode = typeNode;
+				}
+				map.put(nodeId,node);
+				parentNode.add(node);
+				if (object.equals(fromObject))
+				{
+					searchNode = node;
+				}
+			}
+
+			rootNode.add(typeNode);
+		}
+
+		if (searchNode != null)
+		{
+			TreePath path = new TreePath(searchNode.getPath());
+			this.setSelectedPath(path);
+		}
+	}
+
+	/**
 	 * Sélectionne un objet particulier grâce au chemin spécifié
 	 * @param path Un objet TreePath qui renseigne le schéma.
 	 */
 	public void setSelectedPath (TreePath path)
 	{
 		arbre.setSelectionPath(path);
+		this.expandAll(arbre, path);
+		arbre.scrollPathToVisible(path);
+	}
+
+	private void expandAll ( JTree tree, TreePath parent )
+	{
+		TreeNode node = (TreeNode) parent.getLastPathComponent();
+		if (node.getChildCount() >= 0)
+		{
+			for (Enumeration e = node.children(); e.hasMoreElements(); )
+			{
+				TreeNode n = (TreeNode) e.nextElement();
+				TreePath path = parent.pathByAddingChild(n);
+				this.expandAll(tree, path);
+			}
+		}
+		tree.expandPath(parent);
 	}
 
 	/**
@@ -386,6 +458,7 @@ public class SchemaPanel extends JPanel
 		arbre.getSelectionModel().setSelectionMode( TreeSelectionModel.SINGLE_TREE_SELECTION );
 		arbre.setBorder( BorderFactory.createEmptyBorder( 5, 5, 5, 5 ) );
 		arbre.setRootVisible( false );
+		arbre.setExpandsSelectedPaths(true);
 
 		JScrollPane arbreScroller = new JScrollPane( arbre );
 		arbreScroller.setBorder( null );

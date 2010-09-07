@@ -283,6 +283,9 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 				String schemaId = managerPanel.getSelectedSchemaPanelId();
 				Schema s = manager.getSchema(schemaId);
 				SchemaObject so = s.getObjectByName(result);
+				SchemaPanel sp = managerPanel.getSelectedSchemaPanel();
+				sp.setSelectedPath(so);
+				sp.updateTable();
 			}
 		}
 
