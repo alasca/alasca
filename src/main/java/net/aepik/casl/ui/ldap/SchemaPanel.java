@@ -271,28 +271,33 @@ public class SchemaPanel extends JPanel
 
 	/**
 	 * Sélectionne un objet particulier grâce au chemin spécifié
-	 * @param path Un objet TreePath qui renseigne le schéma.
+	 * @param path Un tableau d'objet TreePath qui renseigne le schéma.
 	 */
 	public void setSelectedPath (TreePath path)
 	{
-		arbre.setSelectionPath(path);
-		this.expandAll(arbre, path);
-		arbre.scrollPathToVisible(path);
-	}
-
-	private void expandAll ( JTree tree, TreePath parent )
-	{
-		TreeNode node = (TreeNode) parent.getLastPathComponent();
-		if (node.getChildCount() >= 0)
+		TreePath[] allpath = new TreePath[path.getPathCount()];
+		TreePath currentPath = path;
+		for (int i = allpath.length - 1; i >= 0; i--)
 		{
-			for (Enumeration e = node.children(); e.hasMoreElements(); )
+			allpath[i] = currentPath;
+			currentPath = currentPath.getParentPath();
+		}
+		int row = -1;
+		for (int i = 1; i < allpath.length; i++)
+		{
+			row = 0;
+			while (row < arbre.getRowCount())
 			{
-				TreeNode n = (TreeNode) e.nextElement();
-				TreePath path = parent.pathByAddingChild(n);
-				this.expandAll(tree, path);
+				if (allpath[i].toString().equals(arbre.getPathForRow(row).toString()))
+				{
+					arbre.expandRow(row);
+					break;
+				}
+				row++;
 			}
 		}
-		tree.expandPath(parent);
+		arbre.setSelectionRow(row);
+		arbre.scrollRowToVisible(row);
 	}
 
 	/**
