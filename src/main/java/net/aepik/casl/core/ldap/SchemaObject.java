@@ -128,6 +128,20 @@ public class SchemaObject
 	}
 
 	/**
+	 * Test if a given object is equal to this object.
+	 * @param object A SchemaObject to compare to.
+	 */
+	/*
+	public boolean equals ( SchemaObject object )
+	{
+		String name1 = this.getNameFirstValue().toLowerCase();
+		String name2 = object.getNameFirstValue().toLowerCase();
+		System.out.println(name1 + " ?= " + name2 + " => " + name1.equals(name2));
+		return name1.equals(name2);
+	}
+	*/
+
+	/**
 	 * Retourne l'identifiant de cet objet.
 	 * @return String L'id sous forme de chaîne de caractères.
 	**/

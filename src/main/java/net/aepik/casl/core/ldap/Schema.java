@@ -249,18 +249,18 @@ public class Schema extends Observable {
 	 * @param name Le nom d'un objet, et non son id.
 	 * @return SchemaObject Un objet du schÃ©ma.
 	**/
-	public SchemaObject getObjectByName( String name ) {
-
+	public SchemaObject getObjectByName ( String name )
+	{
 		SchemaObject result = null ;
 		Enumeration<SchemaObject> it = objets.elements();
-
-		while( result==null && it.hasMoreElements() ) {
+		while (result == null && it.hasMoreElements())
+		{
 			SchemaObject o = it.nextElement();
-
-			if( o.getName().equals( name ) )
+			if (o.getName().toLowerCase().equals(name.toLowerCase()))
+			{
 				result = o;
+			}
 		}
-
 		return result ;
 	}
 
