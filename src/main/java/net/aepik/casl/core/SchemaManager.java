@@ -30,174 +30,204 @@ import java.util.Vector;
 
 /**
  * Gère un ensemble de schéma.
-**/
+ */
+public class SchemaManager extends Observable implements Observer
+{
 
-public class SchemaManager extends Observable implements Observer {
+	/**
+	 * Le manager général de l'application
+	 */
+	private Manager manager;
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * Une hastable pour stocker l'ensemble des schémas
+	 */
+	private Hashtable<String,Schema> schemas;
 
-	/** Le manager général de l'application **/
-	private Manager manager ;
-	/** Une hastable pour stocker l'ensemble des schémas **/
-	private Hashtable<String,Schema> schemas ;
-	/** L'identifiant du dernier schéma ajouté **/
-	private String lastSchemaId ;
-	/** L'identifiant schéma sélectionné **/
-	private String currentSchemaId ;
+	/**
+	 * L'identifiant du dernier schéma ajouté
+	 */
+	private String lastSchemaId;
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	/**
+	 * L'identifiant schéma sélectionné
+	 */
+	private String currentSchemaId;
 
-	public SchemaManager( Manager m ) {
+	/**
+	 * Build a new SchemaManager object.
+	 * @param m A Manager object.
+	 */
+	public SchemaManager ( Manager m )
+	{
 		manager = m;
 		schemas = new Hashtable<String,Schema>();
-		lastSchemaId = null ;
-		currentSchemaId = null ;
+		lastSchemaId = null;
+		currentSchemaId = null;
 	}
-
-////////////////////////////////
-// Methodes publiques
-////////////////////////////////
 
 	/**
 	 * Ajoute un schéma dans l'ensemble.
 	 * @param id L'identifiant du schéma.
 	 * @param s Un objet Schema.
 	 * @return boolean True si l'ajout réussi, false sinon.
-	**/
-	public boolean addSchema( String id, Schema s ) {
-
-		try {
-			if( !isSchemaIdExists( id ) ) {
-				schemas.put( id, s );
-				s.addObserver( this );
+	 */
+	public boolean addSchema ( String id, Schema s )
+	{
+		try
+		{
+			if (!isSchemaIdExists(id))
+			{
+				schemas.put(id, s);
+				s.addObserver(this);
 				lastSchemaId = id;
 				notifyUpdates();
 				return true;
 			}
-		} catch( NullPointerException e ) {}
-
+		}
+		catch (NullPointerException e) {}
 		return false;
-
 	}
 
 	/**
 	 * Retourne le manager de l'application.
 	 * @return Manager Le manager de l'application.
-	**/
-	public Manager getManager() { return manager; }
+	 */
+	public Manager getManager ()
+	{
+		return manager;
+	}
 
 	/**
 	 * Retourne le schéma correspondant à l'identifiant id.
 	 * @param id Un identifiant.
 	 * @return Schema Le schéma correspondant à l'id ou null.
-	**/
-	public Schema getSchema( String id ) {
-
-		try {
-			if( isSchemaIdExists( id ) )
-				return schemas.get( id );
-		} catch( NullPointerException e ) {}
-
+	 */
+	public Schema getSchema ( String id )
+	{
+		try
+		{
+			if (isSchemaIdExists(id))
+			{
+				return schemas.get(id);
+			}
+		}
+		catch (NullPointerException e) {}
 		return null;
 	}
 
 	/**
 	 * Retourne les identifiants des schémas.
 	 * @return String[] Les identifiants des schémas, ou null.
-	**/
-	public String[] getSchemaIds() {
-
+	 */
+	public String[] getSchemaIds ()
+	{
 		String[] result = new String[schemas.size()];
 		int position = 0;
-		for( Enumeration<String> e = schemas.keys(); e.hasMoreElements(); ) {
+		for (Enumeration<String> e = schemas.keys(); e.hasMoreElements();)
+		{
 			result[position] = e.nextElement();
 			position++;
 		}
-
-		return result ;
+		return result;
 	}
 
 	/**
 	 * Retourne l'ensemble des schémas.
 	 * @return Schema[] Un ensemble de schémas.
-	**/
-	public Schema[] getSchemas() {
-
+	 */
+	public Schema[] getSchemas ()
+	{
 		Schema[] result = new Schema[schemas.size()];
 		int position = 0;
-		for( Enumeration<Schema> e = schemas.elements(); e.hasMoreElements(); ) {
+		for (Enumeration<Schema> e = schemas.elements(); e.hasMoreElements();)
+		{
 			result[position] = e.nextElement();
 			position++;
 		}
-
-		return result ;
+		return result;
 	}
 
 	/**
 	 * Retourne le schéma sélectionné.
 	 * @return Schema Un schéma.
-	**/
-	public Schema getCurrentSchema() { return getSchema( currentSchemaId ) ; }
+	 */
+	public Schema getCurrentSchema ()
+	{
+		return getSchema(currentSchemaId);
+	}
 
 	/**
 	 * Retourne l'identifiant du schéma sélectionné.
 	 * @return String Un identifiant.
-	**/
-	public String getCurrentSchemaId() { return currentSchemaId ; }
+	 */
+	public String getCurrentSchemaId ()
+	{
+		return currentSchemaId;
+	}
 
 	/**
 	 * Retourne le dernier schéma ajouté.
 	 * @return Schema Un schéma.
-	**/
-	public Schema getLastSchema() { return getSchema( lastSchemaId ) ; }
+	 */
+	public Schema getLastSchema ()
+	{
+		return getSchema(lastSchemaId);
+	}
 
 	/**
 	 * Retourne l'identifiant du dernier schéma ajouté.
 	 * @return String Un identifiant.
-	**/
-	public String getLastSchemaId() { return lastSchemaId ; }
+	 */
+	public String getLastSchemaId ()
+	{
+		return lastSchemaId;
+	}
 
 	/**
 	 * Retourne le nombre de schémas ajoutés.
 	 * @return int Un entier.
-	**/
-	public int getNbSchemas() { return schemas.size(); }
+	 */
+	public int getNbSchemas ()
+	{
+		return schemas.size();
+	}
 
 	/**
 	 * Teste si un schéma d'identifiant id existe.
 	 * @param id L'identifiant d'un schéma.
 	 * @return boolean True si l'id existe, false sinon.
-	**/
-	public boolean isSchemaIdExists( String id ) {
-
-		try {
-			if( id!=null ) {
-				return schemas.containsKey( id );
+	 */
+	public boolean isSchemaIdExists ( String id )
+	{
+		try
+		{
+			if (id != null)
+			{
+				return schemas.containsKey(id);
 			}
-		} catch( NullPointerException e ) {}
-
+		}
+		catch (NullPointerException e) {}
 		return false;
 	}
 
 	/**
 	 * Permet de notifier que les données ont changées.
 	 * Tous les objets observant le Manager verront la notification.
-	**/
-	public void notifyUpdates() {
-		setChanged() ;
-		notifyObservers() ;
+	 */
+	public void notifyUpdates ()
+	{
+		setChanged();
+		notifyObservers();
 	}
 
 	/**
 	 * Supprime tous les schémas.
-	**/
-	public void removeAll() {
+	 */
+	public void removeAll ()
+	{
 		schemas.clear();
-		lastSchemaId = null ;
+		lastSchemaId = null;
 		notifyUpdates();
 	}
 
@@ -205,60 +235,71 @@ public class SchemaManager extends Observable implements Observer {
 	 * Supprime un schéma d'identifiant id.
 	 * @param id L'identifiant du schéma à supprimer.
 	 * @return boolean True si l'id n'existe pas déjà, false sinon.
-	**/
-	public boolean removeSchema( String id ) {
-
-		try {
-			if( isSchemaIdExists( id ) ) {
-
-				lastSchemaId = null ;
-				currentSchemaId = null ;
-
+	 */
+	public boolean removeSchema ( String id )
+	{
+		try
+		{
+			if (isSchemaIdExists(id))
+			{
+				lastSchemaId = null;
+				currentSchemaId = null;
 				int compteur = 0;
-				boolean ok = false ;
-				boolean isNextElement = false ;
-				String previousSchemaId = null ;
+				boolean ok = false;
+				boolean isNextElement = false;
+				String previousSchemaId = null;
 				Enumeration<String> keys = schemas.keys();
-
-				while( keys.hasMoreElements() && !ok ) {
+				while (keys.hasMoreElements() && !ok)
+				{
 					String idTmp = keys.nextElement();
-
-					if( currentSchemaId==null ) {
-						if( isNextElement ) {
-							currentSchemaId = idTmp ;
-							isNextElement = false ;
-	
-						} else if( idTmp.equals( id ) ) {
-							if( compteur>0 )
-								currentSchemaId = previousSchemaId ;
-							else if( keys.hasMoreElements() )
-								isNextElement = true ;
-
-						} else
-							previousSchemaId = idTmp ;
+					if (currentSchemaId == null)
+					{
+						if (isNextElement)
+						{
+							currentSchemaId = idTmp;
+							isNextElement = false;
+						}
+						else if (idTmp.equals(id))
+						{
+							if (compteur > 0)
+							{
+								currentSchemaId = previousSchemaId;
+							}
+							else if (keys.hasMoreElements())
+							{
+								isNextElement = true;
+							}
+						}
+						else
+						{
+							previousSchemaId = idTmp;
+						}
 					}
-
-					if( !keys.hasMoreElements() )
-						lastSchemaId = idTmp ;
+					if (!keys.hasMoreElements())
+					{
+						lastSchemaId = idTmp;
+					}
 				}
-
-				getSchema( id ).deleteObserver( this );
-				schemas.remove( id );
+				getSchema(id).deleteObserver(this);
+				schemas.remove(id);
 				notifyUpdates();
 				return true;
 			}
-		} catch( NullPointerException e ) {}
-
+		}
+		catch (NullPointerException e) {}
 		return false;
 	}
 
 	/**
 	 * Modifie le schéma marqué comme sélectionné.
 	 * @param id Un indentifiant valide de schéma.
-	**/
-	public void setCurrentSchema( String id ) {
-		if( isSchemaIdExists( id ) )
+	 */
+	public void setCurrentSchema ( String id )
+	{
+		if (isSchemaIdExists(id))
+		{
 			currentSchemaId = id;
+		}
 	}
 
 	/**
@@ -267,8 +308,10 @@ public class SchemaManager extends Observable implements Observer {
 	 * @param changed L'objet Observable qui soulève la notification
 	 *		de changement.
 	 * @param arg Les arguments divers pour la mise à jour.
-	**/
-	public void update( Observable changed, Object arg ) {
+	 */
+	public void update ( Observable changed, Object arg )
+	{
 		notifyUpdates();
 	}
+
 }
