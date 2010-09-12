@@ -66,6 +66,11 @@ public class SchemaObject
 	private String id;
 
 	/**
+	 * Indicates whether or not the OID of this object is numeric.
+	 */
+	private boolean isNumericOid;
+
+	/**
 	 * L'objet parent.
 	 */
 	private SchemaObject parent;
@@ -81,6 +86,7 @@ public class SchemaObject
 		this.type = type;
 		this.values = new Hashtable<String,SchemaValue>();
 		this.id = id;
+		this.isNumericOid = SchemaSyntax.isNumericOid(id);
 		this.parent = null;
 	}
 
@@ -309,6 +315,11 @@ public class SchemaObject
 		if( id==null )
 			return false ;
 
+		//
+		// Test if this oid is numeric or not.
+		//
+		this.isNumericOid = SchemaSyntax.isNumericOid(id);
+
 		// Ensuite, on récupère toutes les valeurs possibles.
 		// Le tableau que l'on récupère comprend 2 colonnes, la première
 		// contient les clefs et la seconde les valeurs pour ces clefs.
@@ -364,6 +375,15 @@ public class SchemaObject
 		} catch( NullPointerException e ) {}
 
 		return false;
+	}
+
+	/**
+	 * Indicates whether or not if this value is numeric.
+	 * @return boolean True if this value is numeric.
+	 */
+	public boolean isNumericOid ()
+	{
+		return this.isNumericOid;
 	}
 
 	/**

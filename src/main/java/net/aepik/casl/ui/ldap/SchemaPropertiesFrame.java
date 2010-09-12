@@ -1,7 +1,5 @@
 /*
- * SchemaPropertiesFrame.java		0.1		12/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +20,6 @@ package net.aepik.casl.ui.ldap;
 
 import net.aepik.casl.core.ldap.Schema;
 import org.jdesktop.jdic.desktop.Desktop;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -55,52 +52,98 @@ import javax.swing.event.ListSelectionListener;
  * La lecture des propriétés du schéma dans les fichiers sont réalisées par
  * les parseurs de lecture. C'est eux qui fixent les noms des propriétés.
  * Pour plus d'informations, voir l'aide.
-**/
+ */
+public class SchemaPropertiesFrame extends JDialog implements ActionListener, ListSelectionListener, WindowListener
+{
 
-public class SchemaPropertiesFrame extends JDialog
-		implements
-			ActionListener,
-			ListSelectionListener,
-			WindowListener {
+	/**
+	 * Le schéma
+	 */
+	private Schema schema;
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * Objects identifiers.
+	 */
+	private Properties objectsIdentifiers;
 
-	/** Le schéma **/
-	private Schema schema ;
-	/** Les propriétés du schéma **/
+	/**
+	 * Objects identifiers list.
+	 */
+	private JList objectsIdentifiersList;
+
+	/**
+	 * Les propriétés du schéma
+	 */
 	private Properties properties;
-	/** La liste des propriétés **/
+
+	/**
+	 * La liste des propriétés
+	 */
 	private JList propertiesList;
 
-	/** Le bouton Ok **/
-	private JButton boutonOk = new JButton( "Valider" );
-	/** Le bouton Annuler **/
-	private JButton boutonAnnuler = new JButton( "Annuler" );
-	/** Le bouton Ajouter **/
-	private JButton boutonAjouter = new JButton( "Ajouter" );
-	/** Le bouton Supprimer **/
-	private JButton boutonSupprimer = new JButton( "Supprimer" );
-	/** Le bouton Modifier **/
-	private JButton boutonModifier = new JButton( "Modifier" );
-	/** Le bouton Plus d'informations **/
-	private JButton boutonInfo = new JButton( "Plus d'informations..." );
+	/**
+	 * Le bouton Ok
+	 */
+	private JButton boutonOk = new JButton("Valider");
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	/**
+	 * Le bouton Annuler
+	 */
+	private JButton boutonAnnuler = new JButton("Annuler");
 
-	public SchemaPropertiesFrame( Window parent, Schema s, String sName ) {
+	/**
+	 * Le bouton Plus d'informations
+	 */
+	private JButton boutonInfo = new JButton("Plus d'informations...");
 
+	/**
+	 * Le bouton ajouter un object identifier
+	 */
+	private JButton boutonAjouterObjectIdentifier = new JButton("Ajouter");
+
+	/**
+	 * Le bouton supprimer un object identifier
+	 */
+	private JButton boutonSupprimerObjectIdentifier = new JButton("Supprimer");
+
+	/**
+	 * Le bouton modifier un object identifier
+	 */
+	private JButton boutonModifierObjectIdentifier = new JButton("Modifier");
+
+	/**
+	 * Le bouton ajouter une propriété
+	 */
+	private JButton boutonAjouterProperty = new JButton("Ajouter");
+
+	/**
+	 * Le bouton supprimer une propriété
+	 */
+	private JButton boutonSupprimerProperty = new JButton("Supprimer");
+
+	/**
+	 * Le bouton modifier une propriété
+	 */
+	private JButton boutonModifierProperty = new JButton("Modifier");
+
+	/**
+	 * Build an new SchemaPropertiesFrame object.
+	 * @param parent The parent window.
+	 * @param s The corresponding schema object.
+	 * @param sName The name of the schema.
+	 */
+	public SchemaPropertiesFrame ( Window parent, Schema s, String sName )
+	{
 		super();
-		setTitle( "Propriétés Schéma [" + sName + "]" );
-		setModal( true );
-		setSize( 400, 360 );
-		setResizable( false );
-		setLocationRelativeTo( parent );
+		setTitle("Propriétés Schéma [" + sName + "]");
+		setModal(true);
+		setSize(400, 500);
+		setResizable(false);
+		setLocationRelativeTo(parent);
 
 		schema = s;
+		objectsIdentifiers = (Properties) schema.getObjectsIdentifiers().clone();
+		objectsIdentifiersList = new JList();
 		properties = (Properties) schema.getProperties().clone();
 		propertiesList = new JList();
 
@@ -109,252 +152,413 @@ public class SchemaPropertiesFrame extends JDialog
 		updateButtons();
 	}
 
-////////////////////////////////
-// Méthodes publiques
-////////////////////////////////
-
-	public void actionPerformed( ActionEvent e ) {
-
+	/**
+	 * Manage actions to allow to modify data of this object.
+	 * @param e An action of a panel's element.
+	**/
+	public void actionPerformed ( ActionEvent e )
+	{
 		Object o = e.getSource();
-
+		//
 		// On souhaite ajouter une nouvelle valeur.
 		// On fait appel à une classe interne pour afficher notre
 		// boîte de saisie des données.
-		if( o==boutonAjouter ) {
-			SchemaPropertyEditorFrame f = new SchemaPropertyEditorFrame( this, null, null );
-			f.setVisible( true );
-
-		// Ici, nous affichons notre boîte de saisie des données, avec les
-		// valeurs pré-remplies.
-		} else if( o==boutonModifier ) {
-
+		//
+		if (o == boutonAjouterProperty)
+		{
+			SchemaPropertyEditorFrame f = new SchemaPropertyEditorFrame(
+				this,
+				properties,
+				null,
+				null
+			);
+			f.setVisible(true);
+		}
+		//
+		// Ici, nous affichons notre boîte de saisie des données, avec
+		// les valeurs pré-remplies.
+		//
+		else if (o == boutonModifierProperty)
+		{
 			String str = propertiesList.getSelectedValue().toString();
-
-			if( str!=null ) {
-				int index = str.indexOf( ':' );
-				SchemaPropertyEditorFrame f = new SchemaPropertyEditorFrame( this,
-						str.substring( 0, index ).trim(),
-						str.substring( index+1 ).trim() );
-				f.setVisible( true );
+			if (str != null)
+			{
+				int index = str.indexOf(':');
+				SchemaPropertyEditorFrame f = new SchemaPropertyEditorFrame(
+					this,
+					properties,
+					str.substring(0, index).trim(),
+					str.substring(index+1).trim()
+				);
+				f.setVisible(true);
 			}
-
+		}
+		//
 		// On supprime l'élément en cours de sélection.
-		} else if( o==boutonSupprimer ) {
-
+		//
+		else if (o == boutonSupprimerProperty)
+		{
 			String str = propertiesList.getSelectedValue().toString();
-
-			if( str!=null ) {
-				int index = str.indexOf( ':' );
-				properties.remove( str.substring( 0, index ).trim() );
+			if (str != null)
+			{
+				int index = str.indexOf(':');
+				properties.remove(str.substring(0, index).trim());
 				updateList();
 			}
-
-		// Bouton valider, on enregistre les nouvelles valeurs dans le schéma.
-		} else if( o==boutonOk ) {
-			schema.setProperties( properties );
-			windowClosing( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
-
+		}
+                //
+                // On souhaite ajouter un nouveau object identifier
+                // On fait appel à une classe interne pour afficher notre
+                // boîte de saisie des données.
+                //
+                if (o == boutonAjouterObjectIdentifier)
+                {
+                        SchemaPropertyEditorFrame f = new SchemaPropertyEditorFrame(
+				this,
+				objectsIdentifiers,
+				null,
+				null
+			);
+                        f.setVisible(true);
+                }
+                //
+                // Ici, nous affichons notre boîte de saisie des données, avec
+                // les valeurs pré-remplies de l'object identifier.
+                //
+                else if (o == boutonModifierObjectIdentifier)
+                {
+                        String str = objectsIdentifiersList.getSelectedValue().toString();
+                        if (str != null)
+                        {
+                                int index = str.indexOf(':');
+                                SchemaPropertyEditorFrame f = new SchemaPropertyEditorFrame(
+                                        this,
+					objectsIdentifiers,
+                                        str.substring(0, index).trim(),
+                                        str.substring(index+1).trim()
+                                );
+                                f.setVisible(true);
+                        }
+                }
+                //
+                // On supprime l'object identifier en cours de sélection.
+                //
+                else if (o == boutonSupprimerObjectIdentifier)
+                {
+                        String str = objectsIdentifiersList.getSelectedValue().toString();
+                        if (str != null)
+                        {
+                                int index = str.indexOf(':');
+                                objectsIdentifiers.remove(str.substring(0, index).trim());
+                                updateList();
+                        }
+                }
+		//
+		// Bouton annuler
+		//
+		else if (o == boutonAnnuler)
+		{
+			windowClosing(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		}
+		//
+		// Bouton valider, on enregistre les nouvelles valeurs dans le
+		// schéma.
+		//
+		else if (o == boutonOk)
+		{
+			schema.setProperties(properties);
+			schema.setObjectsIdentifiers(objectsIdentifiers);
+			windowClosing(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		}
+		//
 		// On demande plus d'informations.
 		// On va ouvrir un naviguateur web avec une URL définie.
-		} else if( o==boutonInfo ) {
-
-			try {
-				String currentDir = System.getProperty( "user.dir" );
-				Desktop.browse( new URL( "file://" + currentDir + "/doc/index.html" ) );
-			} catch( Exception ex ) {
-				//System.out.println( ex );
+		//
+		else if (o == boutonInfo)
+		{
+			try
+			{
+				String currentDir = System.getProperty("user.dir");
+				Desktop.browse(new URL("file://" + currentDir + "/doc/index.html"));
+			}
+			catch (Exception ex)
+			{
 				ex.printStackTrace();
 			}
-
-
-		// Bouton annuler
-		} else if( o==boutonAnnuler ) {
-			windowClosing( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
 		}
-
 	}
 
-	public void valueChanged( ListSelectionEvent e ) {
-
-		Object o = ( e!=null ) ? e.getSource() : null;
-		if( o==propertiesList ) {
+	public void valueChanged ( ListSelectionEvent e )
+	{
+		Object o = (e != null) ? e.getSource() : null;
+		if (o == propertiesList || o == objectsIdentifiersList)
+		{
 			updateButtons();
 		}
 	}
 
-	// Méthodes liées aux événements fenêtrés.
-	public void windowActivated( WindowEvent e ) {}
-	public void windowClosed( WindowEvent e ) {}
- 	public void windowClosing( WindowEvent e ) { e.getComponent().setVisible( false ); }
-	public void windowDeactivated( WindowEvent e ) {}
-	public void windowDeiconified( WindowEvent e ) {}
-	public void windowIconified( WindowEvent e ) {}
-	public void windowOpened( WindowEvent e ) {}
+	public void windowActivated ( WindowEvent e )
+	{
+	}
 
-////////////////////////////////
-// Méthodes privées
-////////////////////////////////
+	public void windowClosed ( WindowEvent e )
+	{
+	}
 
-	private void initFrame() {
+ 	public void windowClosing ( WindowEvent e )
+	{
+		e.getComponent().setVisible(false);
+	}
 
-		// - Panel bouton du bas -
+	public void windowDeactivated ( WindowEvent e )
+	{
+	}
 
-		JPanel boutonsPanel = new JPanel( new FlowLayout( FlowLayout.RIGHT ) );
-		boutonsPanel.add( boutonOk );
-		boutonsPanel.add( boutonAnnuler );
+	public void windowDeiconified ( WindowEvent e )
+	{
+	}
 
-		// - Panel de description -
+	public void windowIconified ( WindowEvent e )
+	{
+	}
 
+	public void windowOpened ( WindowEvent e )
+	{
+	}
+
+	/**
+	 * Initialize all environment for this frame.
+	 */
+	private void initFrame ()
+	{
+		//
+		// Panel boutons du bas (valider/annuler)
+		//
+		JPanel boutonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		boutonsPanel.add(boutonOk);
+		boutonsPanel.add(boutonAnnuler);
+
+		//
+		// Panel de description
+		//
 		JTextArea textAreaDescription = new JTextArea(
-				"Les propriétés du schéma peuvent être modifiées. Elles ne sont"
-				+ " pas pré-définies et sont fonction de la syntaxe employée"
-				+ " par ce schéma. Il n'est pas possible de lister toutes les"
-				+ " propriétés du schéma, pour cela référez vous à l'aide en"
-				+ " cliquant sur le lien plus bas." );
-		textAreaDescription.setEditable( false );
-		textAreaDescription.setLineWrap( true );
-		textAreaDescription.setWrapStyleWord( true );
-		textAreaDescription.setFont( (new JLabel()).getFont() );
-		textAreaDescription.setBorder( BorderFactory.createEmptyBorder( 7, 8, 7, 8 ) );
-		textAreaDescription.setBackground( (new JLabel()).getBackground() );
+			"Les propriétés du schéma peuvent être modifiées. Elles ne sont"
+			+ " pas pré-définies et sont fonction de la syntaxe employée"
+			+ " par ce schéma. Il n'est pas possible de lister toutes les"
+			+ " propriétés du schéma, pour cela référez vous à l'aide en"
+			+ " cliquant sur le lien plus bas."
+		);
+		textAreaDescription.setEditable(false);
+		textAreaDescription.setLineWrap(true);
+		textAreaDescription.setWrapStyleWord(true);
+		textAreaDescription.setFont((new JLabel()).getFont());
+		textAreaDescription.setBorder(BorderFactory.createEmptyBorder(7, 8, 7, 8));
+		textAreaDescription.setBackground((new JLabel()).getBackground());
 
-		// - Panel liste des propriétés -
+		//
+		// Panel liste des propriétés
+		//
+		JPanel propertiesBoutons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		propertiesBoutons.add(boutonAjouterProperty);
+		propertiesBoutons.add(boutonSupprimerProperty);
+		propertiesBoutons.add(boutonModifierProperty);
 
-		JPanel propertiesBoutons = new JPanel( new FlowLayout( FlowLayout.RIGHT ) );
-		propertiesBoutons.add( boutonAjouter );
-		propertiesBoutons.add( boutonSupprimer );
-		propertiesBoutons.add( boutonModifier );
+		JScrollPane propertiesScroller = new JScrollPane(propertiesList);
+		propertiesScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		propertiesList.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		propertiesList.setVisibleRowCount(4);
+		propertiesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JScrollPane propertiesScroller = new JScrollPane( propertiesList );
-		propertiesScroller.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS );
-		propertiesList.setBorder( BorderFactory.createEmptyBorder( 3, 3, 3, 3 ) );
-		propertiesList.setVisibleRowCount( 4 );
-		propertiesList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
+		JPanel propertiesPanel = new JPanel(new BorderLayout());
+		propertiesPanel.add(propertiesScroller, BorderLayout.CENTER);
+		propertiesPanel.add(propertiesBoutons, BorderLayout.SOUTH);
+		propertiesPanel.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createEmptyBorder(5, 5, 1, 5),
+			BorderFactory.createCompoundBorder( 
+				BorderFactory.createTitledBorder(" Liste des propriétés "),
+				BorderFactory.createEmptyBorder(0, 5, 0, 5)
+			)
+		));
 
-		JPanel propertiesPanel = new JPanel( new BorderLayout() );
-		propertiesPanel.add( propertiesScroller, BorderLayout.CENTER );
-		propertiesPanel.add( propertiesBoutons, BorderLayout.SOUTH );
-		propertiesPanel.setBorder( BorderFactory.createCompoundBorder(
-				BorderFactory.createEmptyBorder( 5, 5, 1, 5 ),
-				BorderFactory.createCompoundBorder( 
-					BorderFactory.createTitledBorder( " Listes des propriétés " ),
-					BorderFactory.createEmptyBorder( 0, 5, 0, 5 ) ) ) );
+		//
+		// Objects identifiers panel
+		//
+		JPanel objectsIdentifiersBoutons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		objectsIdentifiersBoutons.add(boutonAjouterObjectIdentifier);
+		objectsIdentifiersBoutons.add(boutonSupprimerObjectIdentifier);
+		objectsIdentifiersBoutons.add(boutonModifierObjectIdentifier);
 
-		// - Panel informations -
+		JScrollPane objectsIdentifiersScroller = new JScrollPane(objectsIdentifiersList);
+		objectsIdentifiersScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		objectsIdentifiersList.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		objectsIdentifiersList.setVisibleRowCount(4);
+		objectsIdentifiersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		boutonInfo.setBorder( BorderFactory.createMatteBorder( 0, 0, 1, 0, Color.blue ) );
-		boutonInfo.setForeground( Color.blue );
-		boutonInfo.setFocusPainted( false );
-		boutonInfo.setContentAreaFilled( false );
+		JPanel objectsIdentifiersPanel = new JPanel(new BorderLayout());
+		objectsIdentifiersPanel.add(objectsIdentifiersScroller, BorderLayout.CENTER);
+		objectsIdentifiersPanel.add(objectsIdentifiersBoutons, BorderLayout.SOUTH);
+		objectsIdentifiersPanel.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createEmptyBorder(5, 5, 1, 5),
+			BorderFactory.createCompoundBorder(
+				BorderFactory.createTitledBorder(" Liste des identifiants d'objet "),
+				BorderFactory.createEmptyBorder(0, 5, 0, 5)
+			)
+		));
 
-		JPanel infoPanel = new JPanel( new FlowLayout( FlowLayout.LEFT ) );
-		infoPanel.add( boutonInfo );
-		infoPanel.setBorder( BorderFactory.createEmptyBorder( 0, 4, 1, 4 ) );
+		//
+		// Panel informations
+		//
+		boutonInfo.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.blue));
+		boutonInfo.setForeground(Color.blue);
+		boutonInfo.setFocusPainted(false);
+		boutonInfo.setContentAreaFilled(false);
 
-		// - Organisation générales -
+		JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		infoPanel.add(boutonInfo);
+		infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 4, 1, 4));
 
-		JPanel mainPanel = new JPanel( new BorderLayout() );
-		mainPanel.add( textAreaDescription, BorderLayout.NORTH );
-		mainPanel.add( propertiesPanel, BorderLayout.CENTER );
-		mainPanel.add( infoPanel, BorderLayout.SOUTH );
+		//
+		// Organisation générales
+		//
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add(propertiesPanel, BorderLayout.NORTH);
+		mainPanel.add(objectsIdentifiersPanel, BorderLayout.CENTER);
+		mainPanel.add(infoPanel, BorderLayout.SOUTH);
 
-		JPanel mainPanelContainer = new JPanel( new BorderLayout() );
-		mainPanelContainer.add( mainPanel, BorderLayout.NORTH );
-		mainPanelContainer.add( boutonsPanel, BorderLayout.SOUTH );
-		mainPanelContainer.setBorder( BorderFactory.createEmptyBorder( 2, 1, 1, 1 ) );
+		JPanel mainPanelContainer = new JPanel(new BorderLayout());
+		mainPanelContainer.add(textAreaDescription, BorderLayout.NORTH);
+		mainPanelContainer.add(mainPanel, BorderLayout.CENTER);
+		mainPanelContainer.add(boutonsPanel, BorderLayout.SOUTH);
+		mainPanelContainer.setBorder(BorderFactory.createEmptyBorder(2, 1, 1, 1));
 
-		getContentPane().add( mainPanelContainer );
+		getContentPane().add(mainPanelContainer);
 
-		// - Listeners -
-
-		addWindowListener( this );
-		propertiesList.addListSelectionListener( this );
-		boutonOk.addActionListener( this );
-		boutonAnnuler.addActionListener( this );
-		boutonAjouter.addActionListener( this );
-		boutonModifier.addActionListener( this );
-		boutonSupprimer.addActionListener( this );
-		boutonInfo.addActionListener( this );
+		//
+		// Listeners
+		//
+		addWindowListener(this);
+		propertiesList.addListSelectionListener(this);
+		objectsIdentifiersList.addListSelectionListener(this);
+		boutonOk.addActionListener(this);
+		boutonAnnuler.addActionListener(this);
+		boutonInfo.addActionListener(this);
+		boutonAjouterProperty.addActionListener(this);
+		boutonModifierProperty.addActionListener(this);
+		boutonSupprimerProperty.addActionListener(this);
+		boutonAjouterObjectIdentifier.addActionListener(this);
+		boutonModifierObjectIdentifier.addActionListener(this);
+		boutonSupprimerObjectIdentifier.addActionListener(this);
 	}
 
-	private void updateButtons() {
-
-		if( propertiesList.getSelectedIndex()!=-1 ) {
-			boutonModifier.setEnabled( true );
-			boutonSupprimer.setEnabled( true );
-
-		} else {
-			boutonModifier.setEnabled( false );
-			boutonSupprimer.setEnabled( false );
+	private void updateButtons ()
+	{
+		if (propertiesList.getSelectedIndex() != -1)
+		{
+			boutonModifierProperty.setEnabled(true);
+			boutonSupprimerProperty.setEnabled(true);
+		}
+		else
+		{
+			boutonModifierProperty.setEnabled(false);
+			boutonSupprimerProperty.setEnabled(false);
+		}
+		if (objectsIdentifiersList.getSelectedIndex() != -1)
+		{
+			boutonModifierObjectIdentifier.setEnabled(true);
+			boutonSupprimerObjectIdentifier.setEnabled(true);
+		}
+		else
+		{
+			boutonModifierObjectIdentifier.setEnabled(false);
+			boutonSupprimerObjectIdentifier.setEnabled(false);
 		}
 	}
 
-	private void updateList() {
-
-		DefaultListModel model = new DefaultListModel();
-		for( Enumeration keys = properties.propertyNames();
-				keys.hasMoreElements() ; ) {
+	private void updateList ()
+	{
+		DefaultListModel propertiesModel = new DefaultListModel();
+		DefaultListModel objectsIdentifiersModel = new DefaultListModel();
+		for (Enumeration keys = properties.propertyNames(); keys.hasMoreElements();)
+		{
 			String key = (String) keys.nextElement();
-			String value = properties.getProperty( key );
-			model.addElement( key + ":" + value );
+			String value = properties.getProperty(key);
+			propertiesModel.addElement(key + ":" + value);
 		}
-
-		propertiesList.setModel( model );
+		for (Enumeration keys = objectsIdentifiers.propertyNames(); keys.hasMoreElements();)
+		{
+			String key = (String) keys.nextElement();
+			String value = objectsIdentifiers.getProperty(key);
+			objectsIdentifiersModel.addElement(key + ":" + value);
+		}
+		propertiesList.setModel(propertiesModel);
+		objectsIdentifiersList.setModel(objectsIdentifiersModel);
 		propertiesList.repaint();
+		objectsIdentifiersList.repaint();
 	}
 
-////////////////////////////////
-// Classes internes
-////////////////////////////////
+	private class SchemaPropertyEditorFrame extends JDialog implements ActionListener
+	{	
+		private JButton boutonOk = new JButton("    Ok    ");
 
-	private class SchemaPropertyEditorFrame extends JDialog implements ActionListener {
-		
-		private JButton boutonOk = new JButton( "    Ok    " );
-		private JButton boutonAnnuler = new JButton( "Annuler" );
-		private JTextField varName ;
-		private JTextField varValue ;
+		private JButton boutonAnnuler = new JButton("Annuler");
 
-		public SchemaPropertyEditorFrame( JDialog f, String varname, String varvalue ) {
+		private JTextField varName;
 
+		private JTextField varValue;
+
+		private Properties list;
+
+		public SchemaPropertyEditorFrame ( JDialog f, Properties list, String varname, String varvalue )
+		{
 			super();
-			setTitle( "Editer une propriété" );
-			setModal( true );
-			setResizable( false );
-			setLocationRelativeTo( f );
-
-			varName = new JTextField( varname );
-			varValue = new JTextField( varvalue );
-
+			varName = new JTextField(varname);
+			varValue = new JTextField(varvalue);
+			this.list = list;
+			setTitle("Editer");
+			setModal(true);
+			setResizable(false);
+			setLocationRelativeTo(f);
 			initFrame();
 		}
 
-		public void actionPerformed( ActionEvent e ) {
-
+		public void actionPerformed ( ActionEvent e )
+		{
 			Object o = e.getSource();
-
+			//
 			// Bouton annuler boîte de saisie.
-			if( o==boutonAnnuler ) {
-				SchemaPropertiesFrame.this.windowClosing(
-						new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
-
+			//
+			if (o == boutonAnnuler)
+			{
+				SchemaPropertiesFrame.this.windowClosing(new WindowEvent(
+					this,
+					WindowEvent.WINDOW_CLOSING
+				));
+			}
+			//
 			// Bouton de validation. On mets à jour les valeurs de la liste
 			// de la classe parente.
-			} else if( o==boutonOk ) {
-				properties.setProperty( varName.getText(), varValue.getText() );
+			//
+			else if (o == boutonOk)
+			{
+				this.list.setProperty(varName.getText(), varValue.getText());
 				SchemaPropertiesFrame.this.updateList();
-				SchemaPropertiesFrame.this.windowClosing(
-						new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
+				SchemaPropertiesFrame.this.windowClosing(new WindowEvent(
+					this,
+					WindowEvent.WINDOW_CLOSING
+				));
 			}
 
 		}
 
-		private void initFrame() {
-
-			JTextArea inputsDescription = new JTextArea(
-					"Veuillez remplir les champs ci-dessous." );
-			inputsDescription.setEditable( false );
-			inputsDescription.setLineWrap( true );
-			inputsDescription.setWrapStyleWord( true );
+		/**
+		 * Initialize this internal frame.
+		 */
+		private void initFrame ()
+		{
+			JTextArea inputsDescription = new JTextArea("Veuillez remplir les champs ci-dessous.");
+			inputsDescription.setEditable(false);
+			inputsDescription.setLineWrap(true);
+			inputsDescription.setWrapStyleWord(true);
 			inputsDescription.setFont( (new JLabel()).getFont() );
 			inputsDescription.setBorder( BorderFactory.createEmptyBorder( 2, 3, 6, 3 ) );
 			inputsDescription.setBackground( (new JLabel()).getBackground() );
@@ -392,15 +596,13 @@ public class SchemaPropertiesFrame extends JDialog
 
 			getContentPane().add( mainPanelContainer );
 
-			// On fixe la taille.
 			setSize( 300, 200 );
 			setLocationRelativeTo( SchemaPropertiesFrame.this );
 
 			addWindowListener( SchemaPropertiesFrame.this );
-			boutonOk.addActionListener( this );
-			boutonAnnuler.addActionListener( this );
+			boutonOk.addActionListener(this);
+			boutonAnnuler.addActionListener(this);
 		}
 
 	}
-
 }

@@ -176,6 +176,16 @@ public class RFCReader extends SchemaFileReader
 					{
 						if (objet.initFromString(def))
 						{
+							if (!objet.isNumericOid())
+							{
+								if (schema.getObjectsIdentifiers().getProperty(objet.getId()) == null)
+								{
+									schema.getObjectsIdentifiers().setProperty(
+										objet.getId(),
+										schema.generateRandomObjectIdentifier()
+									);
+								}
+							}
 							objets.add(objet);
 							objet = null;
 						}
