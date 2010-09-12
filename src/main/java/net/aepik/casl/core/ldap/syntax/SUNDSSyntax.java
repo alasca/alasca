@@ -21,13 +21,18 @@ package net.aepik.casl.core.ldap.syntax;
 
 /**
  * SUN Directory Server syntax definition.
-**/
-
+ */
 public class SUNDSSyntax extends RFCSyntax
 {
 
+	/**
+	 * Attribute definition (and used for type).
+	 */
 	public final static String SUNDS_ATTRIBUTE = "attributeTypes:";
 
+	/**
+	 * Attribute parameters.
+	 */
 	protected String[][] SUNDS_ATTRIBUTE_PARAMETERS = {
 		{ "1",	"NAME",			"" },
 		{ "2",	"DESC",			"" },
@@ -48,8 +53,14 @@ public class SUNDSSyntax extends RFCSyntax
 		{ "14",	"X-ORIGIN",		"" }
 	};
 
+	/**
+	 * ObjectClass definition (and used for type).
+	 */
 	public final static String SUNDS_OBJECT = "objectClasses:";
 
+	/**
+	 * ObjectClass parameters.
+	 */
 	protected String[][] SUNDS_OBJECT_PARAMETERS = {
 		{ "1",	"NAME",		"" },
 		{ "2",	"DESC",		"" },
@@ -64,33 +75,46 @@ public class SUNDSSyntax extends RFCSyntax
 		{ "9",	"X-ORIGIN",	"" }
 	};
 
+	/**
+	 * Build a new SUNDSSyntax object.
+	 */
 	public SUNDSSyntax ()
 	{
 		super();
 		super.attributeDefinitionHeader = SUNDS_ATTRIBUTE ;
 		super.objectDefinitionHeader = SUNDS_OBJECT ;
-		super.attributeDefinitionType = SUNDS_ATTRIBUTE.substring( 0, SUNDS_ATTRIBUTE.length()-1 );
-		super.objectDefinitionType = SUNDS_OBJECT.substring( 0, SUNDS_OBJECT.length()-1 );
+		super.attributeDefinitionType = SUNDS_ATTRIBUTE.substring(0, SUNDS_ATTRIBUTE.length() - 1);
+		super.objectDefinitionType = SUNDS_OBJECT.substring(0, SUNDS_OBJECT.length() - 1);
 		super.RFC_ATTRIBUTE_PARAMETERS = SUNDS_ATTRIBUTE_PARAMETERS;
 		super.RFC_OBJECT_PARAMETERS = SUNDS_OBJECT_PARAMETERS;
 	}
 
-	public boolean isAttributeDefinitionHeader (String str)
+	/**
+	 * Test if a string begins with the SunDS attribute definition header.
+	 * @param str A string.
+	 * @return boolean
+	 */
+	public boolean isAttributeDefinitionHeader ( String str )
 	{
 		if (this.attributeDefinitionHeader == null)
 		{
 			return false;
 		}
-		return str.trim().toLowerCase().startsWith( attributeDefinitionType.toLowerCase() );
+		return str.trim().toLowerCase().startsWith(attributeDefinitionType.toLowerCase());
 	}
 
-	public boolean isObjectDefinitionHeader (String str)
+	/**
+	 * Test if a string begins with the SunDS objectClass definition header.
+	 * @param str A string.
+	 * @return boolean
+	 */
+	public boolean isObjectDefinitionHeader ( String str )
 	{
 		if (this.objectDefinitionHeader == null)
 		{
 			return false;
 		}
-		return str.trim().toLowerCase().startsWith( objectDefinitionType.toLowerCase() );
+		return str.trim().toLowerCase().startsWith(objectDefinitionType.toLowerCase());
 	}
 
 }

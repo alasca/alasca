@@ -1,7 +1,5 @@
 /*
- * IBMSyntax.java		0.1		23/05/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,27 +20,31 @@
 package net.aepik.casl.core.ldap.syntax;
 
 /**
- * Syntaxe propre à IBM Directory Server.
-**/
+ * Syntax for IBM Directory Server (Tivoli ?).
+ */
+public class IBMSyntax extends RFCSyntax
+{
 
-public class IBMSyntax extends RFCSyntax {
+	/**
+	 * Attribute definition (and used for type).
+	 */
+	public final static String IBM_ATTRIBUTE = "attributeTypes:";
 
-////////////////////////////////
-// Constantes
-////////////////////////////////
+	/**
+	 * ObjectClass definition (and used for type).
+	 */
+	public final static String IBM_OBJECT = "objectClasses:";
 
-	public final static String IBM_ATTRIBUTE	= "attributeTypes:";
-	public final static String IBM_OBJECT		= "objectClasses:";
-
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
-
-	public IBMSyntax() {
+	/**
+	 * Build a new IBMSyntax object.
+	 */
+	public IBMSyntax ()
+	{
 		super();
 		super.attributeDefinitionHeader = IBM_ATTRIBUTE ;
 		super.objectDefinitionHeader = IBM_OBJECT ;
-		super.attributeDefinitionType = IBM_ATTRIBUTE.substring( 0, IBM_ATTRIBUTE.length()-1 );
-		super.objectDefinitionType = IBM_OBJECT.substring( 0, IBM_OBJECT.length()-1 );
+		super.attributeDefinitionType = IBM_ATTRIBUTE.substring(0, IBM_ATTRIBUTE.length() - 1);
+		super.objectDefinitionType = IBM_OBJECT.substring(0, IBM_OBJECT.length() - 1);
 	}
+
 }

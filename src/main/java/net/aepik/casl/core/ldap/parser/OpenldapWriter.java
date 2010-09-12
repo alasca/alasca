@@ -24,17 +24,19 @@ import net.aepik.casl.core.ldap.SchemaFileWriter;
 import net.aepik.casl.core.ldap.SchemaObject;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Properties;
 
 /**
- * Write ldap definitions in a RFC compliant format.
+ * Write ldap definitions in a Openldap compliant format.
  */
-public class RFCWriter extends SchemaFileWriter
+public class OpenldapWriter extends RFCWriter
 {
 
 	/**
-	 * Build a new RFCWriter object.
+	 * Build a new OpenldapWriter object.
 	 */
-	public RFCWriter ()
+	public OpenldapWriter ()
 	{
 		super();
 	}
@@ -56,35 +58,15 @@ public class RFCWriter extends SchemaFileWriter
 		{
 			return;
 		}
-		SchemaSyntax syntax = schema.getSyntax();
-		SchemaObject[] objets = schema.getObjectsInOrder();
-		for (SchemaObject o : objets)
+		Properties objectsIdentifiers = schema.getObjectsIdentifiers();
+		for (Enumeration keys = objectsIdentifiers.propertyNames(); keys.hasMoreElements();)
 		{
-			//
-			// Il faut fabriquer la chaîne ! La déconstruction se fait dans
-			// le SchemaFileReader, la reconstruction se fait donc dans
-			// SchemaFileWriter. L'objet ne retourne que son contenu, il n'y
-			// a pas de déclaration.
-			//
-			String objStr = "";
-			String oidParamName = null;
-			if (o.getType().equals(syntax.getObjectDefinitionType()))
-			{
-				objStr += syntax.getObjectDefinitionHeader();
-			}
-			if (o.getType().equals(syntax.getAttributeDefinitionType()))
-			{
-				objStr += syntax.getAttributeDefinitionHeader();
-			}
-			o.delValue(oidParamName);
-			objStr += " ( " + o.toString() + " )";
-			//
-			// Enfin, on ecrit la chaîne dans le fichier. On fait attention à
-			// ce que tout objet soit séparé par un retour à la ligne.
-			//
-			output.write(objStr, 0, objStr.length());
+			String key = (String) keys.nextElement();
+			String value = objectsIdentifiers.getProperty(key);
+			output.write("objectIdentifier " + key + " " +value);
 			output.newLine();
 		}
+		super.write(schema);
 	}
 
 }

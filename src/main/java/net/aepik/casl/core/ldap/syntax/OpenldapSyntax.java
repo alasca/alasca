@@ -1,7 +1,5 @@
 /*
- * OpenLdapSyntax.java		0.1		12/07/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,28 +19,44 @@
 
 package net.aepik.casl.core.ldap.syntax;
 
+import net.aepik.casl.core.ldap.parser.OpenldapWriter;
+import net.aepik.casl.core.ldap.SchemaFileWriter;
+
 /**
- * Syntaxe propre à IBM Directory Server.
-**/
+ * OpenLDAP syntax.
+ */
+public class OpenldapSyntax extends RFCSyntax
+{
 
-public class OpenLdapSyntax extends RFCSyntax {
+	/**
+	 * Attribut definition (and used for type).
+	 */
+	public final static String OPENLDAP_ATTRIBUTE = "attributetype";
 
-////////////////////////////////
-// Constantes
-////////////////////////////////
+	/**
+	 * ObjectClass definition (and used for type).
+	 */
+	public final static String OPENLDAP_OBJECT = "objectclass";
 
-	public final static String OPENLDAP_ATTRIBUTE	= "attributetype";
-	public final static String OPENLDAP_OBJECT		= "objectclass";
-
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
-
-	public OpenLdapSyntax() {
+	/**
+	 * Build a new OpenldapSyntax object.
+	 */
+	public OpenldapSyntax()
+	{
 		super();
 		super.attributeDefinitionHeader = OPENLDAP_ATTRIBUTE ;
 		super.objectDefinitionHeader = OPENLDAP_OBJECT ;
 		super.attributeDefinitionType = OPENLDAP_ATTRIBUTE ;
 		super.objectDefinitionType = OPENLDAP_OBJECT ;
 	}
+
+	/**
+	 * Créer un writer pour écrire des données.
+	 * @return SchemaFileWriter Un writer spécifique à cette syntaxe.
+	 */
+	public SchemaFileWriter createSchemaWriter ()
+	{
+		return new OpenldapWriter();
+	}
+
 }

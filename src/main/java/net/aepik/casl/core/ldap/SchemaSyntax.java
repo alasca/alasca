@@ -1,7 +1,5 @@
 /*
- * SchemaSyntax.java		0.1		23/05/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +27,7 @@ import java.lang.String;
  * <br/><br/>
  * Un ensemble de méthodes statiques est proposées, permettant de tester des
  * chaînes de caractères, ou des caractères.
-**/
+ */
 
 public abstract class SchemaSyntax {
 
@@ -37,13 +35,13 @@ public abstract class SchemaSyntax {
 // Attributs
 ////////////////////////////////
 
-	/** L'entête de définition d'un attribut **/
+	/** L'entête de définition d'un attribut  */
 	protected String attributeDefinitionHeader;
-	/** L'entête de définition d'un objet **/
+	/** L'entête de définition d'un objet  */
 	protected String objectDefinitionHeader;
-	/** Le type attribut **/
+	/** Le type attribut  */
 	protected String attributeDefinitionType ;
-	/** Le type objet **/
+	/** Le type objet  */
 	protected String objectDefinitionType ;
 
 ////////////////////////////////
@@ -70,7 +68,7 @@ public abstract class SchemaSyntax {
 	/**
 	 * Créer un reader pour lire un fichier de cette syntaxe.
 	 * @return SchemaFileReader Un reader spécifique à cette syntaxe.
-	**/
+	 */
 	public abstract SchemaFileReader createSchemaReader();
 
 	/**
@@ -78,7 +76,7 @@ public abstract class SchemaSyntax {
 	 * @param type Un type d'objet.
 	 * @param id L'identifiant de l'objet.
 	 * @return SchemaObject L'objet de type SchemaObject.
-	**/
+	 */
 	public abstract SchemaObject createSchemaObject( String type, String id );
 
 	/**
@@ -87,45 +85,45 @@ public abstract class SchemaSyntax {
 	 * @param param Le nom du paramêtre, pour déterminer le type de la valeur.
 	 * @param value Une chaîne de caractères, ou null pour ne pas l'initialiser.
 	 * @return SchemaValue L'objet de type SchemaValue.
-	**/
+	 */
 	public abstract SchemaValue createSchemaValue( String type, String param, String value );
 
 	/**
 	 * Créer un writer pour écrire des données.
 	 * @return SchemaFileWriter Un writer spécifique à cette syntaxe.
-	**/
+	 */
 	public abstract SchemaFileWriter createSchemaWriter();
 
 	/**
 	 * Retourne l'ensemble des valeurs possible d'un paramêtre d'attribut.
 	 * @param paramName Un nom de paramêtre.
 	 * @return String[] Une ensemble de valeurs pour ce nom de paramêtres.
-	**/
+	 */
 	public abstract String[] getAttributeParameterDefaultValues( String paramName );
 
 	/**
 	 * Retourne l'ensemble des paramêtres d'attribut.
 	 * @return String[] Un ensemble de chaînes de caractères.
-	**/
+	 */
 	public abstract String[] getAttributeParameters();
 
 	/**
 	 * Retourne le nom du paramêtre renseignant le nom usuel de l'objet.
 	 * @param type Le type de l'objet.
-	**/
+	 */
 	public abstract String getDisplayNameParameter( String type );
 
 	/**
 	 * Retourne l'ensemble des valeurs possible d'un paramêtre d'objet.
 	 * @param paramName Un nom de paramêtre.
 	 * @return String[] Une ensemble de valeurs pour ce nom de paramêtres.
-	**/
+	 */
 	public abstract String[] getObjectParameterDefaultValues( String paramName );
 
 	/**
 	 * Retourne l'ensemble des paramêtres d'objet.
 	 * @return String[] Un ensemble de chaînes de caractères.
-	**/
+	 */
 	public abstract String[] getObjectParameters();
 
 	/**
@@ -133,7 +131,7 @@ public abstract class SchemaSyntax {
 	 * le paramêtre de nom 'paramName'.
 	 * @param paramName Un nom de paramêtre d'attribut.
 	 * @return String[] Un ensemble de chaînes de caractères.
-	**/
+	 */
 	public abstract String[] getOthersAttributeParametersFor( String paramName );
 
 	/**
@@ -141,7 +139,7 @@ public abstract class SchemaSyntax {
 	 * le paramêtre de nom 'paramName'.
 	 * @param paramName Un nom de paramêtre d'attribut.
 	 * @return String[] Un ensemble de chaînes de caractères.
-	**/
+	 */
 	public abstract String[] getOthersObjectParametersFor( String paramName );
 
 	/**
@@ -150,7 +148,7 @@ public abstract class SchemaSyntax {
 	 * @param type Le type utilisé : objet ou attribut.
 	 * @param initStr Une chaîne qui permet d'initialiser un objet du schéma.
 	 * @return String L'OID si il est trouvé, false sinon.
-	**/
+	 */
 	public abstract String searchSchemaObjectOID( String type, String initStr );
 
 	/**
@@ -161,7 +159,7 @@ public abstract class SchemaSyntax {
 	 * @return String[][] Un tableau de 2 caractères, la première colonne
 	 * comprends les paramêtres, la seconde les valeurs associées sous forme
 	 * de chaîne de caractères.
-	**/
+	 */
 	public abstract String[][] searchSchemaObjectValues( String type, String initStr );
 
 ////////////////////////////////
@@ -171,27 +169,27 @@ public abstract class SchemaSyntax {
 	/**
 	 * Retourne l'entête de définition d'un attribut.
 	 * @return String L'entête de définition.
-	**/
+	 */
 	public String getAttributeDefinitionHeader() { return attributeDefinitionHeader; }
 
 	/**
 	 * Retourne le nom descriptif du type AttributeType.
 	 * Il sera considéré par la suite comme un type d'un objet du schema.
 	 * @return String Une chaîne de caractères.
-	**/
+	 */
 	public String getAttributeDefinitionType() { return attributeDefinitionType; }
 
 	/**
 	 * Retourne l'entête de définition d'un objet.
 	 * @return String L'entête de définition.
-	**/
+	 */
 	public String getObjectDefinitionHeader() { return objectDefinitionHeader; }
 
 	/**
 	 * Retourne le nom descriptif du type ObjectClass.
 	 * Il sera considéré par la suite comme un type d'un objet du schema.
 	 * @return String Une chaîne de caractères.
-	**/
+	 */
 	public String getObjectDefinitionType() { return objectDefinitionType; }
 
 	/**
@@ -200,7 +198,7 @@ public abstract class SchemaSyntax {
 	 * @param type Le type de paramêtre : objet ou attribut.
 	 * @param paramName Un nom de paramêtre d'attribut.
 	 * @return String[] Un ensemble de chaînes de caractères.
-	**/
+	 */
 	public String[] getOthersParametersFor( String type, String paramName ) {
 
 		if( type.equals( getObjectDefinitionType() ) )
@@ -216,7 +214,7 @@ public abstract class SchemaSyntax {
 	 * @param type Le type de parametre : objet ou attribut.
 	 * @param paramName Un nom de paramêtre.
 	 * @return String[] Une ensemble de valeurs pour ce nom de paramêtres.
-	**/
+	 */
 	public String[] getParameterDefaultValues( String type, String paramName ) {
 
 		if( type.equals( getObjectDefinitionType() ) )
@@ -231,7 +229,7 @@ public abstract class SchemaSyntax {
 	 * Retourne l'ensemble des paramêtres d'objet.
 	 * @param type Le type de parametre : objet ou attribut.
 	 * @return String[] Un ensemble de chaînes de caractères.
-	**/
+	 */
 	public String[] getParameters( String type ) {
 
 		if( type.equals( getObjectDefinitionType() ) )
@@ -246,7 +244,7 @@ public abstract class SchemaSyntax {
 	 * Test si un caractère sous forme d'entier décimal
 	 * est un caractère alphabétique ou non.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isAlpha( int character ) {
 
 		// On regarde si le character répond au regex [a-zA-Z]
@@ -258,7 +256,7 @@ public abstract class SchemaSyntax {
 	 * Test si une chaîne de caractères est composée
 	 * uniquement de caractères vérifiant isKey().
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isAnhString( String str ) {
 
 		boolean ok = true ;
@@ -275,7 +273,7 @@ public abstract class SchemaSyntax {
 	 * Test si la chaîne de caractères désigne un attribut.
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public boolean isAttributeDefinitionHeader( String str ) {
 		
 		if( attributeDefinitionHeader==null )
@@ -288,7 +286,7 @@ public abstract class SchemaSyntax {
 	 * d'un attribut.
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public boolean isAttributeDefinitionParam( String str ) {
 
 		String[] params = getAttributeParameters();
@@ -310,7 +308,7 @@ public abstract class SchemaSyntax {
 	 * Test si un caractère sous forme d'entier décimal
 	 * est un caractère héxadécimale ou non.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isHexa( int character ) {
 
 		// On regarde si le character répond au regex [a-fA-F]
@@ -322,7 +320,7 @@ public abstract class SchemaSyntax {
 	 * Test si une chaîne de caractères est composée
 	 * uniquement de caractères alphabétiques.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isLetterString( String str ) {
 
 		boolean ok = true ;
@@ -339,7 +337,7 @@ public abstract class SchemaSyntax {
 	 * Test si un caractère sous forme d'entier décimal
 	 * est un caractère alpha-numérique ou est "-" ou ";".
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isKey( int character ) {
 
 		return ( isAlpha( character ) || isNumeric( character )
@@ -350,7 +348,7 @@ public abstract class SchemaSyntax {
 	 * Test si une chaîne de caractères est composée
 	 * uniquement de caractères alphabétiques.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isKeyString( String str ) {
 
 		if( str.length()>0 ) {
@@ -364,7 +362,7 @@ public abstract class SchemaSyntax {
 	 * Test si un caractère sous forme d'entier décimal
 	 * est un caractère numérique ou non.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isNumeric( int character ) {
 
 		// On regarde si le character répond au regex [0-9]
@@ -375,7 +373,7 @@ public abstract class SchemaSyntax {
 	 * Test si une chaîne est un id numérique d'objet: une chaîne de caractères
 	 * composée de points et de nombre exclusivement.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isNumericOid( String str ) {
 
 		if( str==null || str.length()==0 )
@@ -421,7 +419,7 @@ public abstract class SchemaSyntax {
 	 * numericoid [ "{" numericstring "}" ].
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas.
-	**/
+	 */
 	public static boolean isNumericOidLen( String str ) {
 
 		int firstBracket, secondBracket;
@@ -457,7 +455,7 @@ public abstract class SchemaSyntax {
 	 * Test si une chaîne de caractères est composée
 	 * uniquement de caractères numériques.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isNumericString( String str ) {
 
 		if( str==null || str.length()==0 )
@@ -477,7 +475,7 @@ public abstract class SchemaSyntax {
 	 * Test si la chaîne de caractères désigne un objet.
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public boolean isObjectDefinitionHeader( String str ) {
 
 		if( objectDefinitionHeader==null )
@@ -490,7 +488,7 @@ public abstract class SchemaSyntax {
 	 * d'un objet.
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public boolean isObjectDefinitionParam( String str ) {
 
 		String[] params = getObjectParameters();
@@ -512,7 +510,7 @@ public abstract class SchemaSyntax {
 	 * Test si un caractère sous forme d'entier décimal
 	 * est répond à la régle k de la grammaire BNF de la RF 2252.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isPrintable( int character ) {
 
 		// a | d | """ | "(" | ")" | "+" | "," |
@@ -529,7 +527,7 @@ public abstract class SchemaSyntax {
 	 * Test si une chaîne de caractères est composée
 	 * uniquement de caractères vérifiant isP().
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isPrintableString( String str ) {
 
 		if( str==null || str.length()==0 )
@@ -549,7 +547,7 @@ public abstract class SchemaSyntax {
 	 * Test si une chaîne de caractères est composée
 	 * uniquement d'espaces.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isSpace( String str ) {
 
 		if( str==null )
@@ -569,7 +567,7 @@ public abstract class SchemaSyntax {
 	 * Test si une chaîne de caractères vérifie la règle
 	 * "dstring" de la grammaire BNF de la RFC 2252.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isString( String str ) {
 
 		// A faire : Vérifier si UTF 8 !
@@ -582,7 +580,7 @@ public abstract class SchemaSyntax {
 	 * d'espaces.
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isSurroundedBySpaces( String str ) {
 
 		String str2 = str.trim();
@@ -592,7 +590,7 @@ public abstract class SchemaSyntax {
 	/**
 	 * Test si une chaîne de caractères vérifie isSpace.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
+	 */
 	public static boolean isWhsp( String str ) {
 
 		if( str!=null )
@@ -603,7 +601,7 @@ public abstract class SchemaSyntax {
 	/**
 	 * Retourne le nom de cette syntaxe.
 	 * @return String Le nom de cette syntaxe.
-	**/
+	 */
 	public String toString() {
 
 		String packageName = getClass().getPackage().getName();
