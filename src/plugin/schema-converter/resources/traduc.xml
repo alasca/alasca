@@ -116,7 +116,7 @@
 			<keyequiv>MAY</keyequiv>
 		</key>
 	</syntax>
-	<syntax name="IBM Directory Server vers OpenLDAP" source="IBMSyntax" destination="OpenLdapSyntax">
+	<syntax name="IBM Directory Server vers OpenLDAP" source="IBMSyntax" destination="OpenldapSyntax">
 		<key>
 			<keyname>NAME</keyname>
 			<keyequiv>NAME</keyequiv>
@@ -186,7 +186,7 @@
 			<keyequiv>MAY</keyequiv>
 		</key>
 	</syntax>
-	<syntax name="OpenLDAP vers IBM Directory Server" source="OpenLdapSyntax" destination="IBMSyntax">
+	<syntax name="OpenLDAP vers IBM Directory Server" source="OpenldapSyntax" destination="IBMSyntax">
 		<key>
 			<keyname>NAME</keyname>
 			<keyequiv>NAME</keyequiv>
@@ -256,7 +256,7 @@
 			<keyequiv>MAY</keyequiv>
 		</key>
 	</syntax>
-	<syntax name="SUN Directory Server vers OpenLDAP" source="SUNDSSyntax" destination="OpenLdapSyntax">
+	<syntax name="SUN Directory Server vers OpenLDAP" source="SUNDSSyntax" destination="OpenldapSyntax">
 		<key>
 			<keyname>NAME</keyname>
 			<keyequiv>NAME</keyequiv>
@@ -326,7 +326,7 @@
 			<keyequiv>MAY</keyequiv>
 		</key>
 	</syntax>
-	<syntax name="OpenLDAP vers SUN Directory Server" source="OpenLdapSyntax" destination="SUNDSSyntax">
+	<syntax name="OpenLDAP vers SUN Directory Server" source="OpenldapSyntax" destination="SUNDSSyntax">
 		<key>
 			<keyname>NAME</keyname>
 			<keyequiv>NAME</keyequiv>
