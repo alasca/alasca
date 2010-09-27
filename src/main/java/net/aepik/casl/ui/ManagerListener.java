@@ -22,6 +22,7 @@
 package net.aepik.casl.ui;
 
 import net.aepik.casl.core.Manager;
+import net.aepik.casl.core.util.Config;
 import net.aepik.casl.ui.ldap.SchemaManagerListener;
 import net.aepik.casl.ui.ldap.SchemaManagerPanel;
 
@@ -93,7 +94,7 @@ public class ManagerListener
 
 			try {
 				String currentDir = System.getProperty( "user.dir" );
-				Desktop.browse( new URL( "file://" + currentDir + "/doc/index.html" ) );
+				Desktop.browse( new URL( "file://" + Config.getDataPath() + "/doc/index.html" ) );
 			} catch( Exception ex ) {
 				System.out.println( ex );
 			}

@@ -24,6 +24,7 @@ import net.aepik.casl.core.ldap.Schema;
 import net.aepik.casl.core.ldap.SchemaObject;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.core.ldap.SchemaValue;
+import net.aepik.casl.core.util.Config;
 import net.aepik.casl.core.sddl.SDDL_ACLString;
 import net.aepik.casl.ui.util.NoEditableTableModel;
 import net.aepik.casl.ui.sddl.SDDL_ACLEditListener;
@@ -152,7 +153,7 @@ public class SchemaObjectEditorFrame
 
 			try {
 				String currentDir = System.getProperty( "user.dir" );
-				Desktop.browse( new URL( "file://" + currentDir + "/doc/index.html" ) );
+				Desktop.browse( new URL( "file://" + Config.getDataPath() + "/doc/index.html" ) );
 			} catch( Exception ex ) {
 				System.out.println( ex );
 			}

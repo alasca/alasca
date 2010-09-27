@@ -19,6 +19,7 @@
 package net.aepik.casl.ui.ldap;
 
 import net.aepik.casl.core.ldap.Schema;
+import net.aepik.casl.core.util.Config;
 import org.jdesktop.jdic.desktop.Desktop;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -279,7 +280,7 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 			try
 			{
 				String currentDir = System.getProperty("user.dir");
-				Desktop.browse(new URL("file://" + currentDir + "/doc/index.html"));
+				Desktop.browse(new URL("file://" + Config.getDataPath() + "/doc/index.html"));
 			}
 			catch (Exception ex)
 			{
