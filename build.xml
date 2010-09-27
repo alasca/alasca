@@ -58,7 +58,8 @@
 			deprecation="${COMPILE.DEPRECATION}"
 			encoding="${COMPILE.ENCODING}"
 			optimize="${COMPILE.OPTIMIZE}"
-			verbose="false">
+			verbose="false"
+			includeantruntime="false">
 			<classpath refid="compile.classpath"/>
 		</javac>
 		<ac:for list="${CASL_PLUGINLIST}" param="plugin" keepgoing="true">
@@ -69,7 +70,8 @@
 					deprecation="${COMPILE.DEPRECATION}"
 					encoding="${COMPILE.ENCODING}"
 					optimize="${COMPILE.OPTIMIZE}"
-					verbose="false">
+					verbose="false"
+					includeantruntime="false">
 					<classpath refid="compile.classpath"/>
 				</javac>
 			</sequential>
@@ -81,9 +83,6 @@
 			<manifest>
 				<attribute name="Main-Class" value="net.aepik.casl.ui.Main" />
 				<attribute name="Class-Path" value="${manifest.classpath}" />
-				<!--
-				<attribute name="Class-Path" value="jdic.jar uuid-2.1.1.jar" />
-				-->
 			</manifest>
 			<fileset dir="${CASL_BUILDDIR}/main">
 				<include name="**/*.class" />
@@ -107,7 +106,6 @@
 		</copy>
 		<copy todir="${CASL_TARGETDIR}/lib/resources">
 			<fileset dir="src/main/resources"/>
-			<!--<fileset dir="src/plugin/resources"/>-->
 		</copy>
 		<ac:for list="${CASL_PLUGINLIST}" param="plugin" keepgoing="true">
 			<sequential>
