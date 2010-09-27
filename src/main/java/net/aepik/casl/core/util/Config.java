@@ -25,11 +25,15 @@ import java.util.Map;
 public class Config
 {
 
+	public static final String dataPathEnvName = "CASL_DATA_PATH";
+
 	public static final String libraryPathEnvName = "CASL_LIB_PATH";
 
 	public static final String pluginPathEnvName = "CASL_PLUGIN_PATH";
 
 	public static final String resourcesPathEnvName = "CASL_RESOURCES_PATH";
+
+	private static String dataPath = null;
 
 	private static String libraryPath = null;
 
@@ -40,6 +44,11 @@ public class Config
 	static
 	{
 		readEnvironment();
+	}
+
+	public static String getDataPath ()
+	{
+		return Config.dataPath;
 	}
 
 	public static String getLibraryPath ()
@@ -59,12 +68,17 @@ public class Config
 
 	public static void readEnvironment ()
 	{
+		String envDataPath = null;
 		String envLibraryPath = null;
 		String envPluginPath = null;
 		String envResourcesPath = null;
 		Map<String, String> env = System.getenv();
 		for (String envName : env.keySet())
 		{
+			if (envName.equals(dataPathEnvName))
+			{
+				envDataPath = env.get(envName);
+			}
 			if (envName.equals(libraryPathEnvName))
 			{
 				envLibraryPath = env.get(envName);
@@ -93,6 +107,16 @@ public class Config
 			{
 				Config.libraryPath = "./lib";
 			}
+		}
+		if (envDataPath != null)
+		{
+			Config.dataPath = envDataPath;
+		}
+		else if (libraryPath != null)
+		{
+			File path = new File(libraryPath);
+			String mainPath = path.getParent();
+			Config.dataPath = mainPath + "/share";
 		}
 		if (envPluginPath != null)
 		{
