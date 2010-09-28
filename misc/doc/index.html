@@ -10,8 +10,7 @@
 
 <div class="titre">
 	<a name="top"></a>
-	<img src="logo.png" />
-	<h1>Documentation CASL : Manuel utilisateur</h1>
+	<h1>CASL : Manuel utilisateur</h1>
 	- <strong>C</strong>onvertisseur <strong>A</strong>utomatique de <strong>S</strong>chéma <strong>L</strong>dap -
 </div>
 <p>
@@ -39,7 +38,6 @@
 		<ul>
 			<li>5.1. <a href="#plugins_ad">Active Directory</a></li>
 		</ul>
-		<li>6. <a href="#licence">Licence</a></li>
 	</ul>
 </p>
 
@@ -48,14 +46,14 @@
 	<h2>1. Introduction</h2>
 </p>
 <p>
-	Ce logiciel a été développé à la base pour répondre un besoin spécifique : migrer une partie
-	des données d'un schéma d'un annuaire IBM Directory Server vers l'annuaire propriétaire de
-	Microsoft, à savoir Active Directory. Pour l'utilisation basique que nous en avons fait,
+	Ce logiciel a été développé initialement afin de répondre à un besoin spécifique : migrer une partie
+	des données d'un schéma d'un annuaire IBM Directory Server vers la technologie annuaire propriétaire de
+	Microsoft, à savoir Active Directory. Pour l'utilisation basique qu'il en a été faite,
 	ce logiciel a répondu aux attentes.
 </p>
 <p>
-	Le logiciel a été dévéloppé autour d'une idée principale : la modularité. En effet, il nous
-	a paru évident de pouvoir proposer un système permettant de mettre à jour facilement les
+	Par ailleurs, ce logiciel est structuré autour d'une idée principale : la modularité. En effet, il est
+	apparu évident de pouvoir proposer un système permettant de mettre à jour facilement les
 	fonctionnalités du logiciel. Ainsi, l'idée d'utiliser un système de gestion de plugins s'est
 	imposée d'elle même. CASL dispose donc à la base de fonctionnalités relativement réduites
 	(gestion des fichiers ouverts, renommage de fichiers, visualisation/modifications des
@@ -64,9 +62,9 @@
 	réduits dans l'application principale.
 </p>
 <p>
-	Enfin, nous nous appuyons sur les recommendations fournies par la <a href="http://www.rfc-editor.org/rfc/rfc2252.txt" target="_blank">
-	RFC 2252</a> (ou le <a href="datas/rfc2252_fr.pdf" target="_blank">document PDF en français</a>).
-	Vous y trouverez toutes les informations sur le standard utilisé, les mots-clés et syntaxes
+	CASL s'appuie sur les recommendations fournies par la <a href="http://www.rfc-editor.org/rfc/rfc2252.txt" target="_blank">
+	RFC 2252</a> (<a href="datas/rfc2252_fr.pdf" target="_blank">document PDF en français</a>).
+	Ces documents décrivent toutes les informations sur le standard utilisé, les mots-clés et syntaxes
 	utilisées pour les déclarations d'objets et attributs d'un schéma LDAP.
 </p>
 <p>
@@ -83,29 +81,30 @@
 <p>
 	Le but du logiciel est avant tout de pouvoir manipuler des fichiers spécifiques, contenant
 	des informations propres aux schémas des différents annuaires pris en charge, avec des
-	syntaxes différentes. C'est pourquoi, l'ouverture/fermeture	multiples de fichier est
-	facilitée grâce à l'utilisation d'un système d'onglets. Ainsi, chaque fichier ouvert est
+	syntaxes différentes. C'est pourquoi, l'ouverture/fermeture multiples de fichier est
+	facilitée grâce à l'utilisation d'un système d'onglets. Chaque fichier ouvert est
 	représenté par un onglet mis en évidence, quand le fichier concerné dispose du focus.
 </p>
 <p class="image">
-	<img src="images/openFile1.png" />
+	<img src="images/openFile1.png" width="500" />
 	<br/>
 	Figure 01 - Manipulation de fichiers
 </p>
 <p>
-	Lorsqu'il s'agit d'ouvrir un fichier, il faut spécifier quelle syntaxe utilisée pour lire
+	Lorsqu'il s'agit d'ouvrir un fichier, il faut spécifier quelle syntaxe à utiliser pour lire
 	le fichier. Qu'est ce qu'une syntaxe ? Il faut bien comprendre que le fichier que nous
 	tentons d'ouvrir est un fichier spécifique, écrit dans un language propre à l'annuaire
 	LDAP qui l'utilise, ce fichier peut donc être lisible ou non. La sélection de la syntaxe
 	va permettre au logiciel de savoir comment récupérer toutes les informations importantes
-	de ce fichier : un fichier propre à IBM étant structuré vraiment différemment d'un fichier
-	propre à Microsoft. Nous proposons essentiellement trois syntaxes différentes :
+	de ce fichier : un fichier propre à IBM étant structuré différemment d'un fichier
+	propre à Microsoft. CASL propose essentiellement les syntaxes suivantes :
 	<ul>
-		<li>la syntaxe comme décrit dans la RFC 2252</li>
-		<li>la syntaxe utilisé par IBM Directory Server</li>
-		<li>la syntaxe utilisé par Microsoft Active Directory</li>
+		<li>syntaxe comme décrit dans la RFC 2252</li>
+		<li>syntaxe utilisé par IBM Directory Server</li>
+		<li>syntaxe utilisé par SUN Directory Server</li>
+		<li>syntaxe utilisé par Microsoft Active Directory</li>
 	</ul>
-	Cependant, malgré que ces trois syntaxes soient proposées, en réalité, seules les deux
+	Cependant, bien que ces syntaxes soient proposées, en réalité, seules les trois
 	premières peuvent être utilisées en lecture de fichier (ces deux syntaxes sont en effet
 	très proches, contrairement à la troisième).
 </p>
@@ -119,7 +118,7 @@
 </p>
 <p>
 	La figure 1 nous montre qu'il est aussi possible de visualiser les données d'un schéma. Il
-	est ainsi possible d'accéder à quelques informations. Nous pouvons les séparer essentiellement
+	est ainsi possible d'accéder à quelques informations qu'il est possible de séparer
 	en deux catégories : les propriétés générales et les propriétés des objets.
 </p>
 <p>
@@ -131,12 +130,12 @@
 </p>
 <p>
 	Il est possible d'accéder aux propriétés du schéma de deux façons. Soit par la barre de menu
-	standard en haut de l'application (<em>Edition - Propriétées</em>), soit en faisant un clic
-	droit sur l'onglet adéquate. Vous accéderez alors un menu vous proposant plusieurs choix, dont
-	accéder aux propriétés du schéma.
+	standard en haut de l'application (<em>Edition / Propriétées</em>), soit en faisant un clic
+	droit sur l'onglet adéquat. Vous accéderez alors un menu vous proposant plusieurs choix, dont
+	l'accès aux propriétés du schéma.
 </p>
 <p class="image">
-	<img src="images/viewSchemaProperties1.png" />
+	<img src="images/viewSchemaProperties1.png" width="500" />
 	<br/>
 	Figure 02 - Les propriétés du schéma
 </p>
@@ -144,7 +143,14 @@
 	Les propriétés du schéma permettent de fixer des paramêtres globaux aux objets qu'il contient.
 	Par exemple, il est possible de fixer le DN (Distinguished Name) global. Il est vous est possible
 	de fixer autant de paramêtres que vous le souhaitiez, pour le peu que les syntaxes du logiciel
-	les prennent en compte.
+	les prennent en compte. Les paramètres, suivant la syntaxe, pourront ensuite être considérés
+	comme des valeurs par défaut pour tout objet du schéma.
+</p>
+<p>
+	Les propriétés permettent aussi de fixer éventuellement des identifiants d'objets, pour peu
+	qu'ils soient convenablement gérés par la syntaxe utilisée. Un identifiant d'objet permet
+	d'associer une chaîne de caractères lisibles à un OID identifiant de manière unique l'objet
+	rattaché.
 </p>
 <p>
 	<strong>Paramêtres de propriétés RFC et IBM</strong>
@@ -173,10 +179,10 @@
 		<li>
 			<u>objectClassCategory</u>
 			<p>
-				Le paramêtre <em>objectClassCategory</em> prend au choix trois valeurs possibles, et aucune autre. Les valeurs
-				sont "1" pour indiquer que l'objet concerné est structurel (STRUCTURAL), "2" pour abstrait (ABSTRACT) et "3"
-				pour auxiliaire (AUXILIARY). Pour plus d'informations, veuillez vous référer à la documentation en ligne de
-				Microsoft (<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/ad/ad/characteristics_of_object_classes.asp" target="_blank">voir les caractéristiques des classes d'objets</a>).
+				Le paramêtre <em>objectClassCategory</em> prend au choix trois valeurs possibles, et aucune autre.
+				Les valeurs sont "1" pour indiquer que l'objet concerné est structurel (STRUCTURAL), "2" pour abstrait
+				(ABSTRACT) et "3" pour auxiliaire (AUXILIARY). Pour plus d'informations, veuillez vous référer à la
+				documentation en ligne de Microsoft (<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/ad/ad/characteristics_of_object_classes.asp" target="_blank">voir les caractéristiques des classes d'objets</a>).
 			</p>
 		</li>
 		<li>
@@ -188,10 +194,11 @@
 		<li>
 			<u>attributeSyntax</u>
 			<p>
-				Microsoft a tenu à distinguer les données qui sont stockées dans son annuaire. C'est pourquoi il existe une bonne
-				centaine de références d'après sa documentation. Notre logiciel n'en connaît qu'une dizaine par défaut, celles
-				indiquées explicitement dans la documentation de Microsoft (mais il est toutefois possible de lui renseigner
-				une autre référence, mais dans ce cas la valeur oMSyntax des objets ne sera pas renseignée automatiquement):
+				Microsoft a tenu à distinguer les données qui sont stockées dans son annuaire. C'est pourquoi il existe
+				une bonne centaine de références d'après sa documentation. Notre logiciel n'en connaît qu'une dizaine
+				par défaut, celles indiquées explicitement dans la documentation de Microsoft (mais il est toutefois
+				possible de lui renseigner une autre référence, mais dans ce cas l'attribut oMSyntax des objets ne sera
+				pas renseignée automatiquement):
 				<table cellpadding="0" cellspacing="0">
 					<th>Nom</th>
 					<th>Identifiant</th>
@@ -260,31 +267,30 @@
 	<h3>3.2. Opérations sur les objets et attributs</h3>
 </p>
 <p>
-	Ce logiciel vous donne la possibilité de manipuler les objets et attributs du schéma déjà présent.
-	C'est à dire qu'il ne vous est pas encore possible, tout du moins dans la version présente, d'ajouter
-	des données au schéma ouvert. Vous pouvez ainsi supprimer des objets ou attributs, et même modifier
-	les données qu'ils contiennent à votre convenance.
+	Ce logiciel permet de manipuler les objets et attributs du schéma déjà présent. Il n'est pas encore
+	possible, tout du moins dans la version présente, d'ajouter des données au schéma ouvert. La suppression
+	des objets ou attributs est prise en charge, ainsi que la modification des données qu'ils contiennent.
 </p>
 <p class="image">
-	<img src="images/modifyObjectValues1.png" />
+	<img src="images/modifyObjectValues1.png" width="500" />
 	<br/>
 	Figure 03 - Modifier des valeurs d'un élément du schéma
 </p>
 <p>
-	L'arborescence sur le côté gauche de la fenêtre vous permet d'accéder aux données du schéma. Nous
-	distinguons deux catégories : objets du schéma et attributs du schéma (appelé différement en fonction
-	de la syntaxe du schéma). Si vous cliquez sur une entrée quelconque du schéma, vous pourrez visualiser
-	les données qu'elle contient dans le panneau de droite. Vous pouvez accéder de deux manières différentes
+	L'arborescence sur le côté gauche de la fenêtre permet d'accéder aux données du schéma. Il existe
+	deux catégories : les objets du schéma et les attributs du schéma (appelé différement en fonction
+	de la syntaxe du schéma). EN cliquant sur une entrée quelconque du schéma, il est possible de visualiser
+	les données qu'elle contient dans le panneau de droite. Il existe deux façons différentes d'accéder
 	à la fenêtre d'édition de ces données :
 	<ul>
 		<li>
 			Dans l'arborescence de gauche, en cliquant avec le bouton droit de la souris sur un élément
-			de cette arborescence, un menu apparaît vous indiquant toutes les actions possibles sur cet élément.
-			En cliquant sur "Modifier", vous pourrez accéder à la fenêtre d'édition.
+			de cette arborescence, un menu apparaît indiquant toutes les actions possibles sur cet élément.
+			En cliquant sur "Modifier", la fenêtre d'édition apparait.
 		</li>
 		<li>
 			Quand les données d'un élément de l'arborescence de gauche sont affichées dans le panneau
-			de droite, vous avec la possibilité de cliquer avec le bouton droit de la souris puis cliquer sur
+			de droite, il est possible de cliquer avec le bouton droit de la souris puis cliquer sur
 			"Modifier" pour accéder à la fenêtre d'édition.
 		</li>
 	</ul>
@@ -296,7 +302,7 @@
 		<li>
 			Un champs de saisie grisé signifie qu'il accepte une ou plusieurs valeurs, dans un format
 			spécifique. Dans la dernière version de CASL, l'utilisateur n'a plus à se soucier de ce format,
-			le bouton à droite du champs de signifie lui permet d'accéder à une seconde fenêtre d'édition.
+			le bouton à droite du champs concerné lui permet d'accéder à une seconde fenêtre d'édition.
 		</li>
 		<li>
 			Un champs de saisie non-grisé accepte deux types de valeurs : soit un identifiant, dans ce cas
@@ -316,7 +322,7 @@
 	<h2>4. Manipuler un schéma</h2>
 </p>
 <p>
-	Par défaut, deux outils non spécifique aux syntaxes sont présent dans notre application : le réorganisateur
+	Par défaut, deux outils non spécifiques aux syntaxes fournis avec CASL : le réorganisateur
 	des données d'un schéma et la conversion des données d'un schéma.
 </p>
 <p>
@@ -327,7 +333,7 @@
 	<h3>4.1. Réorganiser un schéma</h3>
 </p>
 <p>
-	Tout objet ou attribut d'un schéma sont déclarés dans un certain ordre. En effet, le serveur LDAP
+	Tout objet ou attribut d'un schéma est déclaré dans un certain ordre. En effet, le serveur LDAP
 	lit une à une les entrées du fichier pour constituer sa base d'objets et d'attributs. Cependant, un objet
 	ou un attribut peut être dépendant d'un ou plusieurs autres objets ou attributs. C'est ici que l'ordre de
 	déclaration des données devient important. En effet, si un objet ou un attribut dépend d'un autre objet
@@ -336,7 +342,7 @@
 <p>
 	La réorganisation d'un schéma consiste donc à refabriquer l'ordre dans lequel les objets et attributs
 	doivent être déclarés. Cela ne modifie en rien l'affichage à proprement parlé des données du schéma
-	(vous ne verrez aucune différence par l'interface graphique). Cependant, au moment de l'écriture du fichier,
+	(aucune différence visuelle dans l'interface graphique). Cependant, au moment de l'écriture du fichier,
 	cet ordre sera pris en compte pour écrire toutes les données.
 </p>
 <p>
@@ -359,10 +365,9 @@
 </p>
 <p>
 	Ce convertisseur s'appuie sur deux données cruciales. Tout d'abord, il dispose d'un fichier au format XML
-	dans lequel sont définis tous les dictionnaires de conversion. Ce fichier est dans le répertoire racine de
-	l'application et se nomme "traduc.xml". Ensuite, le convertisseur s'appuie sur CASL pour connaître la liste
-	des syntaxes disponibles. Un algorithme permet alors de ne proposer à l'utilisateur que les dictionnaires
-	de conversion pour le schéma sélectionné, ainsi que les syntaxes de destination.
+	dans lequel sont définis tous les dictionnaires de conversion. Ensuite, le convertisseur s'appuie sur CASL
+	pour connaître la liste des syntaxes disponibles. Un algorithme permet alors de ne proposer à l'utilisateur
+	que les dictionnaires de conversion pour le schéma sélectionné, ainsi que les syntaxes de destination.
 </p>
 <p>
 	[<a href="#top">sommaire</a>]
@@ -373,47 +378,15 @@
 	<h2>5. Plugins</h2>
 </p>
 <p>
-	Comme nous l'avons dit, CASL a été développé de façon modulaire. De cette façon, il devient très facile
-	d'étendre les fonctionnalités du logiciel en créant d'autres plugins. Pour démarrer un plugin, il suffit
-	alors de ce rendre dans le menu principal en haut de l'application. Ainsi, le menu "Outils" propose la
-	liste des plugins organisée par catégorie.
+	CASL a été développé de façon modulaire. De cette façon, il devient très facile d'étendre les fonctionnalités
+	du logiciel en créant d'autres plugins. Pour démarrer un plugin, il suffit alors de ce rendre dans le menu
+	principal en haut de l'application. Le menu "Outils" propose la liste des plugins organisée par catégorie.
 </p>
 <p class="image">
-	<img src="images/extentionList1.png" />
+	<img src="images/extentionList1.png" width="500" />
 	<br/>
 	Figure 05 - Les plugins dans CASL
 </p>
-<p>
-	[<a href="#top">sommaire</a>]
-</p>
-<p>
-	<a name="plugins_ad"></a>
-	<h3>5.1. Active Directory</h3>
-</p>
-<p>
-	[<a href="#top">sommaire</a>]
-</p>
-
-<p>
-	<a name="licence"></a>
-	<h2>6. Licence</h2>
-</p>
-<div class="licence">
-	<pre>Copyright (C) 2006 Thomas Chemineau
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</pre>
-</div>
 <p>
 	[<a href="#top">sommaire</a>]
 </p>
