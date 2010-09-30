@@ -39,15 +39,22 @@ public class OpenldapSyntax extends RFCSyntax
 	public final static String OPENLDAP_OBJECT = "objectclass";
 
 	/**
+	 * ObjectIdentifier definition (and used for type).
+	 */
+	public final static String OPENLDAP_OBJECTID = "objectIdentifier";
+
+	/**
 	 * Build a new OpenldapSyntax object.
 	 */
 	public OpenldapSyntax()
 	{
 		super();
-		super.attributeDefinitionHeader = OPENLDAP_ATTRIBUTE ;
-		super.objectDefinitionHeader = OPENLDAP_OBJECT ;
-		super.attributeDefinitionType = OPENLDAP_ATTRIBUTE ;
-		super.objectDefinitionType = OPENLDAP_OBJECT ;
+		super.attributeHeader = OPENLDAP_ATTRIBUTE;
+		super.objectClassHeader = OPENLDAP_OBJECT;
+		super.objectIdentifierHeader = OPENLDAP_OBJECTID;
+		super.attributeType = OPENLDAP_ATTRIBUTE;
+		super.objectClassType = OPENLDAP_OBJECT;
+		super.objectIdentifierType = OPENLDAP_OBJECTID;
 	}
 
 	/**

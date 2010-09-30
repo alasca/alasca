@@ -99,8 +99,8 @@ public class ADCTAutoGenFrame extends JFrame
 		schema = s;
 		onglets = new JTabbedPane();
 
-		SchemaObject[] objets = s.getObjects( schema.getSyntax().getObjectDefinitionType() );
-		SchemaObject[] attributs = s.getObjects( schema.getSyntax().getAttributeDefinitionType() );
+		SchemaObject[] objets = s.getObjects( schema.getSyntax().getObjectClassType() );
+		SchemaObject[] attributs = s.getObjects( schema.getSyntax().getAttributeType() );
 
 		modeles = new ADCTAutoGenTableModel[]{
 			new ADCTAutoGenTableModel( objets, values[0] ),
@@ -125,20 +125,20 @@ public class ADCTAutoGenFrame extends JFrame
 
 			boutonOk.setEnabled( false );
 			SchemaSyntax syntax = schema.getSyntax();
-			SchemaObject objets[] = schema.getObjects(syntax.getObjectDefinitionType());
-			SchemaObject attributs[] = schema.getObjects(syntax.getAttributeDefinitionType());
+			SchemaObject objets[] = schema.getObjects(syntax.getObjectClassType());
+			SchemaObject attributs[] = schema.getObjects(syntax.getAttributeType());
 
 			for( int i=0; objets!=null && i<objets.length; i++ )
 				if( modeles[0].isCellEditable( i, 2 ) )
 				{
-					SchemaValue v = syntax.createSchemaValue( syntax.getObjectDefinitionType(), "changetype", (String) modeles[0].getValueAt( i, 2 ) );
+					SchemaValue v = syntax.createSchemaValue( syntax.getObjectClassType(), "changetype", (String) modeles[0].getValueAt( i, 2 ) );
 					objets[i].addValue( "changetype", v );
 				}
 
 			for( int i=0; attributs!=null && i<attributs.length; i++ )
 				if( modeles[1].isCellEditable( i, 2 ) )
 				{
-					SchemaValue v = syntax.createSchemaValue( syntax.getAttributeDefinitionType(), "changetype", (String) modeles[1].getValueAt( i, 2 ) );
+					SchemaValue v = syntax.createSchemaValue( syntax.getAttributeType(), "changetype", (String) modeles[1].getValueAt( i, 2 ) );
 					attributs[i].addValue( "changetype", v );
 				}
 

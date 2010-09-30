@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 package net.aepik.casl.core.ldap;
 
 import java.lang.String;
@@ -29,47 +28,82 @@ import java.lang.String;
  * chaînes de caractères, ou des caractères.
  */
 
-public abstract class SchemaSyntax {
+public abstract class SchemaSyntax
+{
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * L'entête de définition d'un attribut
+	 */
+	protected String attributeHeader;
 
-	/** L'entête de définition d'un attribut  */
-	protected String attributeDefinitionHeader;
-	/** L'entête de définition d'un objet  */
-	protected String objectDefinitionHeader;
-	/** Le type attribut  */
-	protected String attributeDefinitionType ;
-	/** Le type objet  */
-	protected String objectDefinitionType ;
+	/**
+	 * L'entête de définition d'un objet
+	 */
+	protected String objectClassHeader;
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	/**
+	 * L'entête de définition d'un identifiant d'objet
+	 */
+	protected String objectIdentifierHeader;
 
-	public SchemaSyntax(
-		String attributeDefinitionType,
-		String attributeDefinitionHeader,
-		String objectDefinitionType,
-		String objectDefinitionHeader
-	) {
+	/**
+	 * Le type attribut
+	 */
+	protected String attributeType;
 
-		this.attributeDefinitionType = attributeDefinitionType ;
-		this.objectDefinitionType = objectDefinitionType ;
-		this.attributeDefinitionHeader = attributeDefinitionHeader ;
-		this.objectDefinitionHeader = objectDefinitionHeader ;
+	/**
+	 * Le type objet
+	 */
+	protected String objectClassType;
+
+	/**
+	 * Le type identifiant d'objet
+	 */
+	protected String objectIdentifierType;
+
+	/**
+	 * Build a new SchemaSyntax object.
+	 */
+	public SchemaSyntax ()
+	{
+		this.attributeType          = null;
+		this.attributeHeader        = null;
+		this.objectClassType        = null;
+		this.objectClassHeader      = null;
+		this.objectIdentifierType   = null;
+		this.objectIdentifierHeader = null;
 	}
 
-////////////////////////////////
-// Methodes à définir
-////////////////////////////////
+	/**
+	 * Build a new SchemaSyntax object.
+	 * @param String attributeType
+	 * @param String attributeHeader
+	 * @param String objectClassType
+	 * @param String objectClassHeader
+	 * @param String objectIdentifierType
+	 * @param String objectIdentifierHeader
+	 */
+	public SchemaSyntax (
+		String attributeType,
+		String attributeHeader,
+		String objectClassType,
+		String objectClassHeader,
+		String objectIdentifierType,
+		String objectIdentifierHeader )
+	{
+		this.attributeType          = attributeType;
+		this.attributeHeader        = attributeHeader;
+		this.objectClassType        = objectClassType;
+		this.objectClassHeader      = objectClassHeader;
+		this.objectIdentifierType   = objectIdentifierType;
+		this.objectIdentifierHeader = objectIdentifierHeader;
+	}
 
 	/**
 	 * Créer un reader pour lire un fichier de cette syntaxe.
 	 * @return SchemaFileReader Un reader spécifique à cette syntaxe.
 	 */
-	public abstract SchemaFileReader createSchemaReader();
+	public abstract SchemaFileReader createSchemaReader ();
 
 	/**
 	 * Créer un nouvel objet SchemaObject d'un type donné.
@@ -77,7 +111,7 @@ public abstract class SchemaSyntax {
 	 * @param id L'identifiant de l'objet.
 	 * @return SchemaObject L'objet de type SchemaObject.
 	 */
-	public abstract SchemaObject createSchemaObject( String type, String id );
+	public abstract SchemaObject createSchemaObject ( String type, String id );
 
 	/**
 	 * Créer un nouvel objet SchemaValue d'une valeur donnée.
@@ -86,45 +120,45 @@ public abstract class SchemaSyntax {
 	 * @param value Une chaîne de caractères, ou null pour ne pas l'initialiser.
 	 * @return SchemaValue L'objet de type SchemaValue.
 	 */
-	public abstract SchemaValue createSchemaValue( String type, String param, String value );
+	public abstract SchemaValue createSchemaValue ( String type, String param, String value );
 
 	/**
 	 * Créer un writer pour écrire des données.
 	 * @return SchemaFileWriter Un writer spécifique à cette syntaxe.
 	 */
-	public abstract SchemaFileWriter createSchemaWriter();
+	public abstract SchemaFileWriter createSchemaWriter ();
 
 	/**
 	 * Retourne l'ensemble des valeurs possible d'un paramêtre d'attribut.
 	 * @param paramName Un nom de paramêtre.
 	 * @return String[] Une ensemble de valeurs pour ce nom de paramêtres.
 	 */
-	public abstract String[] getAttributeParameterDefaultValues( String paramName );
+	public abstract String[] getAttributeParameterDefaultValues ( String paramName );
 
 	/**
 	 * Retourne l'ensemble des paramêtres d'attribut.
 	 * @return String[] Un ensemble de chaînes de caractères.
 	 */
-	public abstract String[] getAttributeParameters();
+	public abstract String[] getAttributeParameters ();
 
 	/**
 	 * Retourne le nom du paramêtre renseignant le nom usuel de l'objet.
 	 * @param type Le type de l'objet.
 	 */
-	public abstract String getDisplayNameParameter( String type );
+	public abstract String getDisplayNameParameter ( String type );
 
 	/**
 	 * Retourne l'ensemble des valeurs possible d'un paramêtre d'objet.
 	 * @param paramName Un nom de paramêtre.
 	 * @return String[] Une ensemble de valeurs pour ce nom de paramêtres.
 	 */
-	public abstract String[] getObjectParameterDefaultValues( String paramName );
+	public abstract String[] getObjectParameterDefaultValues ( String paramName );
 
 	/**
 	 * Retourne l'ensemble des paramêtres d'objet.
 	 * @return String[] Un ensemble de chaînes de caractères.
 	 */
-	public abstract String[] getObjectParameters();
+	public abstract String[] getObjectParameters ();
 
 	/**
 	 * Retourne l'ensemble des autres paramêtres d'attribut possible pour
@@ -132,7 +166,7 @@ public abstract class SchemaSyntax {
 	 * @param paramName Un nom de paramêtre d'attribut.
 	 * @return String[] Un ensemble de chaînes de caractères.
 	 */
-	public abstract String[] getOthersAttributeParametersFor( String paramName );
+	public abstract String[] getOthersAttributeParametersFor ( String paramName );
 
 	/**
 	 * Retourne l'ensemble des autres paramêtres d'objet possible pour
@@ -140,7 +174,7 @@ public abstract class SchemaSyntax {
 	 * @param paramName Un nom de paramêtre d'attribut.
 	 * @return String[] Un ensemble de chaînes de caractères.
 	 */
-	public abstract String[] getOthersObjectParametersFor( String paramName );
+	public abstract String[] getOthersObjectParametersFor ( String paramName );
 
 	/**
 	 * Retourne l'OID d'un objet du schéma à partir d'une chaîne
@@ -149,7 +183,7 @@ public abstract class SchemaSyntax {
 	 * @param initStr Une chaîne qui permet d'initialiser un objet du schéma.
 	 * @return String L'OID si il est trouvé, false sinon.
 	 */
-	public abstract String searchSchemaObjectOID( String type, String initStr );
+	public abstract String searchSchemaObjectOID ( String type, String initStr );
 
 	/**
 	 * Retourne les valeurs d'un objet du schéma à partir d'une chaîne
@@ -160,37 +194,45 @@ public abstract class SchemaSyntax {
 	 * comprends les paramêtres, la seconde les valeurs associées sous forme
 	 * de chaîne de caractères.
 	 */
-	public abstract String[][] searchSchemaObjectValues( String type, String initStr );
-
-////////////////////////////////
-// Methodes définies
-////////////////////////////////
+	public abstract String[][] searchSchemaObjectValues ( String type, String initStr );
 
 	/**
 	 * Retourne l'entête de définition d'un attribut.
 	 * @return String L'entête de définition.
 	 */
-	public String getAttributeDefinitionHeader() { return attributeDefinitionHeader; }
+	public String getAttributeHeader ()
+	{
+		return attributeHeader;
+	}
 
 	/**
 	 * Retourne le nom descriptif du type AttributeType.
 	 * Il sera considéré par la suite comme un type d'un objet du schema.
 	 * @return String Une chaîne de caractères.
 	 */
-	public String getAttributeDefinitionType() { return attributeDefinitionType; }
+	public String getAttributeType ()
+	{
+		return attributeType;
+	}
 
 	/**
 	 * Retourne l'entête de définition d'un objet.
 	 * @return String L'entête de définition.
 	 */
-	public String getObjectDefinitionHeader() { return objectDefinitionHeader; }
+	public String getObjectClassHeader ()
+	{
+		return objectClassHeader;
+	}
 
 	/**
 	 * Retourne le nom descriptif du type ObjectClass.
 	 * Il sera considéré par la suite comme un type d'un objet du schema.
 	 * @return String Une chaîne de caractères.
 	 */
-	public String getObjectDefinitionType() { return objectDefinitionType; }
+	public String getObjectClassType ()
+	{
+		return objectClassType;
+	}
 
 	/**
 	 * Retourne l'ensemble des autres paramêtres possibles pour
@@ -199,13 +241,16 @@ public abstract class SchemaSyntax {
 	 * @param paramName Un nom de paramêtre d'attribut.
 	 * @return String[] Un ensemble de chaînes de caractères.
 	 */
-	public String[] getOthersParametersFor( String type, String paramName ) {
-
-		if( type.equals( getObjectDefinitionType() ) )
-			return getOthersObjectParametersFor( paramName );
-		else if( type.equals( getAttributeDefinitionType() ) )
-			return getOthersAttributeParametersFor( paramName );
-
+	public String[] getOthersParametersFor ( String type, String paramName )
+	{
+		if (type.equals(getObjectClassType()))
+		{
+			return getOthersObjectParametersFor(paramName);
+		}
+		else if (type.equals(getAttributeType()))
+		{
+			return getOthersAttributeParametersFor(paramName);
+		}
 		return null;
 	}
 
@@ -215,13 +260,16 @@ public abstract class SchemaSyntax {
 	 * @param paramName Un nom de paramêtre.
 	 * @return String[] Une ensemble de valeurs pour ce nom de paramêtres.
 	 */
-	public String[] getParameterDefaultValues( String type, String paramName ) {
-
-		if( type.equals( getObjectDefinitionType() ) )
-			return getObjectParameterDefaultValues( paramName );
-		else if( type.equals( getAttributeDefinitionType() ) )
-			return getAttributeParameterDefaultValues( paramName );
-
+	public String[] getParameterDefaultValues ( String type, String paramName )
+	{
+		if (type.equals(getObjectClassType()))
+		{
+			return getObjectParameterDefaultValues(paramName);
+		}
+		else if (type.equals(getAttributeType()))
+		{
+			return getAttributeParameterDefaultValues(paramName);
+		}
 		return null;
 	}
 
@@ -230,13 +278,16 @@ public abstract class SchemaSyntax {
 	 * @param type Le type de parametre : objet ou attribut.
 	 * @return String[] Un ensemble de chaînes de caractères.
 	 */
-	public String[] getParameters( String type ) {
-
-		if( type.equals( getObjectDefinitionType() ) )
+	public String[] getParameters ( String type )
+	{
+		if (type.equals(getObjectClassType()))
+		{
 			return getObjectParameters();
-		else if( type.equals( getAttributeDefinitionType() ) )
+		}
+		else if (type.equals(getAttributeType()))
+		{
 			return getAttributeParameters();
-
+		}
 		return null;
 	}
 
@@ -245,11 +296,11 @@ public abstract class SchemaSyntax {
 	 * est un caractère alphabétique ou non.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isAlpha( int character ) {
-
+	public static boolean isAlpha ( int character )
+	{
 		// On regarde si le character répond au regex [a-zA-Z]
-		return( ( character>=97 && character<=122 )
-				|| ( character>=65 && character<=90 ) );
+		return (   (character >= 97 && character <= 122)
+			|| (character >= 65 && character <= 90));
 	}
 
 	/**
@@ -257,16 +308,18 @@ public abstract class SchemaSyntax {
 	 * uniquement de caractères vérifiant isKey().
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isAnhString( String str ) {
-
-		boolean ok = true ;
+	public static boolean isAnhString ( String str )
+	{
+		boolean ok = true;
 		char[] strTab = str.toCharArray();
-
-		for( int i=0; i<strTab.length && ok; i++ ) {
-			if( !isKey( strTab[i] ) )
-				ok = false ;
+		for (int i = 0; i < strTab.length && ok; i++)
+		{
+			if (!isKey(strTab[i]))
+			{
+				ok = false;
+			}
 		}
-		return ok ;
+		return ok;
 	}
 
 	/**
@@ -274,11 +327,13 @@ public abstract class SchemaSyntax {
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public boolean isAttributeDefinitionHeader( String str ) {
-		
-		if( attributeDefinitionHeader==null )
+	public boolean isAttributeHeader ( String str )
+	{	
+		if (attributeHeader == null)
+		{
 			return false;
-		return str.trim().equals( attributeDefinitionHeader );
+		}
+		return str.trim().equals(attributeHeader);
 	}
 
 	/**
@@ -287,20 +342,22 @@ public abstract class SchemaSyntax {
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public boolean isAttributeDefinitionParam( String str ) {
-
+	public boolean isAttributeDefinitionParam ( String str )
+	{
 		String[] params = getAttributeParameters();
-
-		if( params==null || params.length==0 )
+		if (params == null || params.length == 0)
+		{
 			return false;
-
-		String str2 = str.trim();
-		boolean ok = false ;
-		for( int i=0; i<params.length; i++ ) {
-			if( str2.equals( params[i] ) )
-				ok = true;
 		}
-
+		String str2 = str.trim();
+		boolean ok = false;
+		for (int i = 0; i < params.length; i++)
+		{
+			if (str2.equals(params[i]))
+			{
+				ok = true;
+			}
+		}
 		return ok;
 	}
 
@@ -309,11 +366,11 @@ public abstract class SchemaSyntax {
 	 * est un caractère héxadécimale ou non.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isHexa( int character ) {
-
+	public static boolean isHexa ( int character )
+	{
 		// On regarde si le character répond au regex [a-fA-F]
-		return ( ( character>=97 && character<=102 )
-				|| ( character>=65 && character<=70 ) );
+		return (   (character >= 97 && character <= 102)
+			|| (character >= 65 && character <= 70));
 	}
 
 	/**
@@ -321,16 +378,18 @@ public abstract class SchemaSyntax {
 	 * uniquement de caractères alphabétiques.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isLetterString( String str ) {
-
-		boolean ok = true ;
+	public static boolean isLetterString ( String str )
+	{
+		boolean ok = true;
 		char[] strTab = str.toCharArray();
-
-		for( int i=0; i<strTab.length && ok; i++ ) {
-			if( !isAlpha( strTab[i] ) )
-				ok = false ;
+		for (int i = 0; i < strTab.length && ok; i++)
+		{
+			if (!isAlpha(strTab[i]))
+			{
+				ok = false;
+			}
 		}
-		return ok ;
+		return ok;
 	}
 
 	/**
@@ -338,10 +397,12 @@ public abstract class SchemaSyntax {
 	 * est un caractère alpha-numérique ou est "-" ou ";".
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isKey( int character ) {
-
-		return ( isAlpha( character ) || isNumeric( character )
-				|| character==45 || character==59 );
+	public static boolean isKey ( int character )
+	{
+		return (   isAlpha(character)
+			|| isNumeric(character)
+			|| character == 45
+			|| character == 59);
 	}
 
 	/**
@@ -349,13 +410,14 @@ public abstract class SchemaSyntax {
 	 * uniquement de caractères alphabétiques.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isKeyString( String str ) {
-
-		if( str.length()>0 ) {
-			String subStr = str.substring( 1 );
-			return isAlpha( str.charAt( 0 ) ) && isAnhString( subStr ) ;
+	public static boolean isKeyString ( String str )
+	{
+		if (str.length() > 0)
+		{
+			String subStr = str.substring(1);
+			return isAlpha(str.charAt(0)) && isAnhString(subStr);
 		}
-		return false ;
+		return false;
 	}
 
 	/**
@@ -363,10 +425,10 @@ public abstract class SchemaSyntax {
 	 * est un caractère numérique ou non.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isNumeric( int character ) {
-
+	public static boolean isNumeric ( int character )
+	{
 		// On regarde si le character répond au regex [0-9]
-		return ( character>=48 && character<=57 );
+		return character >= 48 && character <= 57;
 	}
 
 	/**
@@ -374,42 +436,46 @@ public abstract class SchemaSyntax {
 	 * composée de points et de nombre exclusivement.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isNumericOid( String str ) {
-
-		if( str==null || str.length()==0 )
-			return false ;
-
+	public static boolean isNumericOid ( String str )
+	{
+		if (str == null || str.length() == 0)
+		{
+			return false;
+		}
 		boolean ok = true;
 		StringBuffer buffer = new StringBuffer();
 		char[] strtab = str.toCharArray();
-
-		for( int i=0; i<strtab.length && ok; i++ ) {
-
-			switch( strtab[i] ) {
-
+		for (int i = 0; i < strtab.length && ok; i++)
+		{
+			switch (strtab[i])
+			{
+				//
 				// Si c'est un point, on regarde s'il n'est pas
 				// en première position ou dernière position. Sinon, on
 				// regarde si le caractère précédent n'est pas un point aussi.
 				// Ensuite, on regarde si le buffer est numérique ou non.
+				//
 				case 46:
-					if( i==0 || i==strtab.length-1
-							|| strtab[i-1]==strtab[i]
-							|| !isNumericString( buffer.toString() ) ) {
-						ok = false ;
+					if (i == 0 || i == strtab.length-1
+						   || strtab[i-1]==strtab[i]
+						   || !isNumericString(buffer.toString()))
+					{
+						ok = false;
 					}
 					break;
-
 				default:
-					buffer.append( strtab[i] );
+					buffer.append(strtab[i]);
 					break;
 			}
 		}
-
+		//
 		// Une fois la boucle terminée, il peut rester des infos dans le
 		// buffer, on va tester si c'est numérique aussi.
-		if( !isNumericString( buffer.toString() ) )
+		//
+		if (!isNumericString(buffer.toString()))
+		{
 			ok = false;
-
+		}
 		return ok;
 	}
 
@@ -420,34 +486,43 @@ public abstract class SchemaSyntax {
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas.
 	 */
-	public static boolean isNumericOidLen( String str ) {
-
+	public static boolean isNumericOidLen ( String str )
+	{
 		int firstBracket, secondBracket;
-
-		if( str==null || str.length()==0 )
+		if (str == null || str.length() == 0)
+		{
 			return false;
-
+		}
+		//
 		// On regarde si il y a une parenthèse ouvrante dans la chaîne. Si ca
 		// n'est pas le cas, on regarde si la chaîne vérifie la méthode
 		// isNumericOid. Alors si elle n'est pas vérifie, cette chaîne est
 		// mal formée.
-		if( ( firstBracket = str.indexOf( 40 ) )<0 )
-			return isNumericOid( str );
-
+		//
+		if ((firstBracket = str.indexOf(40)) < 0)
+		{
+			return isNumericOid(str);
+		}
+		//
 		// Sinon, on regarde si il y a une parenthèse fermante.
 		// Il n'y en a pas, la chaîne est mal formée.
-		if( ( secondBracket = str.indexOf( 41, firstBracket+1 ) )<0 )
+		//
+		if ((secondBracket = str.indexOf(41, firstBracket + 1)) < 0)
+		{
 			return false;
-
+		}
+		//
 		// Enfin, on teste si la chaîne avant la parenthèse vérifie isNumericOid,
 		// que la seconde parenthèse est le dernier caractère de cette chaîne,
 		// et que la chaîne entre les parenthèse vérifie isNumericString.
-		if( isNumericOid( str.substring( 0, firstBracket ) )
-				&& secondBracket==str.length()-1 ) {
-			return isNumericString( str.substring( firstBracket+1, secondBracket ) );
+		//
+		if (isNumericOid(str.substring(0, firstBracket)) && secondBracket == str.length() - 1)
+		{
+			return isNumericString(str.substring(firstBracket + 1, secondBracket));
 		}
-
+		//
 		// Dans tous les autres cas, on retourne faux.
+		//
 		return false;
 	}
 
@@ -456,19 +531,19 @@ public abstract class SchemaSyntax {
 	 * uniquement de caractères numériques.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isNumericString( String str ) {
-
-		if( str==null || str.length()==0 )
+	public static boolean isNumericString ( String str )
+	{
+		if (str == null || str.length() == 0)
+		{
 			return false;
-
-		boolean ok = true ;
-		char[] strTab = str.toCharArray();
-
-		for( int i=0; i<strTab.length && ok; i++ ) {
-			ok &= isNumeric( strTab[i] ) ;
 		}
-
-		return ok ;
+		boolean ok = true;
+		char[] strTab = str.toCharArray();
+		for (int i = 0; i < strTab.length && ok; i++)
+		{
+			ok &= isNumeric(strTab[i]);
+		}
+		return ok;
 	}
 
 	/**
@@ -476,11 +551,13 @@ public abstract class SchemaSyntax {
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public boolean isObjectDefinitionHeader( String str ) {
-
-		if( objectDefinitionHeader==null )
+	public boolean isObjectClassHeader ( String str )
+	{
+		if (objectClassHeader == null)
+		{
 			return false;
-		return str.trim().equals( objectDefinitionHeader );
+		}
+		return str.trim().equals(objectClassHeader);
 	}
 
 	/**
@@ -489,20 +566,22 @@ public abstract class SchemaSyntax {
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public boolean isObjectDefinitionParam( String str ) {
-
+	public boolean isObjectDefinitionParam ( String str )
+	{
 		String[] params = getObjectParameters();
-
-		if( params==null || params.length==0 )
+		if (params == null || params.length == 0)
+		{
 			return false;
-
-		String str2 = str.trim();
-		boolean ok = false ;
-		for( int i=0; i<params.length; i++ ) {
-			if( str2.equals( params[i] ) )
-				ok = true;
 		}
-
+		String str2 = str.trim();
+		boolean ok = false;
+		for (int i = 0; i < params.length; i++)
+		{
+			if (str2.equals(params[i]))
+			{
+				ok = true;
+			}
+		}
 		return ok;
 	}
 
@@ -511,16 +590,23 @@ public abstract class SchemaSyntax {
 	 * est répond à la régle k de la grammaire BNF de la RF 2252.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isPrintable( int character ) {
-
+	public static boolean isPrintable( int character )
+	{
 		// a | d | """ | "(" | ")" | "+" | "," |
 		// "-" | "." | "/" | ":" | "?" | " "
-
-		return ( isAlpha( character ) || isNumeric( character )
-				|| character==34 || character==40 || character==41
-				|| character==43 || character==44 || character==45
-				|| character==46 || character==47 || character==58
-				|| character==63 || character==32 );
+		return (   isAlpha(character)
+			|| isNumeric(character)
+			|| character == 34
+			|| character == 40
+			|| character == 41
+			|| character == 43
+			|| character == 44
+			|| character == 45
+			|| character == 46
+			|| character == 47
+			|| character == 58
+			|| character == 63
+			|| character == 32);
 	}
 
 	/**
@@ -528,19 +614,22 @@ public abstract class SchemaSyntax {
 	 * uniquement de caractères vérifiant isP().
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isPrintableString( String str ) {
-
-		if( str==null || str.length()==0 )
+	public static boolean isPrintableString ( String str )
+	{
+		if (str == null || str.length() == 0)
+		{
 			return false;
-
-		boolean ok = true ;
-		char[] strTab = str.toCharArray();
-
-		for( int i=0; i<strTab.length && ok; i++ ) {
-			if( !isPrintable( strTab[i] ) )
-				ok = false ;
 		}
-		return ok ;
+		boolean ok = true;
+		char[] strTab = str.toCharArray();
+		for (int i = 0; i < strTab.length && ok; i++)
+		{
+			if (!isPrintable(strTab[i]))
+			{
+				ok = false;
+			}
+		}
+		return ok;
 	}
 
 	/**
@@ -548,19 +637,22 @@ public abstract class SchemaSyntax {
 	 * uniquement d'espaces.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isSpace( String str ) {
-
-		if( str==null )
+	public static boolean isSpace ( String str )
+	{
+		if (str == null)
+		{
 			return false;
-
-		boolean ok = true ;
-		char[] strTab = str.toCharArray();
-
-		for( int i=0; i<strTab.length && ok; i++ ) {
-			if( strTab[i]!=32 )
-				ok = false ;
 		}
-		return ok ;
+		boolean ok = true;
+		char[] strTab = str.toCharArray();
+		for (int i = 0; i < strTab.length && ok; i++)
+		{
+			if (strTab[i] != 32)
+			{
+				ok = false;
+			}
+		}
+		return ok;
 	}
 
 	/**
@@ -568,11 +660,10 @@ public abstract class SchemaSyntax {
 	 * "dstring" de la grammaire BNF de la RFC 2252.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isString( String str ) {
-
+	public static boolean isString ( String str )
+	{
 		// A faire : Vérifier si UTF 8 !
-
-		return ( str!=null && str.length()>0 );
+		return str != null && str.length() > 0;
 	}
 
 	/**
@@ -581,20 +672,22 @@ public abstract class SchemaSyntax {
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isSurroundedBySpaces( String str ) {
-
+	public static boolean isSurroundedBySpaces ( String str )
+	{
 		String str2 = str.trim();
-		return !str2.equals( str );
+		return !str2.equals(str);
 	}
 
 	/**
 	 * Test si une chaîne de caractères vérifie isSpace.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public static boolean isWhsp( String str ) {
-
-		if( str!=null )
-			return isSpace( str );
+	public static boolean isWhsp ( String str )
+	{
+		if (str != null)
+		{
+			return isSpace(str);
+		}
 		return true;
 	}
 
@@ -602,12 +695,13 @@ public abstract class SchemaSyntax {
 	 * Retourne le nom de cette syntaxe.
 	 * @return String Le nom de cette syntaxe.
 	 */
-	public String toString() {
-
+	public String toString ()
+	{
 		String packageName = getClass().getPackage().getName();
 		String classFullName = getClass().getName();
-		String currentSyntaxName = classFullName.substring( packageName.length()+1 );
+		String currentSyntaxName = classFullName.substring(packageName.length() + 1);
 		return currentSyntaxName;
 	}
 
 }
+

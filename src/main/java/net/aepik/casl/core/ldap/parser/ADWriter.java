@@ -114,7 +114,7 @@ public class ADWriter extends SchemaFileWriter {
 			// Objet
 			//-----------------
 
-			if( objet.getType().equals( syntax.getObjectDefinitionType() ) ) {
+			if( objet.getType().equals( syntax.getObjectClassType() ) ) {
 
 				String opt_defaultObjectCategory = null ;
 				String opt_governsID = null ;
@@ -175,7 +175,7 @@ public class ADWriter extends SchemaFileWriter {
 			//-----------------
 			// Attribut
 			//-----------------
-			} else if( objet.getType().equals( syntax.getAttributeDefinitionType() ) ) {
+			} else if( objet.getType().equals( syntax.getAttributeType() ) ) {
 
 				String currentAttributeSyntax = null ;
 				String[][] oMSyntax = new String[][] {

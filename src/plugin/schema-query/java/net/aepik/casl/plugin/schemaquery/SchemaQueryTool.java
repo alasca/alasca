@@ -90,7 +90,7 @@ public class SchemaQueryTool
 	 */
 	private static void displayAttributes (Schema schema)
 	{
-		String type = schema.getSyntax().getAttributeDefinitionType();
+		String type = schema.getSyntax().getAttributeType();
 		for(SchemaObject attr : schema.getObjectsInOrder(type))
 		{
 			System.out.println(attr.getName());
@@ -103,7 +103,7 @@ public class SchemaQueryTool
 	 */
 	private static void displayObjectClasses (Schema schema)
 	{
-		String type = schema.getSyntax().getObjectDefinitionType();
+		String type = schema.getSyntax().getObjectClassType();
 		for(SchemaObject objt : schema.getObjectsInOrder(type))
 		{
 			System.out.println(objt.getNameFirstValue());

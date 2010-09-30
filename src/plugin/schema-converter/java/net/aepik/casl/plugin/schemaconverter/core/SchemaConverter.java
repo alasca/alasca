@@ -102,10 +102,10 @@ public class SchemaConverter {
 			String type = objets[i].getType();
 			boolean ok = true ;
 
-			if( type.equals( oldSyntax.getObjectDefinitionType() ) )
-				newType = syntax.getObjectDefinitionType();
-			else if( type.equals( oldSyntax.getAttributeDefinitionType() ) )
-				newType = syntax.getAttributeDefinitionType();
+			if( type.equals( oldSyntax.getObjectClassType() ) )
+				newType = syntax.getObjectClassType();
+			else if( type.equals( oldSyntax.getAttributeType() ) )
+				newType = syntax.getAttributeType();
 			else
 				ok = false ;
 

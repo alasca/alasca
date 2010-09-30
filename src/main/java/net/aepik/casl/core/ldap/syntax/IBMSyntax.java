@@ -41,10 +41,10 @@ public class IBMSyntax extends RFCSyntax
 	public IBMSyntax ()
 	{
 		super();
-		super.attributeDefinitionHeader = IBM_ATTRIBUTE ;
-		super.objectDefinitionHeader = IBM_OBJECT ;
-		super.attributeDefinitionType = IBM_ATTRIBUTE.substring(0, IBM_ATTRIBUTE.length() - 1);
-		super.objectDefinitionType = IBM_OBJECT.substring(0, IBM_OBJECT.length() - 1);
+		super.attributeHeader = IBM_ATTRIBUTE ;
+		super.objectClassHeader = IBM_OBJECT ;
+		super.attributeType = IBM_ATTRIBUTE.substring(0, IBM_ATTRIBUTE.length() - 1);
+		super.objectClassType = IBM_OBJECT.substring(0, IBM_OBJECT.length() - 1);
 	}
 
 }

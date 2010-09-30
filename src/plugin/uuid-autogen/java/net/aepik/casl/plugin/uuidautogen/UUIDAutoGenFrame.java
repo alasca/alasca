@@ -95,8 +95,8 @@ public class UUIDAutoGenFrame extends JFrame
 		schema = s;
 		onglets = new JTabbedPane();
 
-		SchemaObject[] objets = s.getObjects( schema.getSyntax().getObjectDefinitionType() );
-		SchemaObject[] attributs = s.getObjects( schema.getSyntax().getAttributeDefinitionType() );
+		SchemaObject[] objets = s.getObjects( schema.getSyntax().getObjectClassType() );
+		SchemaObject[] attributs = s.getObjects( schema.getSyntax().getAttributeType() );
 
 		modeles = new UUIDAutoGenTableModel[]{
 			new UUIDAutoGenTableModel( objets ),
@@ -120,20 +120,20 @@ public class UUIDAutoGenFrame extends JFrame
         {
             boutonOk.setEnabled(false);
             SchemaSyntax syntax = schema.getSyntax();
-            SchemaObject objets[] = schema.getObjects(syntax.getObjectDefinitionType());
-            SchemaObject attributs[] = schema.getObjects(syntax.getAttributeDefinitionType());
+            SchemaObject objets[] = schema.getObjects(syntax.getObjectClassType());
+            SchemaObject attributs[] = schema.getObjects(syntax.getAttributeType());
 
             for(int i = 0; objets != null && i < objets.length; i++)
                 if(modeles[0].isCellEditable(i, 0) && ((Boolean)modeles[0].getValueAt(i, 0)).booleanValue())
                 {
-                    net.aepik.casl.core.ldap.SchemaValue v = syntax.createSchemaValue(syntax.getObjectDefinitionType(), "SchemaIDGUID:", Base64.encode((new UUID()).toString()));
+                    net.aepik.casl.core.ldap.SchemaValue v = syntax.createSchemaValue(syntax.getObjectClassType(), "SchemaIDGUID:", Base64.encode((new UUID()).toString()));
                     objets[i].addValue("SchemaIDGUID:", v);
                 }
 
             for(int i = 0; attributs != null && i < attributs.length; i++)
                 if(modeles[1].isCellEditable(i, 0) && ((Boolean)modeles[1].getValueAt(i, 0)).booleanValue())
                 {
-                    net.aepik.casl.core.ldap.SchemaValue v = syntax.createSchemaValue(syntax.getAttributeDefinitionType(), "SchemaIDGUID:", Base64.encode((new UUID()).toString()));
+                    net.aepik.casl.core.ldap.SchemaValue v = syntax.createSchemaValue(syntax.getAttributeType(), "SchemaIDGUID:", Base64.encode((new UUID()).toString()));
                     attributs[i].addValue("SchemaIDGUID:", v);
                 }
 

@@ -60,8 +60,8 @@ public class RFCReader extends SchemaFileReader
 		StringBuffer buffer = new StringBuffer();
 		StringBuffer bufferBackup = new StringBuffer();
 
-		String attributeDef = syntax.getAttributeDefinitionHeader().toLowerCase();
-		String objectDef    = syntax.getObjectDefinitionHeader().toLowerCase();
+		String attributeDef = syntax.getAttributeHeader().toLowerCase();
+		String objectDef    = syntax.getObjectClassHeader().toLowerCase();
 
 		//
 		// Du a des problèmes sur la lecture de fichier entre les
@@ -149,13 +149,13 @@ public class RFCReader extends SchemaFileReader
 				//
 				if (creationObjet)
 				{
-					if (syntax.isAttributeDefinitionHeader(bufferBackup.toString()))
+					if (syntax.isAttributeHeader(bufferBackup.toString()))
 					{
-						objet = syntax.createSchemaObject(syntax.getAttributeDefinitionType(), null);
+						objet = syntax.createSchemaObject(syntax.getAttributeType(), null);
 					}
-					else if (syntax.isObjectDefinitionHeader(bufferBackup.toString()))
+					else if (syntax.isObjectClassHeader(bufferBackup.toString()))
 					{
-						objet = syntax.createSchemaObject(syntax.getObjectDefinitionType(), null);
+						objet = syntax.createSchemaObject(syntax.getObjectClassType(), null);
 					}
 					if (objet != null)
 					{
@@ -172,7 +172,7 @@ public class RFCReader extends SchemaFileReader
 				if (initialisationObjet && objet != null)
 				{
 					String def = bufferBackup.toString();
-					if (!syntax.isAttributeDefinitionHeader(def) && !syntax.isObjectDefinitionHeader(def))
+					if (!syntax.isAttributeHeader(def) && !syntax.isObjectClassHeader(def))
 					{
 						if (objet.initFromString(def))
 						{

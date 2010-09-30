@@ -1,7 +1,5 @@
 /*
- * ADSyntax.java		0.1		12/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2010 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +26,6 @@ import net.aepik.casl.core.ldap.SchemaFileWriter;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.core.ldap.SchemaValue;
 import net.aepik.casl.core.ldap.parser.ADWriter;
-
 import java.lang.String;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -110,10 +107,10 @@ public class ADSyntax extends RFCSyntax {
 
 	public ADSyntax() {
 		super();
-		super.attributeDefinitionHeader = AD_ATTRIBUTE ;
-		super.objectDefinitionHeader = AD_OBJECT ;
-		super.attributeDefinitionType = AD_ATTRIBUTE;
-		super.objectDefinitionType = AD_OBJECT;
+		super.attributeHeader = AD_ATTRIBUTE ;
+		super.objectClassHeader = AD_OBJECT ;
+		super.attributeType = AD_ATTRIBUTE;
+		super.objectClassType = AD_OBJECT;
 	}
 
 ////////////////////////////////
@@ -153,7 +150,7 @@ public class ADSyntax extends RFCSyntax {
 		// on créer un objet particulier.
 		} else {
 
-			if( type.equals( attributeDefinitionType ) ) {
+			if( type.equals( attributeType ) ) {
 
 				if( param.equals( AD_ATTRIBUTE_PARAMETERS[0][1] )
 						|| param.equals( AD_ATTRIBUTE_PARAMETERS[2][1] )
@@ -194,7 +191,7 @@ public class ADSyntax extends RFCSyntax {
 						valeur = new SValue();
 				}
 
-			} else if( type.equals( objectDefinitionType ) ) {
+			} else if( type.equals( objectClassType ) ) {
 
 				if( param.equals( AD_OBJECT_PARAMETERS[0][2] )
 						|| param.equals( AD_OBJECT_PARAMETERS[2][1] )
@@ -291,9 +288,9 @@ public class ADSyntax extends RFCSyntax {
 		String result = null ;
 
 		if( type!=null ) {
-			if( type.equals( attributeDefinitionType ) ) {
+			if( type.equals( attributeType ) ) {
 				result = AD_ATTRIBUTE_PARAMETERS[1][1];
-			} else if( type.equals( objectDefinitionType ) ) {
+			} else if( type.equals( objectClassType ) ) {
 				result = AD_OBJECT_PARAMETERS[1][1];
 			}
 		}

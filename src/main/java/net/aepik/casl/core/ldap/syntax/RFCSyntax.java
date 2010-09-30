@@ -133,6 +133,11 @@ public class RFCSyntax extends SchemaSyntax
 	};
 
 	/**
+	 * ObjectIdentifier definition (and used for type)
+	 */
+	private static final String RFC_OBJECTID = "ObjectIdentifier =";
+
+	/**
 	 * Build a new RFCSyntax object.
 	 */
 	public RFCSyntax () {
@@ -140,7 +145,9 @@ public class RFCSyntax extends SchemaSyntax
 			RFC_ATTRIBUTE.substring(0, RFC_ATTRIBUTE.length() - 2),
 			RFC_ATTRIBUTE,
 			RFC_OBJECT.substring(0, RFC_OBJECT.length() - 2),
-			RFC_OBJECT
+			RFC_OBJECT,
+			RFC_OBJECTID.substring(0, RFC_OBJECTID.length() - 2),
+			RFC_OBJECTID
 		);
 	}
 
@@ -162,8 +169,8 @@ public class RFCSyntax extends SchemaSyntax
 	public SchemaObject createSchemaObject ( String type, String id )
 	{
 		SchemaObject objet = null;
-		if (type.equals(getObjectDefinitionType())
-			|| type.equals(getAttributeDefinitionType()))
+		if (type.equals(getObjectClassType())
+			|| type.equals(getAttributeType()))
 		{
 			objet = new SchemaObject(this, type, id);
 		}
@@ -196,7 +203,7 @@ public class RFCSyntax extends SchemaSyntax
 		}
 		else
 		{
-			if (type.equals(attributeDefinitionType))
+			if (type.equals(attributeType))
 			{
 				if (param.equals(RFC_ATTRIBUTE_PARAMETERS[0][1]))
 				{
@@ -266,7 +273,7 @@ public class RFCSyntax extends SchemaSyntax
 				}
 			}
 
-			if (type.equals(objectDefinitionType))
+			if (type.equals(objectClassType))
 			{
 				if (param.equals(RFC_OBJECT_PARAMETERS[0][1]))
 				{
@@ -370,11 +377,11 @@ public class RFCSyntax extends SchemaSyntax
 		String result = null;
 		if (type != null)
 		{
-			if (type.equals(attributeDefinitionType))
+			if (type.equals(attributeType))
 			{
 				result = RFC_ATTRIBUTE_PARAMETERS[0][1];
 			}
-			else if (type.equals(objectDefinitionType))
+			else if (type.equals(objectClassType))
 			{
 				result = RFC_OBJECT_PARAMETERS[0][1];
 			}
@@ -428,13 +435,13 @@ public class RFCSyntax extends SchemaSyntax
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public boolean isAttributeDefinitionHeader ( String str )
+	public boolean isAttributeHeader ( String str )
 	{
-		if (attributeDefinitionHeader == null)
+		if (attributeHeader == null)
 		{
 			return false;
 		}
-		return str.trim().toLowerCase().startsWith(attributeDefinitionType.toLowerCase());
+		return str.trim().toLowerCase().startsWith(attributeType.toLowerCase());
 	}
 
 	/**
@@ -442,13 +449,13 @@ public class RFCSyntax extends SchemaSyntax
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
-	public boolean isObjectDefinitionHeader ( String str )
+	public boolean isObjectClassHeader ( String str )
 	{
-		if (objectDefinitionHeader == null)
+		if (objectClassHeader == null)
 		{
 			return false;
 		}
-		return str.trim().toLowerCase().startsWith(objectDefinitionType.toLowerCase());
+		return str.trim().toLowerCase().startsWith(objectClassType.toLowerCase());
 	}
 
 	/**

@@ -81,10 +81,10 @@ public class SUNDSSyntax extends RFCSyntax
 	public SUNDSSyntax ()
 	{
 		super();
-		super.attributeDefinitionHeader = SUNDS_ATTRIBUTE ;
-		super.objectDefinitionHeader = SUNDS_OBJECT ;
-		super.attributeDefinitionType = SUNDS_ATTRIBUTE.substring(0, SUNDS_ATTRIBUTE.length() - 1);
-		super.objectDefinitionType = SUNDS_OBJECT.substring(0, SUNDS_OBJECT.length() - 1);
+		super.attributeHeader = SUNDS_ATTRIBUTE ;
+		super.objectClassHeader = SUNDS_OBJECT ;
+		super.attributeType = SUNDS_ATTRIBUTE.substring(0, SUNDS_ATTRIBUTE.length() - 1);
+		super.objectClassType = SUNDS_OBJECT.substring(0, SUNDS_OBJECT.length() - 1);
 		super.RFC_ATTRIBUTE_PARAMETERS = SUNDS_ATTRIBUTE_PARAMETERS;
 		super.RFC_OBJECT_PARAMETERS = SUNDS_OBJECT_PARAMETERS;
 	}
@@ -94,13 +94,13 @@ public class SUNDSSyntax extends RFCSyntax
 	 * @param str A string.
 	 * @return boolean
 	 */
-	public boolean isAttributeDefinitionHeader ( String str )
+	public boolean isAttributeHeader ( String str )
 	{
-		if (this.attributeDefinitionHeader == null)
+		if (this.attributeHeader == null)
 		{
 			return false;
 		}
-		return str.trim().toLowerCase().startsWith(attributeDefinitionType.toLowerCase());
+		return str.trim().toLowerCase().startsWith(attributeType.toLowerCase());
 	}
 
 	/**
@@ -108,13 +108,13 @@ public class SUNDSSyntax extends RFCSyntax
 	 * @param str A string.
 	 * @return boolean
 	 */
-	public boolean isObjectDefinitionHeader ( String str )
+	public boolean isObjectClassHeader ( String str )
 	{
-		if (this.objectDefinitionHeader == null)
+		if (this.objectClassHeader == null)
 		{
 			return false;
 		}
-		return str.trim().toLowerCase().startsWith(objectDefinitionType.toLowerCase());
+		return str.trim().toLowerCase().startsWith(objectClassType.toLowerCase());
 	}
 
 }

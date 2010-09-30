@@ -225,8 +225,8 @@ public class SchemaPanel extends JPanel
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Objets du schema");
 		DefaultMutableTreeNode searchNode = null;
 		String[] types = {
-			schema.getSyntax().getObjectDefinitionType(),
-			schema.getSyntax().getAttributeDefinitionType()
+			schema.getSyntax().getObjectClassType(),
+			schema.getSyntax().getAttributeType()
 		};
 
 		for (String type : types)
@@ -384,8 +384,8 @@ public class SchemaPanel extends JPanel
 	{
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Objets du schema");
 		String[] types = {
-			schema.getSyntax().getObjectDefinitionType(),
-			schema.getSyntax().getAttributeDefinitionType()
+			schema.getSyntax().getObjectClassType(),
+			schema.getSyntax().getAttributeType()
 		};
 
 		for (String type : types)

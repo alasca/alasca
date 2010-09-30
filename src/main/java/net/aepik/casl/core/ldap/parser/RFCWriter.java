@@ -68,13 +68,13 @@ public class RFCWriter extends SchemaFileWriter
 			//
 			String objStr = "";
 			String oidParamName = null;
-			if (o.getType().equals(syntax.getObjectDefinitionType()))
+			if (o.getType().equals(syntax.getObjectClassType()))
 			{
-				objStr += syntax.getObjectDefinitionHeader();
+				objStr += syntax.getObjectClassHeader();
 			}
-			if (o.getType().equals(syntax.getAttributeDefinitionType()))
+			if (o.getType().equals(syntax.getAttributeType()))
 			{
-				objStr += syntax.getAttributeDefinitionHeader();
+				objStr += syntax.getAttributeHeader();
 			}
 			o.delValue(oidParamName);
 			objStr += " ( " + o.toString() + " )";
