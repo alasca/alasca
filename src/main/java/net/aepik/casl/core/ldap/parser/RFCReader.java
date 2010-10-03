@@ -46,22 +46,19 @@ public class RFCReader extends SchemaFileReader
 		}
 
 		Schema schema = new Schema( syntax );
-		SchemaObject objet = null;
-		boolean creationObjet = false;
-		boolean initialisationObjet = false;
-		boolean parametreObjet = false;
-		boolean erreurObjet = false;
-		Vector<SchemaObject> objets = new Vector<SchemaObject>();
+		SchemaObject object = null;
+		boolean createObject = false;
+		boolean initialiseObject = false;
+		boolean objectParameter = false;
+		boolean objectError = false;
+		Vector<SchemaObject> objects = new Vector<SchemaObject>();
 
 		int nbOccurences = 0;
-		int nbLignes = 0;
-		int hauteurParenthese = 0;
-		int parentheseLine = 0;
+		int nbLines = 0;
+		int bracketHeight = 0;
+		int bracketLine = 0;
 		StringBuffer buffer = new StringBuffer();
 		StringBuffer bufferBackup = new StringBuffer();
-
-		String attributeDef = syntax.getAttributeHeader().toLowerCase();
-		String objectDef    = syntax.getObjectClassHeader().toLowerCase();
 
 		//
 		// Du a des problèmes sur la lecture de fichier entre les
@@ -70,18 +67,18 @@ public class RFCReader extends SchemaFileReader
 		// et de fin de fichier.
 		//
 
-		String ligne;
-		while ((ligne = input.readLine()) != null && hauteurParenthese >= 0 && !erreurObjet)
+		String line;
+		while ((line = input.readLine()) != null && bracketHeight >= 0 && !objectError)
 		{
 			int debut = 0;
-			char[] chars = ligne.toCharArray();
+			char[] chars = line.toCharArray();
 
 			if (chars.length >= 1 && chars[0] == 32)
 			{
 				debut++;
 			}
 
-			for (int i = debut; i < chars.length && hauteurParenthese >= 0 && !erreurObjet; i++)
+			for (int i = debut; i < chars.length && bracketHeight >= 0 && !objectError; i++)
 			{
 				switch (chars[i])
 				{
@@ -91,16 +88,16 @@ public class RFCReader extends SchemaFileReader
 					// On indique qu'il faut créer l'objet.
 					//
 					case 40:
-						if (hauteurParenthese == 0)
+						if (bracketHeight == 0)
 						{
 							bufferBackup = buffer;
 							buffer = new StringBuffer();
-							parametreObjet = true;
-							creationObjet = true;
+							objectParameter = true;
+							createObject = true;
 						} else {
 							buffer.append(chars[i]);
 						}
-						hauteurParenthese++;
+						bracketHeight++;
 						break;
 
 					//
@@ -109,14 +106,14 @@ public class RFCReader extends SchemaFileReader
 					// on indique qu'il faut initialiser l'objet.
 					//
 					case 41:
-						hauteurParenthese--;
-						if (hauteurParenthese == 0)
+						bracketHeight--;
+						if (bracketHeight == 0)
 						{
 							bufferBackup = buffer;
 							buffer = new StringBuffer();
-							parametreObjet = false;
-							initialisationObjet = true;
-							parentheseLine = nbLignes;
+							objectParameter = false;
+							initialiseObject = true;
+							bracketLine = nbLines;
 						} else {
 							buffer.append(chars[i]);
 						}
@@ -147,54 +144,54 @@ public class RFCReader extends SchemaFileReader
 				// La définition d'un objet se fait obligatoirement en dehors
 				// d'un quelconque niveau de parenthèse.
 				//
-				if (creationObjet)
+				if (createObject)
 				{
 					if (syntax.isAttributeHeader(bufferBackup.toString()))
 					{
-						objet = syntax.createSchemaObject(syntax.getAttributeType(), null);
+						object = syntax.createSchemaObject(syntax.getAttributeType(), null);
 					}
 					else if (syntax.isObjectClassHeader(bufferBackup.toString()))
 					{
-						objet = syntax.createSchemaObject(syntax.getObjectClassType(), null);
+						object = syntax.createSchemaObject(syntax.getObjectClassType(), null);
 					}
-					if (objet != null)
+					if (object != null)
 					{
 						buffer = new StringBuffer();
 						nbOccurences++;
 					}
-					creationObjet = false;
+					createObject = false;
 				}
 
 				//
 				// Si on est en creation d'objet et que l'objet n'est pas null,
 				// on initialise cet objet à partir de ses paramêtres.
 				//
-				if (initialisationObjet && objet != null)
+				if (initialiseObject && object != null)
 				{
 					String def = bufferBackup.toString();
 					if (!syntax.isAttributeHeader(def) && !syntax.isObjectClassHeader(def))
 					{
-						if (objet.initFromString(def))
+						if (object.initFromString(def))
 						{
-							if (!objet.isNumericOid())
+							if (!object.isNumericOid())
 							{
-								if (schema.getObjectsIdentifiers().getProperty(objet.getId()) == null)
+								if (schema.getObjectsIdentifiers().getProperty(object.getId()) == null)
 								{
 									schema.getObjectsIdentifiers().setProperty(
-										objet.getId(),
+										object.getId(),
 										schema.generateRandomObjectIdentifier()
 									);
 								}
 							}
-							objets.add(objet);
-							objet = null;
+							objects.add(object);
+							object = null;
 						}
 						else
 						{
-							erreurObjet = true;
+							objectError = true;
 						}
 					}
-					initialisationObjet = false;
+					initialiseObject = false;
 				}
 
 			}
@@ -202,11 +199,11 @@ public class RFCReader extends SchemaFileReader
 			//
 			// Si c'est un retour à la ligne
 			//
-			if (!parametreObjet)
+			if (!objectParameter)
 			{
 				bufferBackup = buffer;
 				buffer = new StringBuffer();
-				nbLignes++;
+				nbLines++;
 			}
 		}
 
@@ -214,19 +211,19 @@ public class RFCReader extends SchemaFileReader
 		// Test errors. If an error occurs, we keep it in
 		// memory so that we could reuse it as a trace.
 		//
-		if (erreurObjet)
+		if (objectError)
 		{
 			this.setErrorMessage(bufferBackup.toString());
-			this.setErrorLine(nbLignes+1);
+			this.setErrorLine(nbLines+1);
 			return null;
 		}
-		if (hauteurParenthese != 0)
+		if (bracketHeight != 0)
 		{
 			this.setErrorMessage("Missing parentheses");
-			this.setErrorLine(parentheseLine+2);
+			this.setErrorLine(bracketLine+2);
 			return null;
 		}
-		if (nbOccurences == 0 || !schema.addObjects(objets))
+		if (nbOccurences == 0 || !schema.addObjects(objects))
 		{
 			this.setErrorMessage("Empty schema");
 			return null;
@@ -235,7 +232,7 @@ public class RFCReader extends SchemaFileReader
 		//
 		// Optional: specify hierarchy if we could.
 		//
-		for (SchemaObject o : objets)
+		for (SchemaObject o : objects)
 		{
 			SchemaValue parentNameValue = o.getValue("SUP");
 			if (parentNameValue == null)
