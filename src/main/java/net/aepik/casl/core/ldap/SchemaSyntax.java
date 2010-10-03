@@ -66,9 +66,9 @@ public abstract class SchemaSyntax
 	 */
 	public SchemaSyntax ()
 	{
-		this.attributeType          = null;
-		this.attributeHeader        = null;
-		this.objectClassType        = null;
+		this.attributeType	  = null;
+		this.attributeHeader	= null;
+		this.objectClassType	= null;
 		this.objectClassHeader      = null;
 		this.objectIdentifierType   = null;
 		this.objectIdentifierHeader = null;
@@ -91,9 +91,9 @@ public abstract class SchemaSyntax
 		String objectIdentifierType,
 		String objectIdentifierHeader )
 	{
-		this.attributeType          = attributeType;
-		this.attributeHeader        = attributeHeader;
-		this.objectClassType        = objectClassType;
+		this.attributeType	  = attributeType;
+		this.attributeHeader	= attributeHeader;
+		this.objectClassType	= objectClassType;
 		this.objectClassHeader      = objectClassHeader;
 		this.objectIdentifierType   = objectIdentifierType;
 		this.objectIdentifierHeader = objectIdentifierHeader;
@@ -232,6 +232,25 @@ public abstract class SchemaSyntax
 	public String getObjectClassType ()
 	{
 		return objectClassType;
+	}
+
+	/**
+	 * Retourne l'entête de définition d'un identifiant d'objet.
+	 * @return String L'entête de définition.
+	 */
+	public String getObjectIdentifierHeader ()
+	{
+		return objectIdentifierHeader;
+	}
+
+	/**
+	 * Retourne le nom descriptif du type ObjectIdentifier.
+	 * Il sera considéré par la suite comme un type d'un objet du schema.
+	 * @return String Une chaîne de caractères.
+	 */
+	public String getObjectIdentifierType ()
+	{
+		return objectIdentifierType;
 	}
 
 	/**
@@ -583,6 +602,20 @@ public abstract class SchemaSyntax
 			}
 		}
 		return ok;
+	}
+
+	/**
+	 * Test si la chaîne de caractères désigne un identifiant d'objet.
+	 * @param str Une chaîne de caractères.
+	 * @return boolean True si c'est le cas, false sinon.
+	 */
+	public boolean isObjectIdentifierHeader ( String str )
+	{
+		if (objectIdentifierHeader == null)
+		{
+			return false;
+		}
+		return str.trim().equals(objectIdentifierHeader);
 	}
 
 	/**
