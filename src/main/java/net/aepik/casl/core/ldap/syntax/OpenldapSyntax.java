@@ -41,7 +41,7 @@ public class OpenldapSyntax extends RFCSyntax
 	/**
 	 * ObjectIdentifier definition (and used for type).
 	 */
-	public final static String OPENLDAP_OBJECTID = "objectIdentifier";
+	public final static String OPENLDAP_OBJECTID = "objectidentifier";
 
 	/**
 	 * Build a new OpenldapSyntax object.

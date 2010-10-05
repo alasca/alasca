@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 package net.aepik.casl.core.ldap.syntax;
 
 import net.aepik.casl.core.ldap.value.*;
@@ -456,6 +455,20 @@ public class RFCSyntax extends SchemaSyntax
 			return false;
 		}
 		return str.trim().toLowerCase().startsWith(objectClassType.toLowerCase());
+	}
+
+	/**
+	 * Test si la chaîne de caractères désigne un identifiant d'objet.
+	 * @param str Une chaîne de caractères.
+	 * @return boolean True si c'est le cas, false sinon.
+	 */
+	public boolean isObjectIdentifierHeader ( String str )
+	{
+		if (objectIdentifierHeader == null)
+		{
+			return false;
+		}
+		return str.trim().toLowerCase().startsWith(objectIdentifierType.toLowerCase());
 	}
 
 	/**
