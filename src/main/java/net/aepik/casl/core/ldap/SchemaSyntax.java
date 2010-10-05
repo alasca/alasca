@@ -66,9 +66,9 @@ public abstract class SchemaSyntax
 	 */
 	public SchemaSyntax ()
 	{
-		this.attributeType	  = null;
-		this.attributeHeader	= null;
-		this.objectClassType	= null;
+		this.attributeType          = null;
+		this.attributeHeader        = null;
+		this.objectClassType        = null;
 		this.objectClassHeader      = null;
 		this.objectIdentifierType   = null;
 		this.objectIdentifierHeader = null;
@@ -91,9 +91,9 @@ public abstract class SchemaSyntax
 		String objectIdentifierType,
 		String objectIdentifierHeader )
 	{
-		this.attributeType	  = attributeType;
-		this.attributeHeader	= attributeHeader;
-		this.objectClassType	= objectClassType;
+		this.attributeType          = attributeType;
+		this.attributeHeader        = attributeHeader;
+		this.objectClassType        = objectClassType;
 		this.objectClassHeader      = objectClassHeader;
 		this.objectIdentifierType   = objectIdentifierType;
 		this.objectIdentifierHeader = objectIdentifierHeader;
