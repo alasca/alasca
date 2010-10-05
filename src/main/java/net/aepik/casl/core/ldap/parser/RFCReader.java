@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 package net.aepik.casl.core.ldap.parser;
 
 import net.aepik.casl.core.ldap.Schema;
@@ -154,6 +153,10 @@ public class RFCReader extends SchemaFileReader
 					{
 						object = syntax.createSchemaObject(syntax.getObjectClassType(), null);
 					}
+					else if (syntax.isObjectIdentifierHeader(bufferBackup.toString()))
+					{
+						object = syntax.createSchemaObject(syntax.getObjectIdentifierType(), null);
+					}
 					if (object != null)
 					{
 						buffer = new StringBuffer();
@@ -169,7 +172,7 @@ public class RFCReader extends SchemaFileReader
 				if (initialiseObject && object != null)
 				{
 					String def = bufferBackup.toString();
-					if (!syntax.isAttributeHeader(def) && !syntax.isObjectClassHeader(def))
+					if (syntax.isObjectIdentifierHeader(def))
 					{
 						if (object.initFromString(def))
 						{

@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 package net.aepik.casl.core.ldap.parser;
 
 import net.aepik.casl.core.ldap.Schema;
@@ -63,7 +62,7 @@ public class OpenldapWriter extends RFCWriter
 		{
 			String key = (String) keys.nextElement();
 			String value = objectsIdentifiers.getProperty(key);
-			output.write("objectIdentifier " + key + " " +value);
+			output.write(schema.getSyntax().getObjectIdentifierHeader() + " " + key + " " +value);
 			output.newLine();
 		}
 		super.write(schema);
