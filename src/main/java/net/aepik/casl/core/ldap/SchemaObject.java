@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 package net.aepik.casl.core.ldap;
 
 import net.aepik.casl.core.ldap.value.*;
@@ -113,69 +112,63 @@ public class SchemaObject
 	/**
 	 * Retourne le nombre de valeurs contenues dans cet objet.
 	 * @return int Un entier.
-	**/
-	public int countValues() { return values.size(); }
+	 */
+	public int countValues ()
+	{
+		return values.size();
+	}
 
 	/**
 	 * Supprime une entrée de l'objet.
 	 * @param key La clef spécifiant l'entrée.
 	 * @return boolean True si l'entrée n'existe pas déjà, false sinon.
-	**/
-	public boolean delValue( String key ) {
-
-		try {
-			if( isKeyExists( key ) ) {
-				values.remove( key );
+	 */
+	public boolean delValue ( String key )
+	{
+		try
+		{
+			if (isKeyExists(key))
+			{
+				values.remove(key);
 				return true;
 			}
-		} catch( NullPointerException e ) {}
-
+		}
+		catch (NullPointerException e) {}
 		return false;
 	}
 
 	/**
-	 * Test if a given object is equal to this object.
-	 * @param object A SchemaObject to compare to.
-	 */
-	/*
-	public boolean equals ( SchemaObject object )
-	{
-		String name1 = this.getNameFirstValue().toLowerCase();
-		String name2 = object.getNameFirstValue().toLowerCase();
-		System.out.println(name1 + " ?= " + name2 + " => " + name1.equals(name2));
-		return name1.equals(name2);
-	}
-	*/
-
-	/**
 	 * Retourne l'identifiant de cet objet.
 	 * @return String L'id sous forme de chaîne de caractères.
-	**/
-	public String getId() { return id; }
+	 */
+	public String getId ()
+	{
+		return id;
+	}
 
 	/**
 	 * Retourne l'ensemble des clefs.
 	 * L'indexation est en correspondance avec les valeurs retournés
 	 * par la méthode getValues().
 	 * @return String[] L'ensemble des clefs
-	**/
-	public String[] getKeys() {
-
+	 */
+	public String[] getKeys ()
+	{
 		String[] result = new String[values.size()];
 		int position = 0;
-		for( Enumeration<String> e = values.keys(); e.hasMoreElements(); ) {
+		for (Enumeration<String> e = values.keys(); e.hasMoreElements();)
+		{
 			result[position] = e.nextElement();
 			position++;
 		}
-
-		return result ;
+		return result;
 	}
 
 	/**
 	 * Retourne le nom usuel de cet objet si il existe.
 	 * @return String Le nom usuel, sinon null.
-	**/
-	public String getName()
+	 */
+	public String getName ()
 	{
 		String keyname = syntax.getDisplayNameParameter( type );
 		if (!isKeyExists(keyname))
@@ -198,30 +191,12 @@ public class SchemaObject
 			return null;
 		}
 		return values.replaceAll("'","");
-
-		/*
-		String keyname = syntax.getDisplayNameParameter( type );
-
-		if( isKeyExists( keyname ) ) {
-			String tmp = getValue( keyname ).toString();
-			
-			if( QDescriptionList.isValidFormat( tmp ) ) {
-				int firstQuote = tmp.indexOf( 39 );
-				int secondQuote = tmp.indexOf( 39, firstQuote+1 );
-				tmp = tmp.substring( firstQuote+1, secondQuote );
-			}
-
-			return tmp ;
-		}
-
-		return null ;
-		*/
 	}
 
 	/**
 	 * Retourne la première valeur du nom usuel de cet objet si elle existe.
 	 * @return String Le nom usuel, sinon null.
-	**/
+	 */
 	public String getNameFirstValue ()
 	{
 		String keyname = syntax.getDisplayNameParameter( type );
@@ -242,11 +217,11 @@ public class SchemaObject
 	 * Retourne l'ensemble des références vers d'autres objets qui sont
 	 * contenues dans les valeurs de toutes les données de cet objet.
 	 * @return String[] Un tableau de références vers d'autres objets.
-	**/
-	public String[] getObjectsReferences() {
-
-		String[] result = null ;
-		return result ;
+	 */
+	public String[] getObjectsReferences ()
+	{
+		String[] result = null;
+		return result;
 	}
 
 	/**
@@ -261,103 +236,121 @@ public class SchemaObject
 	/**
 	 * Retourne la syntaxe de cet objet.
 	 * @return SchemaSyntax La syntaxe de cet objet.
-	**/
-	public SchemaSyntax getSyntax() { return syntax; }
+	 */
+	public SchemaSyntax getSyntax ()
+	{
+		return syntax;
+	}
 
 	/**
 	 * Retourne le type de cet objet.
 	 * @return String Le type de cet objet sous forme de chaîne de caractères.
-	**/
-	public String getType() { return type; }
+	 */
+	public String getType ()
+	{
+		return type;
+	}
 
 	/**
 	 * Retourne une valeur pour une clef donnée.
 	 * @param key La clef spécifiant l'entrée.
 	 * @return String La valeur associée à la clef.
-	**/
-	public SchemaValue getValue( String key ) {
-
-		try {
-			if( isKeyExists( key ) )
-				return values.get( key );
-		} catch( NullPointerException e ) {}
-
+	 */
+	public SchemaValue getValue ( String key )
+	{
+		try
+		{
+			if (isKeyExists(key))
+			{
+				return values.get(key);
+			}
+		}
+		catch (NullPointerException e) {}
 		return null;
 	}
 
 	/**
 	 * Retourne l'ensemble des valeurs.
 	 * @return SchemaValue[] L'ensemble des valeurs.
-	**/
-	public SchemaValue[] getValues() {
-
+	 */
+	public SchemaValue[] getValues ()
+	{
 		SchemaValue[] result = new SchemaValue[values.size()];
 		int position = 0;
-		for( Enumeration<SchemaValue> e = values.elements(); e.hasMoreElements(); ) {
+		for (Enumeration<SchemaValue> e = values.elements(); e.hasMoreElements();)
+		{
 			result[position] = e.nextElement();
 			position++;
 		}
-
-		return result ;
+		return result;
 	}
 
 	/**
 	 * Initialise tous les paramêtres à l'aide d'une chaîne
 	 * de caractères.
 	 * @param str Une chaîne de caractères.
-	**/
-	public boolean initFromString( String str ) {
-
+	 */
+	public boolean initFromString ( String str )
+	{
+		//
 		// En premier lui, il s'agit d'initialiser l'id de
 		// l'objet grâce à la chaîne d'initialisation.
-
-		id = syntax.searchSchemaObjectOID( type, str );
-		if( id==null )
-			return false ;
-
 		//
+		this.id = syntax.searchSchemaObjectOID(type, str);
+		if (id == null)
+		{
+			return false;
+		}
+		//
+		// TODO: should be refactored!
 		// Test if this oid is numeric or not.
 		//
 		this.isNumericOid = SchemaSyntax.isNumericOid(id);
-
+		//
 		// Ensuite, on récupère toutes les valeurs possibles.
 		// Le tableau que l'on récupère comprend 2 colonnes, la première
 		// contient les clefs et la seconde les valeurs pour ces clefs.
-
-		String[][] pvalues = syntax.searchSchemaObjectValues( type, str );
-		if( values==null )
-			return false ;
-
+		//
+		String[][] pvalues = syntax.searchSchemaObjectValues(type, str);
+		if (values == null)
+		{
+			return false;
+		}
+		//
 		// On procède à une petite sauvegarde des données.
 		// Si l'initialisation échoue, on restaure les anciennes valeurs.
-
-		Hashtable<String,SchemaValue> save = values ;
+		//
+		Hashtable<String,SchemaValue> save = values;
 		Hashtable<String,SchemaValue> values = new Hashtable<String,SchemaValue>();
-
+		//
 		// Enfin, on va stocker ces valeurs dans cet objet.
 		// Il s'agit de tester si la syntaxe peut créer des valeurs d'objets
 		// avec les valeurs qu'on a.
-
-		boolean erreur = false ;
-		for( int i=0; i<pvalues.length && !erreur; i++ ) {
-
-			if( pvalues[i][0]!=null && pvalues[i][1]!=null ) {
-
-				SchemaValue value = syntax.createSchemaValue( type, pvalues[i][0], pvalues[i][1] );
-				if( value!=null )
-					addValue( pvalues[i][0], value );
+		//
+		boolean erreur = false;
+		for (int i = 0; i < pvalues.length && !erreur; i++)
+		{
+			if (pvalues[i][0] != null && pvalues[i][1] != null)
+			{
+				SchemaValue value = syntax.createSchemaValue(type, pvalues[i][0], pvalues[i][1]);
+				if (value != null)
+				{
+					addValue(pvalues[i][0], value);
+				}
 				else
-					erreur = true ;
+				{
+					erreur = true;
+				}
 			}
 		}
-
+		//
 		// Restauration des anciennes valeurs, si erreur.
-
-		if( erreur ) {
+		//
+		if (erreur)
+		{
 			values = save;
 			return false;
 		}
-
 		return true;
 	}
 
@@ -365,15 +358,17 @@ public class SchemaObject
 	 * Teste si une entrée pour une clef donnée existe.
 	 * @param key Une clef.
 	 * @return boolean True si l'entrée existe, false sinon.
-	**/
-	public boolean isKeyExists( String key ) {
-
-		try {
-			if( key!=null ) {
-				return values.containsKey( key );
+	 */
+	public boolean isKeyExists ( String key )
+	{
+		try
+		{
+			if (key != null)
+			{
+				return values.containsKey(key);
 			}
-		} catch( NullPointerException e ) {}
-
+		}
+		catch (NullPointerException e) {}
 		return false;
 	}
 
@@ -390,7 +385,7 @@ public class SchemaObject
 	 * Positionne l'objet parent.
 	 * @param SchemaObject parent L'objet parent.
 	 */
-	public void setParent (SchemaObject parent)
+	public void setParent ( SchemaObject parent )
 	{
 		this.parent = parent;
 	}
@@ -398,32 +393,41 @@ public class SchemaObject
 	/**
 	 * Modifie la syntaxe utilisée.
 	 * @param syntax La nouvelle syntaxe a utiliser.
-	**/
-	public void setSyntax( SchemaSyntax syntax ) { this.syntax = syntax; }
+	 */
+	public void setSyntax ( SchemaSyntax syntax )
+	{
+		this.syntax = syntax;
+	}
 
 	/**
 	 * Modifie le type de l'objet.
 	 * @param type Le nouveau type de l'objet.
-	**/
-	public void setType( String type ) { this.type = type; }
+	 */
+	public void setType ( String type )
+	{
+		this.type = type;
+	}
 
 	/**
 	 * Retourne une chaîne de caractères représentant cet objet.
 	 * @return String Une chaîne de caractères.
-	**/
-	public String toString() {
-
-		String[] params_name = syntax.getParameters( type );
-		if( params_name==null )
+	 */
+	public String toString ()
+	{
+		String[] params_name = syntax.getParameters(type);
+		if (params_name == null)
+		{
 			return "";
-
+		}
 		String str = id + " ";
-		for( int i=0; i<params_name.length; i++ ) {
-			if( isKeyExists( params_name[i] ) ) {
-				str += params_name[i] + " " + getValue( params_name[i] ) + " ";
+		for (int i = 0; i < params_name.length; i++)
+		{
+			if (isKeyExists(params_name[i]))
+			{
+				str += params_name[i] + " " + getValue(params_name[i]) + " ";
 			}
 		}
-
 		return str;
 	}
 }
+
