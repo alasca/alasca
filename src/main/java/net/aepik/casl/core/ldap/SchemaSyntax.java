@@ -148,6 +148,19 @@ public abstract class SchemaSyntax
 	public abstract String getDisplayNameParameter ( String type );
 
 	/**
+	 * Return parameters of object identifier.
+	 * @return String[] An array of strings.
+	 */
+	public abstract String[] getObjectIdentifierParameters ();
+
+	/**
+	 * Return default parameters of object identifier.
+	 * @param paramName A parameter name
+	 * @return String[] An array of default values for the specified parameter.
+	 */
+	public abstract String[] getObjectIdentifierParameterDefaultValues ( String paramName );
+
+	/**
 	 * Retourne l'ensemble des valeurs possible d'un paramêtre d'objet.
 	 * @param paramName Un nom de paramêtre.
 	 * @return String[] Une ensemble de valeurs pour ce nom de paramêtres.
@@ -306,6 +319,10 @@ public abstract class SchemaSyntax
 		else if (type.equals(getAttributeType()))
 		{
 			return getAttributeParameters();
+		}
+		else if (type.equals(getObjectIdentifierType()))
+		{
+			return getObjectIdentifierParameters();
 		}
 		return null;
 	}

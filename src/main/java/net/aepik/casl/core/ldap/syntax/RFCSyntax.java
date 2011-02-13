@@ -389,6 +389,25 @@ public class RFCSyntax extends SchemaSyntax
 	}
 
 	/**
+	 * Return parameters of object identifier.
+	 * @return String[] An array of strings.
+	 */
+	public String[] getObjectIdentifierParameters ()
+	{
+		return null;
+	}
+
+	/**
+	 * Return default parameters of object identifier.
+	 * @param paramName A parameter name
+	 * @return String[] An array of default values for the specified parameter.
+	 */
+	public String[] getObjectIdentifierParameterDefaultValues ( String paramName )
+	{
+		return null;
+	}
+
+	/**
 	 * Retourne l'ensemble des valeurs possible d'un paramêtre d'objet.
 	 * @param paramName Un nom de paramêtre.
 	 * @return String[] Une ensemble de valeurs pour ce nom de paramêtres.

@@ -40,10 +40,6 @@ import java.util.Hashtable;
 public class SchemaObject
 {
 
-	public static final int TYPE_OBJECT = 0;
-
-	public static final int TYPE_ATTRIBUTE = 1;
-
 	/**
 	 * La syntaxe utilisé par l'objet.
 	 */
@@ -322,6 +318,18 @@ public class SchemaObject
 		//
 		Hashtable<String,SchemaValue> save = values;
 		Hashtable<String,SchemaValue> values = new Hashtable<String,SchemaValue>();
+		//
+		// Object identifier is different of classical object and
+		// attribute definition. So we have to do some special
+		// stuffs to register them.
+		//
+		String oidTypeDef = syntax.getObjectIdentifierType();
+		if (this.type.equals(oidTypeDef))
+		{
+			SchemaValue value = syntax.createSchemaValue(oidTypeDef, "0", str);
+			addValue("0", value);
+			return true;
+		}
 		//
 		// Enfin, on va stocker ces valeurs dans cet objet.
 		// Il s'agit de tester si la syntaxe peut créer des valeurs d'objets
