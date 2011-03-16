@@ -3,19 +3,6 @@
 # OpenLDAP sample test file.
 #
 
-objectIdentifier CASLroot 1.2.3.4.5.6.7.8.9.101112
-objectIdentifier CASL CASLroot:1
-objectIdentifier CASLattributeType CASL:3
-objectIdentifier CASLobjectClass CASL:4
-
-attributetype (
-	CASLattributeType:1
-	NAME 'caslAttr1'
-	DESC 'CASL test attribute'
-	EQUALITY 2.5.13.5
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
-)
-
 attributetype (
 	1.3.6.1.4.1.250.1.57
 	NAME 'labeledURI'

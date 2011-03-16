@@ -1,0 +1,256 @@
+
+#
+# OpenLDAP sample test file.
+#
+
+objectIdentifier CASLroot 1.2.3.4.5.6.7.8.9.101112
+objectIdentifier CASL CASLroot:1
+objectIdentifier CASLattributeType CASL:3
+objectIdentifier CASLobjectClass CASL:4
+
+attributetype (
+	CASLattributeType
+	NAME 'caslAttr1'
+	DESC 'CASL test attribute'
+	EQUALITY 2.5.13.5
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+)
+
+attributetype (
+	1.3.6.1.4.1.250.1.57
+	NAME 'labeledURI'
+	DESC 'Uniform Resource Identifier with optional label as defined in RFC2079.'
+	EQUALITY 2.5.13.5
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+)
+
+attributetype (
+	1.3.18.0.2.4.1995
+	NAME 'ibm-eimTargetUserName'
+	DESC 'Name of the user within the registry. The name is normalized to facilitate consistent matching when used in search filters. The method of normalization is determined by the registry type.'
+	EQUALITY 1.3.6.1.4.1.1466.109.114.1
+	SUBSTR 2.5.13.7
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+)
+
+attributetype (
+	1.3.18.0.2.4.1996
+	NAME 'ibm-eimAdminUserAssoc'
+	DESC 'Identifies an admin relationship with a user in a registry. This value is of the form: registry-UUID normalized-user-name.  Registry-UUID is the UUID of the system or application registry entry. Normalized-user-name is the user name in the registry normalized according to the registry type.'
+	EQUALITY 1.3.6.1.4.1.1466.109.114.1
+	SUBSTR 2.5.13.7
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+)
+
+attributetype (
+	1.3.18.0.2.4.1997
+	NAME 'ibm-eimSourceUserAssoc'
+	DESC 'Identifies a source relationship with a user in a registry. This value is of the form: registry-UUID normalized-user-name. Registry-UUID is the UUID of the system or application registry entry. Normalized-user-name is the user name in the registry normalized according to the registry type.'
+	EQUALITY 1.3.6.1.4.1.1466.109.114.1
+	SUBSTR 2.5.13.7
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+)
+
+attributetype (
+	1.3.18.0.2.4.1998
+	NAME 'ibm-eimUserAssoc'
+	DESC 'Identifies a relationship to a user in a registry. This value is of the form: identifier-uuid registry-UUID normalized-user-name.  Identifier-uuid is the UUID of the associated ibm-eimIdentifier entry.  Registry-UUID is the UUID of the system or application registry entry. Normalized-user-name is the user name in the registry normalized according to the registry type.'
+	EQUALITY 1.3.6.1.4.1.1466.109.114.1
+	SUBSTR 2.5.13.7
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+)
+
+objectclass (
+	1.3.18.0.2.6.377
+	NAME 'ibm-eimSourceRelationship'
+	DESC 'Describes a source relationship between the specified user and one or more EIM identifiers. The cn value is a stringified MD5 hash of the source registry UUID and normalized user name. ibm-eimUserAssoc includes both the identifier and source user information to resolve potential hash collisions.'
+	SUP top
+	MUST ( cn $ ibm-eimUserAssoc )
+)
+
+attributetype (
+	1.3.18.0.2.4.1999
+	NAME 'ibm-eimRegistryName'
+	DESC 'Name of a registry instance, as opposed to the registry type.'
+	EQUALITY 2.5.13.2
+	SUBSTR 2.5.13.4
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE
+)
+
+attributetype (
+	1.3.18.0.2.4.2000
+	NAME 'ibm-eimRegistryType'
+	DESC 'String that represents the registry type (OID) and user name format.  Values have the form:  regTypeOID-nameFormat.  RegTypeOID is the OID assigned to a specific registry type.  nameFormat is one of: caseIgnore, caseExact, or distinguishedName.'
+	EQUALITY 2.5.13.2
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE
+)
+
+attributetype (
+	1.3.18.0.2.4.2001
+	NAME 'ibm-eimAdditionalInformation'
+	DESC 'Additional information related to the user in the registry.'
+	EQUALITY 2.5.13.2
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+)
+
+objectclass (
+	1.3.18.0.2.6.376
+	NAME 'ibm-eimIdentifier'
+	DESC 'Describes an EIM identifier representing a person or entity within an EIM domain.'
+	SUP top
+	MUST cn
+	MAY ( description $ ibm-eimAdditionalInformation $ ibm-eimAdminUserAssoc $ ibm-eimSourceUserAssoc )
+)
+
+attributetype (
+	1.3.18.0.2.4.2002
+	NAME 'ibm-eimRegistryEntryName'
+	DESC 'Distinguished name of the system registry entry associated with this application registry entry.'
+	EQUALITY 2.5.13.1
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.12
+	SINGLE-VALUE
+)
+
+attributetype (
+	1.3.18.0.2.4.2003
+	NAME 'ibm-eimDomainName'
+	DESC 'Names the EIM domain.'
+	EQUALITY 2.5.13.2
+	SUBSTR 2.5.13.4
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE
+)
+
+attributetype (
+	1.3.18.0.2.4.2004
+	NAME 'ibm-eimTargetIdAssoc'
+	DESC 'Identifies a target relation with the specified EIM identifier.  The value is the UUID of the ibm-eimIdentifier entry.  This attribute is used as the naming attribute for ibm-eimTargetRelationship entries.'
+	EQUALITY 2.5.13.2
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+)
+
+objectclass (
+	1.3.18.0.2.6.383
+	NAME 'ibm-eimTargetRelationship'
+	DESC 'Describes a target relationship between the specified users and EIM identifier.'
+	SUP top
+	MUST ibm-eimTargetIdAssoc
+	MAY ibm-eimTargetUserName
+)
+
+objectclass (
+	1.3.18.0.2.6.378
+	NAME 'ibm-eimRegistryUser'
+	DESC 'Identifies a user in a registry. The cn value is a generated value used to form a unique RDN; its value has no significance to EIM.'
+	SUP top
+	MUST ( cn $ ibm-eimTargetUserName )
+	MAY ( description $ ibm-eimAdditionalInformation $ ibm-eimTargetIdAssoc )
+)
+
+attributetype (
+	1.3.18.0.2.4.2005
+	NAME 'ibm-eimRegistryAliases'
+	DESC 'Used to associate a source or target registry with the specific ibm-eimRegistry instance.  The value is a string of the form: <aliasType>alias-type</aliasType><aliasValue>alias-value</aliasValue>.  Alias-type is DNSHostName, KerberosRealm, IssuerDN, RootDN, or some other descriptive type name.  Alias-value is the value for the alias.'
+	EQUALITY 2.5.13.2
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+)
+
+objectclass (
+	1.3.18.0.2.6.380
+	NAME 'ibm-eimRegistry'
+	DESC 'Represents a set of users in a registry.  This may be a complete system registry or a subset of users for a particular application.'
+	SUP top
+	ABSTRACT
+	MUST ( ibm-eimRegistryName $ ibm-eimRegistryType )
+	MAY ( description $ ibm-eimRegistryAliases )
+)
+
+objectclass (
+	1.3.18.0.2.6.382
+	NAME 'ibm-eimApplicationRegistry'
+	DESC 'Represents a set of users that is meant to be used with a particular application.'
+	SUP ibm-eimRegistry
+	MUST ibm-eimRegistryEntryName
+)
+
+objectclass (
+	1.3.18.0.2.6.381
+	NAME 'ibm-eimSystemRegistry'
+	DESC 'Represents a physical or operating system registry of users.'
+	SUP ibm-eimRegistry
+	MAY labeledURI
+)
+
+attributetype (
+	1.3.18.0.2.4.2006
+	NAME 'ibm-eimDomainVersion'
+	DESC 'Indicates the version of the EIM data model used'
+	EQUALITY 2.5.13.14
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE
+)
+
+objectclass (
+	1.3.18.0.2.6.379
+	NAME 'ibm-eimDomain'
+	DESC 'Root entry for an EIM domain. All data for this domain is stored under this entry.'
+	SUP top
+	MUST ( ibm-eimDomainName $ ibm-eimDomainVersion )
+	MAY description
+)
+
+attributetype (
+	1.3.18.0.2.4.2992
+	NAME 'ibm-eimFilterType'
+	DESC 'Defines the type of filter represented by this entry in cases where more than one type of filter might apply to a given registry.'
+	EQUALITY 2.5.13.2
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE
+)
+
+attributetype (
+	1.3.18.0.2.4.2993
+	NAME 'ibm-eimFilterValue'
+	DESC 'A displayable string representing a filter value which some authentication data (e.g. certificate) must match when applying the entry that contains this attribute.'
+	EQUALITY 2.5.13.5
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE
+)
+
+objectclass (
+	1.3.18.0.2.6.548
+	NAME 'ibm-eimFilterPolicy'
+	DESC 'Defines a filter policy which is used to associate authentication credentials (i.e. certificates) matching the associated filter to a common identity.'
+	SUP top
+	MUST cn
+	MAY ( ibm-eimFilterType $ ibm-eimFilterValue )
+)
+
+attributetype (
+	1.3.18.0.2.4.2994
+	NAME 'ibm-eimPolicyStatus'
+	DESC 'Identifies the status of policies that are supported by the entry containing this attribute.'
+	EQUALITY 2.5.13.2
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+)
+
+objectclass (
+	1.3.18.0.2.6.550
+	NAME 'ibm-eimPolicyListAux'
+	DESC 'An auxiliary class used to list the policies that apply to the entry having this objectclass.'
+	SUP top
+	AUXILIARY
+	MAY ibm-eimPolicyStatus
+)
+
+objectclass (
+	1.3.18.0.2.6.549
+	NAME 'ibm-eimDefaultPolicy'
+	DESC 'Defines a default policy which is used to associate all authentication credentials to a common identity.'
+	SUP top
+	MUST cn
+	MAY ibm-eimPolicyStatus
+)
+
