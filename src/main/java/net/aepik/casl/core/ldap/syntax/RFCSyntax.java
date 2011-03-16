@@ -729,7 +729,8 @@ public class RFCSyntax extends SchemaSyntax
 		for (int i = 0; i < params_index.length; i++)
 		{
 			String param_value = null;
-			if (params_index[i] != -1)
+			String[] param_values_default = getParameterDefaultValues(type,params_name[i]);
+			if (params_index[i] != -1 && param_values_default.length != 0)
 			{
 				int indexOfBegin = params_index[i] + params_name[i].length() + 1;
 				int indexOfEnd = -1;
@@ -751,6 +752,10 @@ public class RFCSyntax extends SchemaSyntax
 					param_value = initStr.substring(indexOfBegin);
 				}
 				param_value.trim();
+			}
+			if (params_index[i] != -1 && param_value == null)
+			{
+				param_value = "";
 			}
 			params_value[i][0] = params_name[i];
 			params_value[i][1] = param_value;
