@@ -172,9 +172,9 @@ public class RFCReader extends SchemaFileReader
 				if (initialiseObject && object != null)
 				{
 					String def = bufferBackup.toString();
-					if (syntax.isObjectIdentifierHeader(def))
+					if (object.initFromString(def))
 					{
-						if (object.initFromString(def))
+						if (syntax.isObjectIdentifierHeader(def))
 						{
 							if (!object.isNumericOid())
 							{
@@ -186,13 +186,13 @@ public class RFCReader extends SchemaFileReader
 									);
 								}
 							}
-							objects.add(object);
-							object = null;
 						}
-						else
-						{
-							objectError = true;
-						}
+						objects.add(object);
+						object = null;
+					}
+					else
+					{
+						objectError = true;
 					}
 					initialiseObject = false;
 				}
