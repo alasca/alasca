@@ -171,7 +171,7 @@ public class RFCReader extends SchemaFileReader
 				//
 				if (initialiseObject && object != null)
 				{
-					String def = bufferBackup.toString();
+					String def = bufferBackup.toString().replaceAll("\\s+", " ").replaceAll("\\t+", " ");
 					if (object.initFromString(def))
 					{
 						if (syntax.isObjectIdentifierHeader(def))
