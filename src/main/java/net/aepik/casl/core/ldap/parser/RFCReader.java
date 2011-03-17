@@ -72,58 +72,81 @@ public class RFCReader extends SchemaFileReader
 			int debut = 0;
 			char[] chars = line.toCharArray();
 
-			if (chars.length >= 1 && chars[0] == 32)
+			//
+			// Est une ligne, ou commence par un diese = un commentaire
+			// Inutile d'aller plus loin
+			//
+			if (chars.length == 0 || (chars.length > 0 && chars[0] == 35))
+			{
+				nbLines++;
+				continue;
+			}
+
+			//
+			// Commence par un espace = continuité de la ligne précédente
+			//
+			if (chars[0] == 32 || chars[0] == 9)
 			{
 				debut++;
 			}
 
 			for (int i = debut; i < chars.length && bracketHeight >= 0 && !objectError; i++)
 			{
-				switch (chars[i])
+                                if (debut == chars.length - 1 && bracketHeight == 0)
+                                {
+                                        bufferBackup = buffer;
+                                        buffer = new StringBuffer();
+                                        objectParameter = false;
+                                        createObject = true;
+                                }
+				else
 				{
-					//
-					// Parenthèse ouvrante !
-					// On rentre dans une définition de paramètres de l'objet.
-					// On indique qu'il faut créer l'objet.
-					//
-					case 40:
-						if (bracketHeight == 0)
-						{
-							bufferBackup = buffer;
-							buffer = new StringBuffer();
-							objectParameter = true;
-							createObject = true;
-						} else {
-							buffer.append(chars[i]);
-						}
-						bracketHeight++;
-						break;
+					switch (chars[i])
+					{
+						//
+						// Parenthèse ouvrante !
+						// On rentre dans une définition de paramètres de l'objet.
+						// On indique qu'il faut créer l'objet.
+						//
+						case 40:
+							if (bracketHeight == 0)
+							{
+								bufferBackup = buffer;
+								buffer = new StringBuffer();
+								objectParameter = true;
+								createObject = true;
+							} else {
+								buffer.append(chars[i]);
+							}
+							bracketHeight++;
+							break;
 
-					//
-					// Parenthèse fermante !
-					// Si c'est une fin de définition de paramètres de l'objet,
-					// on indique qu'il faut initialiser l'objet.
-					//
-					case 41:
-						bracketHeight--;
-						if (bracketHeight == 0)
-						{
-							bufferBackup = buffer;
-							buffer = new StringBuffer();
-							objectParameter = false;
-							initialiseObject = true;
-							bracketLine = nbLines;
-						} else {
-							buffer.append(chars[i]);
-						}
-						break;
+						//
+						// Parenthèse fermante !
+						// Si c'est une fin de définition de paramètres de l'objet,
+						// on indique qu'il faut initialiser l'objet.
+						//
+						case 41:
+							bracketHeight--;
+							if (bracketHeight == 0)
+							{
+								bufferBackup = buffer;
+								buffer = new StringBuffer();
+								objectParameter = false;
+								initialiseObject = true;
+								bracketLine = nbLines;
+							} else {
+								buffer.append(chars[i]);
+							}
+							break;
 
-					//
-					// On copie dans tous les autres cas.
-					//
-					default:
-						buffer.append(chars[i]);
-						break;
+						//
+						// On copie dans tous les autres cas.
+						//
+						default:
+							buffer.append(chars[i]);
+							break;
+					}
 				}
 
 				//
@@ -145,17 +168,17 @@ public class RFCReader extends SchemaFileReader
 				//
 				if (createObject)
 				{
-					if (syntax.isAttributeHeader(bufferBackup.toString()))
+					if (syntax.isObjectIdentifierHeader(bufferBackup.toString()))
+					{
+						object = syntax.createSchemaObject(syntax.getObjectIdentifierType(), null);
+					}
+					else if (syntax.isAttributeHeader(bufferBackup.toString()))
 					{
 						object = syntax.createSchemaObject(syntax.getAttributeType(), null);
 					}
 					else if (syntax.isObjectClassHeader(bufferBackup.toString()))
 					{
 						object = syntax.createSchemaObject(syntax.getObjectClassType(), null);
-					}
-					else if (syntax.isObjectIdentifierHeader(bufferBackup.toString()))
-					{
-						object = syntax.createSchemaObject(syntax.getObjectIdentifierType(), null);
 					}
 					if (object != null)
 					{
@@ -171,22 +194,9 @@ public class RFCReader extends SchemaFileReader
 				//
 				if (initialiseObject && object != null)
 				{
-					String def = bufferBackup.toString().replaceAll("\\s+", " ").replaceAll("\\t+", " ");
+					String def = bufferBackup.toString().trim().replaceAll("\\s+", " ").replaceAll("\\t+", " ");
 					if (object.initFromString(def))
 					{
-						if (syntax.isObjectIdentifierHeader(def))
-						{
-							if (!object.isNumericOid())
-							{
-								if (schema.getObjectsIdentifiers().getProperty(object.getId()) == null)
-								{
-									schema.getObjectsIdentifiers().setProperty(
-										object.getId(),
-										schema.generateRandomObjectIdentifier()
-									);
-								}
-							}
-						}
 						objects.add(object);
 						object = null;
 					}
@@ -206,8 +216,13 @@ public class RFCReader extends SchemaFileReader
 			{
 				bufferBackup = buffer;
 				buffer = new StringBuffer();
-				nbLines++;
 			}
+			else
+			{
+				buffer.append(" ");
+			}
+
+			nbLines++;
 		}
 
 		//
