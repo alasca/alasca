@@ -335,6 +335,12 @@ public class RFCSyntax extends SchemaSyntax
 					}
 				}
 			}
+
+			if (type.equals(objectIdentifierType))
+			{
+				valeur = new SValue(tmp);
+			}
+
 		}
 		return valeur;
 	}
