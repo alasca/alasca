@@ -211,7 +211,6 @@ public class Schema extends Observable
 	 */
 	public int countObjects ()
 	{
-		System.out.println(objets.size());
 		return objets.size();
 	}
 

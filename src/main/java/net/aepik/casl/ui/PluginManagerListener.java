@@ -38,8 +38,6 @@ public class PluginManagerListener
 				&& lse.getValueIsAdjusting()==false ) {
 			DefaultListModel listModel = (DefaultListModel) ((JList) lse.getSource()).getModel();
 
-			System.out.println( "ok" );
-
 			for( int x=0; x<listModel.getSize(); x++ )
 				listModel.setElementAt( listModel.getElementAt(x), x );
 		}
