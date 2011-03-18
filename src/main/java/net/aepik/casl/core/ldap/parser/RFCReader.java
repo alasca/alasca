@@ -92,13 +92,13 @@ public class RFCReader extends SchemaFileReader
 
 			for (int i = debut; i < chars.length && bracketHeight >= 0 && !objectError; i++)
 			{
-                                if (debut == chars.length - 1 && bracketHeight == 0)
-                                {
-                                        bufferBackup = buffer;
-                                        buffer = new StringBuffer();
-                                        objectParameter = false;
-                                        createObject = true;
-                                }
+				if (debut == chars.length - 1 && bracketHeight == 0)
+				{
+					bufferBackup = buffer;
+					buffer = new StringBuffer();
+					objectParameter = false;
+					createObject = true;
+				}
 				else
 				{
 					switch (chars[i])
@@ -147,6 +147,18 @@ public class RFCReader extends SchemaFileReader
 							buffer.append(chars[i]);
 							break;
 					}
+				}
+
+				//
+				// Test if we are at the end of the line
+				//
+				if (i == chars.length - 1 && bracketHeight == 0 && !createObject && !initialiseObject)
+				{
+					bufferBackup = buffer;
+					buffer = new StringBuffer();
+					objectParameter = false;
+					createObject = true;
+					initialiseObject = true;
 				}
 
 				//

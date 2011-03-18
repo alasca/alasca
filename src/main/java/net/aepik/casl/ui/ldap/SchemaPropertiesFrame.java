@@ -19,6 +19,8 @@
 package net.aepik.casl.ui.ldap;
 
 import net.aepik.casl.core.ldap.Schema;
+import net.aepik.casl.core.ldap.SchemaObject;
+import net.aepik.casl.core.ldap.SchemaValue;
 import net.aepik.casl.core.util.Config;
 import org.jdesktop.jdic.desktop.Desktop;
 import java.awt.BorderLayout;
@@ -207,53 +209,53 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 				updateList();
 			}
 		}
-                //
-                // On souhaite ajouter un nouveau object identifier
-                // On fait appel à une classe interne pour afficher notre
-                // boîte de saisie des données.
-                //
-                if (o == boutonAjouterObjectIdentifier)
-                {
-                        SchemaPropertyEditorFrame f = new SchemaPropertyEditorFrame(
+		//
+		// On souhaite ajouter un nouveau object identifier
+		// On fait appel à une classe interne pour afficher notre
+		// boîte de saisie des données.
+		//
+		if (o == boutonAjouterObjectIdentifier)
+		{
+			SchemaPropertyEditorFrame f = new SchemaPropertyEditorFrame(
 				this,
 				objectsIdentifiers,
 				null,
 				null
 			);
-                        f.setVisible(true);
-                }
-                //
-                // Ici, nous affichons notre boîte de saisie des données, avec
-                // les valeurs pré-remplies de l'object identifier.
-                //
-                else if (o == boutonModifierObjectIdentifier)
-                {
-                        String str = objectsIdentifiersList.getSelectedValue().toString();
-                        if (str != null)
-                        {
-                                int index = str.indexOf(':');
-                                SchemaPropertyEditorFrame f = new SchemaPropertyEditorFrame(
-                                        this,
+			f.setVisible(true);
+		}
+		//
+		// Ici, nous affichons notre boîte de saisie des données, avec
+		// les valeurs pré-remplies de l'object identifier.
+		//
+		else if (o == boutonModifierObjectIdentifier)
+		{
+			String str = objectsIdentifiersList.getSelectedValue().toString();
+			if (str != null)
+			{
+				int index = str.indexOf(':');
+				SchemaPropertyEditorFrame f = new SchemaPropertyEditorFrame(
+					this,
 					objectsIdentifiers,
-                                        str.substring(0, index).trim(),
-                                        str.substring(index+1).trim()
-                                );
-                                f.setVisible(true);
-                        }
-                }
-                //
-                // On supprime l'object identifier en cours de sélection.
-                //
-                else if (o == boutonSupprimerObjectIdentifier)
-                {
-                        String str = objectsIdentifiersList.getSelectedValue().toString();
-                        if (str != null)
-                        {
-                                int index = str.indexOf(':');
-                                objectsIdentifiers.remove(str.substring(0, index).trim());
-                                updateList();
-                        }
-                }
+					str.substring(0, index).trim(),
+					str.substring(index+1).trim()
+				);
+				f.setVisible(true);
+			}
+		}
+		//
+		// On supprime l'object identifier en cours de sélection.
+		//
+		else if (o == boutonSupprimerObjectIdentifier)
+		{
+			String str = objectsIdentifiersList.getSelectedValue().toString();
+			if (str != null)
+			{
+				int index = str.indexOf(':');
+				objectsIdentifiers.remove(str.substring(0, index).trim());
+				updateList();
+			}
+		}
 		//
 		// Bouton annuler
 		//
@@ -485,11 +487,13 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 			String value = properties.getProperty(key);
 			propertiesModel.addElement(key + ":" + value);
 		}
-		for (Enumeration keys = objectsIdentifiers.propertyNames(); keys.hasMoreElements();)
-		{
-			String key = (String) keys.nextElement();
-			String value = objectsIdentifiers.getProperty(key);
-			objectsIdentifiersModel.addElement(key + ":" + value);
+                SchemaObject[] objects = schema.getObjectsInOrder(schema.getSyntax().getObjectIdentifierType());
+		int i = 0;
+                for (SchemaObject object : objects)
+                {       
+                        SchemaValue value = object.getValue("0");
+			objectsIdentifiersModel.addElement(i + ":" + value.toString());
+			i++;
 		}
 		propertiesList.setModel(propertiesModel);
 		objectsIdentifiersList.setModel(objectsIdentifiersModel);

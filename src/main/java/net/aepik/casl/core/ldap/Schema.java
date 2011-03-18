@@ -305,6 +305,10 @@ public class Schema extends Observable
 		while (result == null && it.hasMoreElements())
 		{
 			SchemaObject o = it.nextElement();
+			if (o.getName() == null)
+			{
+				continue;
+			}
 			if (o.getName().toLowerCase().equals(name.toLowerCase()))
 			{
 				result = o;

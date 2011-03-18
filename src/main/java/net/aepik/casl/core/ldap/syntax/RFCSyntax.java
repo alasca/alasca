@@ -167,13 +167,11 @@ public class RFCSyntax extends SchemaSyntax
 	 */
 	public SchemaObject createSchemaObject ( String type, String id )
 	{
-		SchemaObject objet = null;
-		if (type.equals(getObjectClassType())
-			|| type.equals(getAttributeType()))
+		if (type == null)
 		{
-			objet = new SchemaObject(this, type, id);
+			return null;
 		}
-		return objet;
+		return new SchemaObject(this, type, id);
 	}
 
 	/**
@@ -640,7 +638,16 @@ public class RFCSyntax extends SchemaSyntax
 	 */
 	public String searchSchemaObjectOID ( String type, String initStr )
 	{
+		if (type.equals(getObjectIdentifierType()))
+		{
+			String[] str = initStr.split(" ");
+			return str[2];
+		}
 		String[] parametres = getParameters(type);
+		if (parametres == null)
+		{
+			return null;
+		}
 		//
 		// L'OID, dans la syntax RFC, se situe tout au début de la chaîne,
 		// avant les paramêtre. Il n'y a pas de clef.
