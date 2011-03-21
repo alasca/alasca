@@ -682,6 +682,20 @@ public class RFCSyntax extends SchemaSyntax
 	 */
 	public String[][] searchSchemaObjectValues ( String type, String initStr )
 	{
+		//
+		// Si le type est object identifier, alors on fait un traitement particulier.
+		//
+		if (type.equals(objectIdentifierType))
+		{
+			String[][] params_value = new String[1][2];
+			String[] strs = initStr.split(" ");
+			params_value[0][0] = strs[1];
+			params_value[0][1] = strs[2];
+			return params_value;
+		}
+		//
+		// Sinon, c'est de l'attribut ou de l'objectclass.
+		//
 		String[] params_name = getParameters(type);
 		if (params_name == null)
 		{

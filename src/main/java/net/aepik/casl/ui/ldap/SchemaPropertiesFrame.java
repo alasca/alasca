@@ -227,7 +227,7 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 			String str = objectsIdentifiersList.getSelectedValue().toString();
 			if (str != null)
 			{
-				int index = str.indexOf(':');
+				int index = str.indexOf(' ');
 				SchemaPropertyEditorFrame f = new SchemaPropertyEditorFrame(
 					this,
 					objectsIdentifiers,
@@ -245,7 +245,7 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 			String str = objectsIdentifiersList.getSelectedValue().toString();
 			if (str != null)
 			{
-				int index = str.indexOf(':');
+				int index = str.indexOf(' ');
 				objectsIdentifiers.remove(str.substring(0, index).trim());
 				updateList();
 			}
@@ -452,12 +452,11 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 			propertiesModel.addElement(key + ":" + value);
 		}
                 SchemaObject[] objects = schema.getObjectsInOrder(schema.getSyntax().getObjectIdentifierType());
-		int i = 0;
                 for (SchemaObject object : objects)
-                {       
-                        SchemaValue value = object.getValue("0");
-			objectsIdentifiersModel.addElement(i + ":" + value.toString());
-			i++;
+                {
+			String[] keys = object.getKeys();
+                        SchemaValue value = object.getValue(keys[0]);
+			objectsIdentifiersModel.addElement(keys[0] + " " + value.toString());
 		}
 		propertiesList.setModel(propertiesModel);
 		objectsIdentifiersList.setModel(objectsIdentifiersModel);

@@ -308,28 +308,12 @@ public class SchemaObject
 		// contient les clefs et la seconde les valeurs pour ces clefs.
 		//
 		String[][] pvalues = syntax.searchSchemaObjectValues(type, str);
-		if (values == null)
-		{
-			return false;
-		}
 		//
 		// On procède à une petite sauvegarde des données.
 		// Si l'initialisation échoue, on restaure les anciennes valeurs.
 		//
 		Hashtable<String,SchemaValue> save = values;
 		Hashtable<String,SchemaValue> values = new Hashtable<String,SchemaValue>();
-		//
-		// Object identifier is different of classical object and
-		// attribute definition. So we have to do some special
-		// stuffs to register them.
-		//
-		String oidTypeDef = syntax.getObjectIdentifierType();
-		if (this.type.equals(oidTypeDef))
-		{
-			SchemaValue value = syntax.createSchemaValue(oidTypeDef, "0", str);
-			addValue("0", value);
-			return true;
-		}
 		//
 		// Enfin, on va stocker ces valeurs dans cet objet.
 		// Il s'agit de tester si la syntaxe peut créer des valeurs d'objets
