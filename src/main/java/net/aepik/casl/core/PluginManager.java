@@ -125,7 +125,7 @@ public class PluginManager {
 			try {
 
 				File pluginFile = pluginsFiles[i];
-				URL pluginURL = pluginFile.toURL();
+				URL pluginURL = pluginFile.toURI().toURL();
 				URLClassLoader loader = new URLClassLoader( new URL[]{ pluginURL } );
 	
 				// On charge chaque maintenant le fichier en mÃ©moire. Par la
