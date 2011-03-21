@@ -11,7 +11,7 @@
 	<property name="CASL_PLUGINLIST" value="adct-autogen,schema-converter,schema-reorganizer,schema-query,sddl-autogen,uuid-autogen" />
 
 	<property name="COMPILE.DEBUG" value="false" />
-	<property name="COMPILE.DEPRECATION" value="false" />
+	<property name="COMPILE.DEPRECATION" value="true" />
 	<property name="COMPILE.OPTIMIZE" value="true" />
 	<property name="COMPILE.ENCODING" value="UTF8" />
 
