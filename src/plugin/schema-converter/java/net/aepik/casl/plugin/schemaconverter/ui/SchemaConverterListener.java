@@ -26,7 +26,6 @@ import net.aepik.casl.core.ldap.SchemaFile;
 import net.aepik.casl.core.ldap.SchemaFileWriter;
 import net.aepik.casl.core.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaSyntax;
-import org.jdesktop.jdic.desktop.Desktop;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -100,17 +99,6 @@ public class SchemaConverterListener
 			// Erreur lors de la lecture du fichier.					
 			} catch( Exception ex ) {
 				JOptionPane.showMessageDialog( converterFrame, "Erreur de conversion.", "Erreur", JOptionPane.ERROR_MESSAGE );
-			}
-
-		// On demande plus d'infos.
-		// On va ouvrir un naviguateur web avec une URL définie.
-		} else if( o==converterFrame.boutonInfo ) {
-
-			try {
-				String currentDir = System.getProperty( "user.dir" );
-				Desktop.browse( new URL( "file://" + currentDir + "/doc/index.html" ) );
-			} catch( Exception ex ) {
-				System.out.println( ex );
 			}
 
 		// Bouton suivant

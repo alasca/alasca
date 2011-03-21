@@ -25,9 +25,6 @@ import net.aepik.casl.core.Manager;
 import net.aepik.casl.core.util.Config;
 import net.aepik.casl.ui.ldap.SchemaManagerListener;
 import net.aepik.casl.ui.ldap.SchemaManagerPanel;
-
-import org.jdesktop.jdic.desktop.Desktop;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -87,17 +84,6 @@ public class ManagerListener
 					managerFrame,
 					managerFrame.getManager().getPluginManager() );
 			f.setVisible( true );
-
-		// On demande l'aide du logiciel.
-		// On va ouvrir un naviguateur web avec une URL définie.
-		} else if( o==managerFrame.item_help ) {
-
-			try {
-				String currentDir = System.getProperty( "user.dir" );
-				Desktop.browse( new URL( "file://" + Config.getDataPath() + "/doc/index.html" ) );
-			} catch( Exception ex ) {
-				System.out.println( ex );
-			}
 
 		// On affiche les crédits.
 		} else if( o==managerFrame.item_authors ) {

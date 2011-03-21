@@ -57,8 +57,6 @@ public class ManagerFrame extends JFrame {
 	public JMenuItem item_plugins = new JMenuItem( "Liste des extentions" );
 	/** L'item de menu quitter **/
 	public JMenuItem item_quit = new JMenuItem( "Quitter" );
-	/** L'item de menu Aide **/
-	public JMenuItem item_help = new JMenuItem( "Aide" );
 	/** L'item de menu A Propos **/
 	public JMenuItem item_authors = new JMenuItem( "A Propos..." );
 
@@ -136,7 +134,6 @@ public class ManagerFrame extends JFrame {
 
 		item_plugins.addActionListener( l );
 		item_quit.addActionListener( l );
-		item_help.addActionListener( l );
 		item_authors.addActionListener( l );
 	}
 
@@ -222,7 +219,6 @@ public class ManagerFrame extends JFrame {
 
 		item_plugins.removeActionListener( l );
 		item_quit.removeActionListener( l );
-		item_help.removeActionListener( l );
 		item_authors.removeActionListener( l );
 	}
 
@@ -300,7 +296,6 @@ public class ManagerFrame extends JFrame {
 		JMenu menu_edition = new JMenu( "Edition" );
 		JMenu menu_plugins = new JMenu( "Outils" );
 		JMenu menu_help = new JMenu( "Aide" );
-		menu_help.add( item_help );
 		menu_help.add( item_authors );
 
 		menu.add( menu_fichiers );
@@ -348,7 +343,6 @@ public class ManagerFrame extends JFrame {
 		menu_plugins.setMnemonic( KeyEvent.VK_O );
 		menu_help.setMnemonic( KeyEvent.VK_A );
 
-		item_help.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_F1, 0 ) );
 		item_authors.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_F12, 0 ) );
 		item_plugins.setAccelerator( KeyStroke.getKeyStroke(
 				KeyEvent.VK_P, KeyEvent.CTRL_MASK ) );

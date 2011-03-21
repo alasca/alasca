@@ -27,7 +27,6 @@ import net.aepik.casl.core.ldap.SchemaObject;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.ui.util.LoadFileFrame;
 import net.aepik.casl.ui.ManagerFrame;
-import org.jdesktop.jdic.desktop.Desktop;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

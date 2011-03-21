@@ -22,7 +22,6 @@ import net.aepik.casl.core.ldap.Schema;
 import net.aepik.casl.core.ldap.SchemaObject;
 import net.aepik.casl.core.ldap.SchemaValue;
 import net.aepik.casl.core.util.Config;
-import org.jdesktop.jdic.desktop.Desktop;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -93,11 +92,6 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 	 * Le bouton Annuler
 	 */
 	private JButton boutonAnnuler = new JButton("Annuler");
-
-	/**
-	 * Le bouton Plus d'informations
-	 */
-	private JButton boutonInfo = new JButton("Plus d'informations...");
 
 	/**
 	 * Le bouton ajouter un object identifier
@@ -273,22 +267,6 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 			schema.setObjectsIdentifiers(objectsIdentifiers);
 			windowClosing(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		}
-		//
-		// On demande plus d'informations.
-		// On va ouvrir un naviguateur web avec une URL définie.
-		//
-		else if (o == boutonInfo)
-		{
-			try
-			{
-				String currentDir = System.getProperty("user.dir");
-				Desktop.browse(new URL("file://" + Config.getDataPath() + "/doc/index.html"));
-			}
-			catch (Exception ex)
-			{
-				ex.printStackTrace();
-			}
-		}
 	}
 
 	public void valueChanged ( ListSelectionEvent e )
@@ -409,24 +387,11 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 		));
 
 		//
-		// Panel informations
-		//
-		boutonInfo.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.blue));
-		boutonInfo.setForeground(Color.blue);
-		boutonInfo.setFocusPainted(false);
-		boutonInfo.setContentAreaFilled(false);
-
-		JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		infoPanel.add(boutonInfo);
-		infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 4, 1, 4));
-
-		//
 		// Organisation générales
 		//
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		mainPanel.add(propertiesPanel, BorderLayout.NORTH);
 		mainPanel.add(objectsIdentifiersPanel, BorderLayout.CENTER);
-		mainPanel.add(infoPanel, BorderLayout.SOUTH);
 
 		JPanel mainPanelContainer = new JPanel(new BorderLayout());
 		mainPanelContainer.add(textAreaDescription, BorderLayout.NORTH);
@@ -444,7 +409,6 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 		objectsIdentifiersList.addListSelectionListener(this);
 		boutonOk.addActionListener(this);
 		boutonAnnuler.addActionListener(this);
-		boutonInfo.addActionListener(this);
 		boutonAjouterProperty.addActionListener(this);
 		boutonModifierProperty.addActionListener(this);
 		boutonSupprimerProperty.addActionListener(this);

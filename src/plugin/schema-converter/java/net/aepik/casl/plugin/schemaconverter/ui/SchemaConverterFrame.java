@@ -29,7 +29,6 @@ import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.core.ldap.syntax.*;
 import net.aepik.casl.ui.ManagerFrame;
 import net.aepik.casl.ui.util.DescriptiveInternalFrame;
-import org.jdesktop.jdic.desktop.Desktop;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,8 +65,6 @@ public class SchemaConverterFrame extends JFrame {
 	public JButton boutonPrecedent = new JButton( "Préc." );
 	/** Le bouton suivant **/
 	public JButton boutonSuivant = new JButton( "Suiv." );
-	/** Le bouton plus d'infos (=url) **/
-	public JButton boutonInfo = new JButton( "Plus d'informations..." );
 
 ////////////////////////////////
 // Attributs
@@ -128,7 +125,6 @@ public class SchemaConverterFrame extends JFrame {
 		boutonPrecedent.addActionListener( l );
 		boutonSuivant.addActionListener( l );
 		boutonAnnuler.addActionListener( l );
-		boutonInfo.addActionListener( l );
 	}
 
 	public String getSelectedDictionnaryName() {
@@ -146,7 +142,6 @@ public class SchemaConverterFrame extends JFrame {
 		boutonPrecedent.removeActionListener( l );
 		boutonSuivant.removeActionListener( l );
 		boutonAnnuler.removeActionListener( l );
-		boutonInfo.removeActionListener( l );
 	}
 
 	public void switchToPreviousPanel() {
@@ -192,18 +187,6 @@ public class SchemaConverterFrame extends JFrame {
 		boutonsPanel.add( boutonSuivant );
 		boutonsPanel.add( boutonOk );
 		boutonsPanel.add( boutonAnnuler );
-
-		// - Panel plus d'informations -
-
-		boutonInfo.setBorder( BorderFactory.createMatteBorder( 0, 0, 1, 0, Color.blue ) );
-		boutonInfo.setForeground( Color.blue );
-		boutonInfo.setFocusPainted( false );
-		//boutonInfo.setBorderPainted( false );
-		boutonInfo.setContentAreaFilled( false );
-
-		JPanel panelInfo = new JPanel( new FlowLayout( FlowLayout.LEFT ) );
-		panelInfo.add( boutonInfo );
-		panelInfo.setBorder( BorderFactory.createEmptyBorder( 0, 4, 1, 4 ) );
 
 		// - Panel liste Dictionnaires -
 
@@ -275,7 +258,6 @@ public class SchemaConverterFrame extends JFrame {
 		JPanel mainPanel = new JPanel( new BorderLayout() );
 		mainPanel.add( textAreaDescription, BorderLayout.NORTH );
 		mainPanel.add( boardsPanel, BorderLayout.CENTER );
-		mainPanel.add( panelInfo, BorderLayout.SOUTH );
 
 		JPanel mainPanelContainer = new JPanel( new BorderLayout() );
 		mainPanelContainer.add( mainPanel, BorderLayout.NORTH );

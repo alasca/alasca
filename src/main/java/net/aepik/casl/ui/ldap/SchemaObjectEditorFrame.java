@@ -28,7 +28,6 @@ import net.aepik.casl.core.util.Config;
 import net.aepik.casl.core.sddl.SDDL_ACLString;
 import net.aepik.casl.ui.util.NoEditableTableModel;
 import net.aepik.casl.ui.sddl.SDDL_ACLEditListener;
-import org.jdesktop.jdic.desktop.Desktop;
 
 import org.jdesktop.swingx.JXHeader;
 
@@ -104,8 +103,6 @@ public class SchemaObjectEditorFrame
 	private JButton boutonOk = new JButton( "Valider" );
 	/** Le bouton Annuler **/
 	private JButton boutonAnnuler = new JButton( "Annuler" );
-	/** Le bouton plus d'infos (=url) **/
-	private JButton boutonInfo = new JButton( "Plus d'informations" );
 
 ////////////////////////////////
 // Constructeurs
@@ -145,17 +142,6 @@ public class SchemaObjectEditorFrame
 					"Impossible de spécifier des valeurs nulles",
 					"Erreur",
 					JOptionPane.ERROR_MESSAGE );
-			}
-
-		// On demande plus d'infos.
-		// On va ouvrir un naviguateur web avec une URL définie.
-		} else if( o==boutonInfo ) {
-
-			try {
-				String currentDir = System.getProperty( "user.dir" );
-				Desktop.browse( new URL( "file://" + Config.getDataPath() + "/doc/index.html" ) );
-			} catch( Exception ex ) {
-				System.out.println( ex );
 			}
 
 		// On a cliqué sur le bouton annuler, aucune modification
@@ -330,23 +316,11 @@ public class SchemaObjectEditorFrame
 						BorderFactory.createEmptyBorder( 0, 5, 5, 5 ),
 						tmpForBorderScroller.getBorder() ) ) ) );
 
-		// - Panel plus d'informations -
-
-		boutonInfo.setBorder( BorderFactory.createMatteBorder( 0, 0, 1, 0, Color.blue ) );
-		boutonInfo.setForeground( Color.blue );
-		boutonInfo.setFocusPainted( false );
-		boutonInfo.setContentAreaFilled( false );
-
-		JPanel panelInfo = new JPanel( new FlowLayout( FlowLayout.LEFT ) );
-		panelInfo.add( boutonInfo );
-		panelInfo.setBorder( BorderFactory.createEmptyBorder( 0, 4, 1, 4 ) );
-
 		// - Organisation générale -
 
 		JPanel mainPanel = new JPanel( new BorderLayout() );
 		mainPanel.add( textAreaValues, BorderLayout.NORTH );
 		mainPanel.add( tableScroller, BorderLayout.CENTER );
-		mainPanel.add( panelInfo, BorderLayout.SOUTH );
 
 		JPanel mainPanelContainer = new JPanel( new BorderLayout() );
 		mainPanelContainer.add( mainPanel, BorderLayout.CENTER );
@@ -360,7 +334,6 @@ public class SchemaObjectEditorFrame
 		addWindowListener( this );
 		boutonOk.addActionListener( this );
 		boutonAnnuler.addActionListener( this );
-		boutonInfo.addActionListener( this );
 	}
 
 	private void init() {
