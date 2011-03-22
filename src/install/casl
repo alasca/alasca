@@ -6,9 +6,14 @@ CASL_ROOT_PATH="`dirname ${CASL_BIN_FILENAME}`"
 CASL_ROOT_PATH="`dirname ${CASL_ROOT_PATH}`"
 CASL_LIB_PATH="${CASL_ROOT_PATH}/lib"
 
-# For JDK < 1.5
-#export CASL_LIB_PATH
-#cd "${CASL_DIR}"
+JAVA_BIN_PATH="`which java`"
+JAVA_VERSION="`${JAVA_BIN_PATH} -version 2>&1 | head -n 1 | sed -e 's/[^ ]\+ [^ ]\+ "\(.*\)"/\1/'`"
+JAVA_VERSION_SHORT="`echo ${JAVA_VERSION} | cut -d "." -f 1,2 | sed -e 's/\.//'`"
+
+if [ ${JAVA_VERSION_SHORT} -lt 15 ]; then
+  export CASL_LIB_PATH
+  cd "${CASL_DIR}"
+fi
 
 CASL_JAR="`find ${CASL_LIB_PATH} -name *.jar -print | perl -p0e 's/\n/:/g;s/:$//g'`"
 java -cp ${CASL_JAR} net.aepik.casl.ui.Main $*
