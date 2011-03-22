@@ -43,6 +43,8 @@ import javax.swing.SingleSelectionModel;
 public class SchemaManagerPanel extends JPanel
 {
 
+	private static final long serialVersionUID = 0;
+
 	/**
 	 * L'item de menu Ouvrir un fichier
 	 */

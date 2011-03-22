@@ -63,10 +63,15 @@ public class SCTool {
 		SchemaSyntax syntax = null;
 		try
 		{
-			String syntaxClass = Schema.getSyntaxPackageName() + "." + syntaxName;
-			syntax = ((Class<SchemaSyntax>) Class.forName(syntaxClass)).newInstance();
+			String syntaxClassName = Schema.getSyntaxPackageName() + "." + syntaxName;
+			@SuppressWarnings("unchecked")
+			Class<SchemaSyntax> syntaxClass = (Class<SchemaSyntax>) Class.forName(syntaxClassName);
+			syntax = syntaxClass.newInstance();
 		}
-		catch (Exception e){};
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		};
 		return syntax;
 	}
 

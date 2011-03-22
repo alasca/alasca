@@ -58,6 +58,8 @@ import javax.swing.event.ListSelectionListener;
 public class SchemaPropertiesFrame extends JDialog implements ActionListener, ListSelectionListener, WindowListener
 {
 
+	private static final long serialVersionUID = 0;
+
 	/**
 	 * Le schéma
 	 */
@@ -470,7 +472,10 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 	}
 
 	private class SchemaPropertyEditorFrame extends JDialog implements ActionListener
-	{	
+	{
+
+		private static final long serialVersionUID = 0;
+
 		private JButton boutonOk = new JButton("    Ok    ");
 
 		private JButton boutonAnnuler = new JButton("Annuler");

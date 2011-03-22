@@ -27,6 +27,8 @@ import javax.swing.table.AbstractTableModel;
 
 public class SDDL_ACETableModel extends AbstractTableModel {
 
+	private static final long serialVersionUID = 0;
+
 ////////////////////////////////
 // Attributs
 ////////////////////////////////

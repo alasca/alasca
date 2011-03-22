@@ -31,6 +31,8 @@ import javax.swing.JPanel;
 
 public class CreditsFrameLauncher extends JDialog implements ActionListener {
 
+	private static final long serialVersionUID = 0;
+
 	private JButton closeButton;
 	private CreditsFrame creditsFrame ;
 

@@ -60,6 +60,8 @@ import javax.swing.event.TreeSelectionListener;
 public class SchemaPanel extends JPanel
 {
 
+	private static final long serialVersionUID = 0;
+
 	/**
 	 * L'item de suppression
 	 */

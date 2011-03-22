@@ -49,6 +49,8 @@ import javax.swing.SingleSelectionModel;
 
 public class ManagerFrame extends JFrame {
 
+	private static final long serialVersionUID = 0;
+
 ////////////////////////////////
 // Constantes
 ////////////////////////////////

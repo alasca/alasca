@@ -58,6 +58,8 @@ public class SchemaValueEditorFrame
 			ListSelectionListener
 {
 
+	private static final long serialVersionUID = 0;
+
 ////////////////////////////////
 // Attributs
 ////////////////////////////////

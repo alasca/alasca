@@ -40,6 +40,8 @@ import javax.swing.JTextArea;
 
 public class CreditsFrame extends JDialog {
 
+	private static final long serialVersionUID = 0;
+
 	public CreditsFrame( JFrame p, Manager m, JComponent footerComponent, boolean licence ) {
 
 		super();

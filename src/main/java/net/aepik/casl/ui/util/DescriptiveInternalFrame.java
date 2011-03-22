@@ -36,6 +36,8 @@ import javax.swing.JTextArea;
 
 public class DescriptiveInternalFrame extends JPanel {
 
+	private static final long serialVersionUID = 0;
+
 ////////////////////////////////
 // Attributs
 ////////////////////////////////

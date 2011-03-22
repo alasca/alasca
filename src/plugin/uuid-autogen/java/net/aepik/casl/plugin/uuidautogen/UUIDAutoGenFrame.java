@@ -52,6 +52,8 @@ import javax.swing.border.BevelBorder;
 public class UUIDAutoGenFrame extends JFrame
 		implements ActionListener, WindowListener {
 
+	private static final long serialVersionUID = 0;
+
 ////////////////////////////////
 // Constantes
 ////////////////////////////////

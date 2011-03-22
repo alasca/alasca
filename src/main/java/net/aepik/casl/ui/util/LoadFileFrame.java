@@ -51,20 +51,26 @@ import javax.swing.table.TableColumn;
 public class LoadFileFrame extends JDialog implements ActionListener, WindowListener
 {
 
+private static final long serialVersionUID = 0;
+
 	/** La fenêtre appelante **/
 	private JFrame mainFrame ;
+
 	/** Le manager de schéma **/
 	private SchemaManager manager ;
 
 	/** Le champs contenant le nom du fichier **/
 	private JTextField filename ;
+
 	/** La liste contenant l'ensemble des syntaxes disponibles **/
 	private JComboBox syntaxes ;
 
 	/** Le bouton de choix du fichier **/
 	private JButton boutonOpenFile ;
+
 	/** Le bouton Ok **/
 	private JButton boutonOk ;
+
 	/** Le bouton Annuler **/
 	private JButton boutonAnnuler ;
 

@@ -50,6 +50,8 @@ import javax.swing.event.ListSelectionListener;
 
 public class SDDL_ACLFrame extends JDialog implements ActionListener, ListSelectionListener, WindowListener {
 
+	private static final long serialVersionUID = 0;
+
 ////////////////////////////////
 // Attributs
 ////////////////////////////////

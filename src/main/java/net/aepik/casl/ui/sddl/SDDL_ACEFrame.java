@@ -52,6 +52,8 @@ import javax.swing.border.BevelBorder;
 
 public class SDDL_ACEFrame extends JDialog implements ActionListener, WindowListener {
 
+	private static final long serialVersionUID = 0;
+
 ////////////////////////////////
 // Attributs
 ////////////////////////////////

@@ -19,6 +19,8 @@ import javax.swing.text.html.HTMLDocument;
 
 public class PluginManagerTable extends JTable {
 
+	private static final long serialVersionUID = 0;
+
 	private PluginManager manager ;
 
 	public PluginManagerTable( PluginManager m ) {

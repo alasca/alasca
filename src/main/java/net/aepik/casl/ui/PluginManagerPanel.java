@@ -51,6 +51,8 @@ import javax.swing.JTextArea;
 
 public class PluginManagerPanel extends JPanel {
 
+	private static final long serialVersionUID = 0;
+
 ////////////////////////////////
 // Attributs
 ////////////////////////////////
@@ -125,6 +127,8 @@ public class PluginManagerPanel extends JPanel {
 	
 	private class PluginManagerCell extends JPanel
 			implements MouseListener {
+
+		private static final long serialVersionUID = 0;
 
 		private boolean isSelected ;
 		private Plugin plugin ;

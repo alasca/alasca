@@ -25,6 +25,8 @@ import javax.swing.table.DefaultTableModel;
 
 public class NoEditableTableModel extends DefaultTableModel {
 
+	private static final long serialVersionUID = 0;
+
 	protected boolean[] columnEditable ;
 
 	public NoEditableTableModel( Object[][] data, Object[] columnNames ) {

@@ -432,7 +432,7 @@ public class Schema extends Observable
 		int position = 0;
 		for (Enumeration<SchemaObject> e = objets.elements(); e.hasMoreElements(); position++)
 		{
-			objects[position] = (SchemaObject) e.nextElement();
+			objects[position] = e.nextElement();
 		}
 		return objects;
 	}

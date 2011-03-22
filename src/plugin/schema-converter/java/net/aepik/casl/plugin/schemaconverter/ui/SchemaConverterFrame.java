@@ -53,6 +53,8 @@ import javax.swing.table.TableColumn;
 
 public class SchemaConverterFrame extends JFrame {
 
+	private static final long serialVersionUID = 0;
+
 ////////////////////////////////
 // Constantes
 ////////////////////////////////

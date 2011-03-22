@@ -52,6 +52,8 @@ import javax.swing.WindowConstants;
 
 public class PluginManagerFrame extends JFrame implements ActionListener {
 
+	private static final long serialVersionUID = 0;
+
 ////////////////////////////////
 // Attributs
 ////////////////////////////////

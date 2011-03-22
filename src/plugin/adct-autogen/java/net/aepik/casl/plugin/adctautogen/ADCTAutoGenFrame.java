@@ -53,6 +53,8 @@ import javax.swing.border.BevelBorder;
 public class ADCTAutoGenFrame extends JFrame
 		implements ActionListener, WindowListener {
 
+	private static final long serialVersionUID = 0;
+
 ////////////////////////////////
 // Constantes
 ////////////////////////////////

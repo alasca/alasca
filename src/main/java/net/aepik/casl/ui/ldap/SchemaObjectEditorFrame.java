@@ -81,6 +81,8 @@ public class SchemaObjectEditorFrame
 			WindowListener
 {
 
+	private static final long serialVersionUID = 0;
+
 ////////////////////////////////
 // Attributs
 ////////////////////////////////
