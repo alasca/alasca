@@ -57,6 +57,7 @@ public class OpenldapWriter extends RFCWriter
 		{
 			return;
 		}
+		/*
 		Properties objectsIdentifiers = schema.getObjectsIdentifiers();
 		for (Enumeration keys = objectsIdentifiers.propertyNames(); keys.hasMoreElements();)
 		{
@@ -65,6 +66,7 @@ public class OpenldapWriter extends RFCWriter
 			output.write(schema.getSyntax().getObjectIdentifierHeader() + " " + key + " " +value);
 			output.newLine();
 		}
+		*/
 		super.write(schema);
 	}
 
