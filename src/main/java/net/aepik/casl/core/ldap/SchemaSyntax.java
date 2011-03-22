@@ -430,7 +430,7 @@ public abstract class SchemaSyntax
 
 	/**
 	 * Test si un caractère sous forme d'entier décimal
-	 * est un caractère alpha-numérique ou est "-" ou ";".
+	 * est un caractère alpha-numérique ou est "-", ";", ou ":".
 	 * @return boolean True si c'est le cas, false sinon.
 	 */
 	public static boolean isKey ( int character )
@@ -438,6 +438,7 @@ public abstract class SchemaSyntax
 		return (   isAlpha(character)
 			|| isNumeric(character)
 			|| character == 45
+			|| character == 58
 			|| character == 59);
 	}
 
