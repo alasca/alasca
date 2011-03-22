@@ -9,7 +9,7 @@ objectIdentifier CASLattributeType CASL:3
 objectIdentifier CASLobjectClass CASL:4
 
 attributetype (
-	CASLattributeType
+	CASLattributeType:1
 	NAME 'caslAttr1'
 	DESC 'CASL test attribute'
 	EQUALITY 2.5.13.5
