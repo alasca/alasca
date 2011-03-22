@@ -60,6 +60,7 @@
 			optimize="${COMPILE.OPTIMIZE}"
 			verbose="false"
 			includeantruntime="false">
+			<compilerarg value="-Xlint"/>
 			<classpath refid="compile.classpath"/>
 		</javac>
 		<ac:for list="${CASL_PLUGINLIST}" param="plugin" keepgoing="true">
@@ -72,6 +73,7 @@
 					optimize="${COMPILE.OPTIMIZE}"
 					verbose="false"
 					includeantruntime="false">
+					<compilerarg value="-Xlint"/>
 					<classpath refid="compile.classpath"/>
 				</javac>
 			</sequential>
