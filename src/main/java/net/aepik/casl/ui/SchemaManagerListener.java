@@ -161,6 +161,7 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 			jfcProgramme.setDialogTitle("Enregistrer un fichier");
 			jfcProgramme.setApproveButtonText("Enregistrer");
 			jfcProgramme.setApproveButtonToolTipText("Cliquer apres avoir nommé le fichier");
+			jfcProgramme.setAcceptAllFileFilterUsed(false);
 
 			if (jfcProgramme.showDialog(managerFrame, null) == JFileChooser.APPROVE_OPTION)
 			{

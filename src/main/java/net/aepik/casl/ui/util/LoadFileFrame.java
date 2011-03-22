@@ -25,6 +25,7 @@ import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.ui.util.DescriptiveInternalFrame;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -107,6 +108,7 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 			jfcProgramme.setDialogTitle( "Selectionner un fichier" );
 			jfcProgramme.setApproveButtonText( "Selectionner" );
 			jfcProgramme.setApproveButtonToolTipText( "Cliquer apres avoir selectionné un fichier" );
+			jfcProgramme.setAcceptAllFileFilterUsed(false);
 
 			if( jfcProgramme.showDialog( this, null )==JFileChooser.APPROVE_OPTION ) {
 
