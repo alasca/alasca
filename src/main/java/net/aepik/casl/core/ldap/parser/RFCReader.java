@@ -168,6 +168,8 @@ public class RFCReader extends SchemaFileReader
 					int index = str.indexOf(':');
 					String value = str.substring(index+1).trim();
 					schema.getProperties().setProperty("dn", value);
+					initialiseObject = false;
+					createObject = false;
 				}
 
 				//
