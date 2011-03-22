@@ -134,15 +134,15 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 		super();
 		setTitle("Propriétés du schéma " + sName);
 		setModal(true);
-		setSize(400, 400);
+		setSize(400, 440);
 		setResizable(false);
 		setLocationRelativeTo(parent);
 
 		schema = s;
-		objectsIdentifiers = (Properties) schema.getObjectsIdentifiers().clone();
-		objectsIdentifiersList = new JList();
 		properties = (Properties) schema.getProperties().clone();
 		propertiesList = new JList();
+		objectsIdentifiers = (Properties) schema.getObjectsIdentifiers().clone();;
+		objectsIdentifiersList = new JList();
 
 		updateList();
 		initFrame();
@@ -417,6 +417,9 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 		boutonSupprimerObjectIdentifier.addActionListener(this);
 	}
 
+	/**
+	 * Update buttons status.
+	 */
 	private void updateButtons ()
 	{
 		if (propertiesList.getSelectedIndex() != -1)
@@ -441,6 +444,9 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 		}
 	}
 
+	/**
+	 * Update lists contents
+	 */
 	private void updateList ()
 	{
 		DefaultListModel propertiesModel = new DefaultListModel();
@@ -451,12 +457,11 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 			String value = properties.getProperty(key);
 			propertiesModel.addElement(key + ":" + value);
 		}
-                SchemaObject[] objects = schema.getObjectsInOrder(schema.getSyntax().getObjectIdentifierType());
-                for (SchemaObject object : objects)
-                {
-			String[] keys = object.getKeys();
-                        SchemaValue value = object.getValue(keys[0]);
-			objectsIdentifiersModel.addElement(keys[0] + " " + value.toString());
+		for (Enumeration keys = objectsIdentifiers.propertyNames(); keys.hasMoreElements();)
+		{
+			String key = (String) keys.nextElement();
+			String value = objectsIdentifiers.getProperty(key);
+			objectsIdentifiersModel.addElement(key + " " + value);
 		}
 		propertiesList.setModel(propertiesModel);
 		objectsIdentifiersList.setModel(objectsIdentifiersModel);
