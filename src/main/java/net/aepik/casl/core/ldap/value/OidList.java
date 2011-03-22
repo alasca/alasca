@@ -22,9 +22,6 @@
 package net.aepik.casl.core.ldap.value;
 
 import net.aepik.casl.core.ldap.SchemaValue;
-import net.aepik.casl.core.ldap.SchemaSyntax;
-
-import java.lang.String;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;

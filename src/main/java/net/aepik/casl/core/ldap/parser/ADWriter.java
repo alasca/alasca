@@ -26,7 +26,6 @@ import net.aepik.casl.core.ldap.SchemaFileWriter;
 import net.aepik.casl.core.ldap.SchemaObject;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.core.ldap.SchemaValue;
-import net.aepik.casl.core.ldap.syntax.ADSyntax;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -179,15 +178,15 @@ public class ADWriter extends SchemaFileWriter {
 
 				String currentAttributeSyntax = null ;
 				String[][] oMSyntax = new String[][] {
-					{ "String(Octet)",				"4",	"2.5.5.10" 	},
-					{ "Object(DN-Binary)",			"127",	"2.5.5.7"	},
-					{ "Boolean",					"1",	"2.5.5.8"	},
-					{ "Object(DS-DN)",				"127",	"2.5.5.1"	},
-					{ "Integer",					"2",	"2.5.5.9"	},
-					{ "LargeInteger",				"65",	"2.5.5.16"	},
-					{ "String(NT-Sec-Desc)",		"66",	"2.5.5.15"	},
-					{ "String(Sid)",				"4",	"2.5.5.17"	},
-					{ "String(Unicode)",			"64",	"2.5.5.12"	},
+					{ "String(Octet)",		"4",	"2.5.5.10" 	},
+					{ "Object(DN-Binary)",		"127",	"2.5.5.7"	},
+					{ "Boolean",			"1",	"2.5.5.8"	},
+					{ "Object(DS-DN)",		"127",	"2.5.5.1"	},
+					{ "Integer",			"2",	"2.5.5.9"	},
+					{ "LargeInteger",		"65",	"2.5.5.16"	},
+					{ "String(NT-Sec-Desc)",	"66",	"2.5.5.15"	},
+					{ "String(Sid)",		"4",	"2.5.5.17"	},
+					{ "String(Unicode)",		"64",	"2.5.5.12"	},
 					{ "String(Generalized-Time)",	"24",	"2.5.5.11"	}
 				};
 

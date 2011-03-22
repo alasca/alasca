@@ -23,8 +23,6 @@ package net.aepik.casl.core.ldap.value;
 
 import net.aepik.casl.core.ldap.SchemaSyntax;
 
-import java.lang.String;
-
 /**
  * Un objet QuotedDescription est un objet dont la valeur est une chaîne de
  * caractères quotées, et dont les caractères sont alpha-numériques ou

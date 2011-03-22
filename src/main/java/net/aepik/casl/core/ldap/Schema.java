@@ -20,11 +20,8 @@
 package net.aepik.casl.core.ldap;
 
 import net.aepik.casl.core.History;
-import net.aepik.casl.core.ldap.value.QDescription;
 import java.io.File;
-import java.lang.String;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -125,7 +122,10 @@ public class Schema extends Observable
 				return true;
 			}
 		}
-		catch (Exception e) {}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		return false;
 	}
 
@@ -194,7 +194,10 @@ public class Schema extends Observable
 				return true;
 			}
 		}
-		catch (Exception e) {}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		return false;
 	}
 
@@ -364,25 +367,15 @@ public class Schema extends Observable
 		{
 			result.add(o);
 		}
-                for (SchemaObject o : this.getObjectsInOrder(this.getSyntax().getAttributeType()))
-                {
-                        result.add(o);
-                }
-                for (SchemaObject o : this.getObjectsInOrder(this.getSyntax().getObjectClassType()))
-                {
-                        result.add(o);
-                }
-		return result.toArray(new SchemaObject[10]);
-		/*
-		SchemaObject[] result = new SchemaObject[objets.size()];
-		int position = 0;
-		for (Enumeration<Object> e=objectsOrder.elements(); e.hasMoreElements();)
+		for (SchemaObject o : this.getObjectsInOrder(this.getSyntax().getAttributeType()))
 		{
-			result[position] = (SchemaObject) e.nextElement();
-			position++;
+			result.add(o);
 		}
-		return result;
-		*/
+		for (SchemaObject o : this.getObjectsInOrder(this.getSyntax().getObjectClassType()))
+		{
+			result.add(o);
+		}
+		return result.toArray(new SchemaObject[10]);
 	}
 
 	/**
@@ -553,7 +546,10 @@ public class Schema extends Observable
 				}
 			}
 		}
-		catch (Exception e) {}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		if (result != null)
 		{
 			Arrays.sort(result);
@@ -593,12 +589,7 @@ public class Schema extends Observable
 	public void notifyUpdates ( boolean force )
 	{
 		setChanged();
-		Boolean b = new Boolean(false);
-		if (force)
-		{
-			b = new Boolean(true);
-		}
-		notifyObservers(b);
+		notifyObservers(Boolean.valueOf(force));
 	}
 
 	/**
@@ -610,7 +601,7 @@ public class Schema extends Observable
 		SchemaObject[] oids = this.getObjectsInOrder(this.getSyntax().getObjectIdentifierType());
 		for (SchemaObject object : oids)
 		{
-			boolean b = this.delObject(object.getId());
+			this.delObject(object.getId());
 		}
 		for (Enumeration keys = newOIDs.propertyNames(); keys.hasMoreElements();)
 		{
@@ -625,7 +616,7 @@ public class Schema extends Observable
 				v.toString()
 			);
 			o.addValue(id,v);
-			boolean b = this.addObject(o);
+			this.addObject(o);
 		}
 	}
 

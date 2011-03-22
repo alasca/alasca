@@ -18,8 +18,6 @@
 
 package net.aepik.casl.core.ldap;
 
-import java.lang.String;
-
 /**
  * Cette classe définie toutes les méthodes qui doivent être implémentées
  * pour être correctement utilisée par un objet du schema.

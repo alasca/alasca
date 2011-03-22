@@ -20,13 +20,10 @@
 package net.aepik.casl.core;
 
 import net.aepik.casl.core.ldap.Schema;
-import java.io.File;
-import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 
 /**
  * Gère un ensemble de schéma.
@@ -85,7 +82,10 @@ public class SchemaManager extends Observable implements Observer
 				return true;
 			}
 		}
-		catch (NullPointerException e) {}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 		return false;
 	}
 
@@ -112,7 +112,10 @@ public class SchemaManager extends Observable implements Observer
 				return schemas.get(id);
 			}
 		}
-		catch (NullPointerException e) {}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -207,7 +210,10 @@ public class SchemaManager extends Observable implements Observer
 				return schemas.containsKey(id);
 			}
 		}
-		catch (NullPointerException e) {}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 		return false;
 	}
 
@@ -286,7 +292,10 @@ public class SchemaManager extends Observable implements Observer
 				return true;
 			}
 		}
-		catch (NullPointerException e) {}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 		return false;
 	}
 

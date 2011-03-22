@@ -19,16 +19,11 @@
 
 package net.aepik.casl.core.ldap;
 
-import net.aepik.casl.core.ldap.Schema;
-import net.aepik.casl.core.ldap.SchemaFileReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.lang.String;
-import java.util.Iterator;
-import java.util.Vector;
 
 /**
  * Cet objet ouvre une fichier et créé un flux pour ce fichier. Il utilise

@@ -23,7 +23,6 @@ package net.aepik.casl.core.ldap;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.lang.String;
 
 /**
  * Cet objet est un parser pour la grammaire décrit dans la RFC 2252.

@@ -19,7 +19,6 @@
 package net.aepik.casl.core;
 
 import javax.swing.JFrame;
-import java.lang.Runnable;
 
 public abstract class PluginImpl implements Plugin
 {

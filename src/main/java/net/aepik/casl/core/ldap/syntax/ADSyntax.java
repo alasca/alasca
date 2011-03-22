@@ -20,16 +20,10 @@
 package net.aepik.casl.core.ldap.syntax;
 
 import net.aepik.casl.core.ldap.value.*;
-import net.aepik.casl.core.ldap.SchemaObject;
 import net.aepik.casl.core.ldap.SchemaFileReader;
 import net.aepik.casl.core.ldap.SchemaFileWriter;
-import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.core.ldap.SchemaValue;
 import net.aepik.casl.core.ldap.parser.ADWriter;
-import java.lang.String;
-import java.util.Iterator;
-import java.util.StringTokenizer;
-import java.util.Vector;
 
 /**
  * Syntaxe propre à IBM Directory Server.

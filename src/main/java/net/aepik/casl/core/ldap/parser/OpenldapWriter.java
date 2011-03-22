@@ -19,12 +19,7 @@
 package net.aepik.casl.core.ldap.parser;
 
 import net.aepik.casl.core.ldap.Schema;
-import net.aepik.casl.core.ldap.SchemaFileWriter;
-import net.aepik.casl.core.ldap.SchemaObject;
-import net.aepik.casl.core.ldap.SchemaSyntax;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Properties;
 
 /**
  * Write ldap definitions in a Openldap compliant format.
@@ -57,16 +52,6 @@ public class OpenldapWriter extends RFCWriter
 		{
 			return;
 		}
-		/*
-		Properties objectsIdentifiers = schema.getObjectsIdentifiers();
-		for (Enumeration keys = objectsIdentifiers.propertyNames(); keys.hasMoreElements();)
-		{
-			String key = (String) keys.nextElement();
-			String value = objectsIdentifiers.getProperty(key);
-			output.write(schema.getSyntax().getObjectIdentifierHeader() + " " + key + " " +value);
-			output.newLine();
-		}
-		*/
 		super.write(schema);
 	}
 

@@ -21,10 +21,8 @@
 
 package net.aepik.casl.core.sddl;
 
-import java.lang.String;
 import java.util.Iterator;
 import java.util.UUID;
-import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.regex.*;
 
@@ -246,8 +244,6 @@ public class SDDL_ACEString {
 	 * @return boolean True si l'initialisation a réussie, false sinon.
 	**/
 	public boolean initFromString( String str ) {
-
-		boolean ok = false ;
 
 		// On recherche d'abord des espaces, si il y en a au moins un,
 		// la chaîne est mal formée, on retourne false.

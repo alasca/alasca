@@ -21,7 +21,6 @@
 
 package net.aepik.casl.core.sddl;
 
-import java.lang.String;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.regex.*;

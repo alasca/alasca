@@ -18,8 +18,6 @@
 
 package net.aepik.casl.core;
 
-import java.lang.Comparable;
-import java.lang.Runnable;
 import javax.swing.JFrame;
 
 /**

@@ -19,8 +19,6 @@
 package net.aepik.casl.core.ldap;
 
 import net.aepik.casl.core.ldap.value.*;
-import java.lang.NullPointerException;
-import java.lang.String;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -101,7 +99,10 @@ public class SchemaObject
 				return true;
 			}
 		}
-		catch (NullPointerException e) {}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 		return false;
 	}
 
@@ -129,7 +130,10 @@ public class SchemaObject
 				return true;
 			}
 		}
-		catch (NullPointerException e) {}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 		return false;
 	}
 
@@ -261,7 +265,10 @@ public class SchemaObject
 				return values.get(key);
 			}
 		}
-		catch (NullPointerException e) {}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -360,7 +367,10 @@ public class SchemaObject
 				return values.containsKey(key);
 			}
 		}
-		catch (NullPointerException e) {}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 		return false;
 	}
 

@@ -23,10 +23,7 @@ package net.aepik.casl.core.ldap.value;
 
 import net.aepik.casl.core.ldap.SchemaValue;
 import net.aepik.casl.core.ldap.SchemaSyntax;
-
-import java.lang.String;
 import java.util.Iterator;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 /**
@@ -124,7 +121,7 @@ public class QStringList implements SchemaValue {
 
 		Vector<QString> newListe = new Vector<QString>();
 		boolean ok = false ;
-		int firstBracket, secondBracket;
+		int firstBracket;
 
 		if( value==null || value.length()==0 )
 			return false;
@@ -141,7 +138,7 @@ public class QStringList implements SchemaValue {
 
 		// Sinon, on regarde si il y a une parenthèse fermante.
 		// Il n'y en a pas, la chaîne est mal formée.
-		} else if( ( secondBracket = value.indexOf( 41, firstBracket+1 ) )>=0 ) {
+		} else if( ( value.indexOf( 41, firstBracket+1 ) )>=0 ) {
 
 			int begin=0, firstQuote=0, secondQuote=-1;
 			boolean fin = false ;

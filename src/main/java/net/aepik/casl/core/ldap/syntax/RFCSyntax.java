@@ -26,9 +26,7 @@ import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.core.ldap.SchemaValue;
 import net.aepik.casl.core.ldap.parser.RFCReader;
 import net.aepik.casl.core.ldap.parser.RFCWriter;
-import java.lang.String;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Vector;
 
 /**
@@ -590,7 +588,6 @@ public class RFCSyntax extends SchemaSyntax
 		{
 			Integer indice = new Integer(tab[i][0]);
 			String parametre = tab[i][1];
-			String valeur = tab[i][2];
 			if (!indices.contains(indice))
 			{
 				indices.add(indice);
@@ -778,7 +775,7 @@ public class RFCSyntax extends SchemaSyntax
 				{
 					param_value = initStr.substring(indexOfBegin);
 				}
-				param_value.trim();
+				param_value = param_value.trim();
 			}
 			if (params_index[i] != -1 && param_value == null)
 			{

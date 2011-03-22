@@ -24,9 +24,6 @@ import net.aepik.casl.core.ldap.SchemaObject;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.core.ldap.SchemaValue;
 import java.io.IOException;
-import java.lang.StringBuffer;
-import java.util.Iterator;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 public class RFCReader extends SchemaFileReader
@@ -169,7 +166,6 @@ public class RFCReader extends SchemaFileReader
 				{
 					String str = bufferBackup.toString();
 					int index = str.indexOf(':');
-					String key = str.substring(0, index).trim();
 					String value = str.substring(index+1).trim();
 					schema.getProperties().setProperty("dn", value);
 				}
