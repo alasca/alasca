@@ -66,18 +66,19 @@ public class RFCWriter extends SchemaFileWriter
 			// SchemaFileWriter. L'objet ne retourne que son contenu, il n'y
 			// a pas de déclaration.
 			//
-			String objStr = "";
-			String oidParamName = null;
+			String objStr = o.toString();
 			if (o.getType().equals(syntax.getObjectClassType()))
 			{
-				objStr += syntax.getObjectClassHeader();
+				objStr = syntax.getObjectClassHeader() + " ( " + objStr + " )";
 			}
 			if (o.getType().equals(syntax.getAttributeType()))
 			{
-				objStr += syntax.getAttributeHeader();
+				objStr = syntax.getAttributeHeader() + " ( " + objStr + " )";
 			}
-			o.delValue(oidParamName);
-			objStr += " ( " + o.toString() + " )";
+			if (o.getType().equals(syntax.getObjectIdentifierType()))
+			{
+				objStr = syntax.getObjectIdentifierHeader() + " " + objStr;
+			}
 			//
 			// Enfin, on ecrit la chaîne dans le fichier. On fait attention à
 			// ce que tout objet soit séparé par un retour à la ligne.

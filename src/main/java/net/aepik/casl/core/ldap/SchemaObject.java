@@ -406,6 +406,12 @@ public class SchemaObject
 	 */
 	public String toString ()
 	{
+		if (this.type.equals(this.getSyntax().getObjectIdentifierType()))
+		{
+			String[] keys = this.getKeys();
+			SchemaValue value = this.getValue(keys[0]);
+			return keys[0] + " " + value.toString();
+		}
 		String[] params_name = syntax.getParameters(type);
 		if (params_name == null)
 		{
@@ -419,6 +425,7 @@ public class SchemaObject
 				str += params_name[i] + " " + getValue(params_name[i]) + " ";
 			}
 		}
+		str = str.trim();
 		return str;
 	}
 }

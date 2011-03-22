@@ -49,11 +49,6 @@ public class Schema extends Observable
 	private Hashtable<String,SchemaObject> objets;
 
 	/**
-	 * Objects identifiers.
-	 */
-	private Properties objectsIdentifiers;
-
-	/**
 	 * Schema properties
 	 */
 	private Properties proprietes;
@@ -90,7 +85,6 @@ public class Schema extends Observable
 	{	
 		objets = new Hashtable<String,SchemaObject>();
 		proprietes = new Properties();
-		objectsIdentifiers = new Properties();
 		syntax = s;
 		isSyntaxChanged = false;
 		objectsOrder = new History();
@@ -107,7 +101,6 @@ public class Schema extends Observable
 	{
 		objets = new Hashtable<String,SchemaObject>() ;
 		proprietes = new Properties();
-		objectsIdentifiers = new Properties();
 		syntax = s ;
 		isSyntaxChanged = false ;
 		addObjects( objs );
@@ -366,6 +359,21 @@ public class Schema extends Observable
 	 */
 	public SchemaObject[] getObjectsInOrder ()
 	{
+		Vector<SchemaObject> result = new Vector<SchemaObject>();
+		for (SchemaObject o : this.getObjectsInOrder(this.getSyntax().getObjectIdentifierType()))
+		{
+			result.add(o);
+		}
+                for (SchemaObject o : this.getObjectsInOrder(this.getSyntax().getAttributeType()))
+                {
+                        result.add(o);
+                }
+                for (SchemaObject o : this.getObjectsInOrder(this.getSyntax().getObjectClassType()))
+                {
+                        result.add(o);
+                }
+		return result.toArray(new SchemaObject[10]);
+		/*
 		SchemaObject[] result = new SchemaObject[objets.size()];
 		int position = 0;
 		for (Enumeration<Object> e=objectsOrder.elements(); e.hasMoreElements();)
@@ -374,6 +382,7 @@ public class Schema extends Observable
 			position++;
 		}
 		return result;
+		*/
 	}
 
 	/**
@@ -409,6 +418,14 @@ public class Schema extends Observable
 	 */
 	public Properties getObjectsIdentifiers ()
 	{
+		Properties objectsIdentifiers = new Properties();
+		SchemaObject[] oids = this.getObjectsInOrder(this.getSyntax().getObjectIdentifierType());
+		for (SchemaObject object : oids)
+		{
+			String[] keys = object.getKeys();
+			SchemaValue value = object.getValue(keys[0]);
+			objectsIdentifiers.setProperty(keys[0], value.toString());
+		}
 		return objectsIdentifiers;
 	}
 
@@ -590,7 +607,26 @@ public class Schema extends Observable
 	 */
 	public void setObjectsIdentifiers ( Properties newOIDs )
 	{
-		this.objectsIdentifiers = newOIDs;
+		SchemaObject[] oids = this.getObjectsInOrder(this.getSyntax().getObjectIdentifierType());
+		for (SchemaObject object : oids)
+		{
+			boolean b = this.delObject(object.getId());
+		}
+		for (Enumeration keys = newOIDs.propertyNames(); keys.hasMoreElements();)
+		{
+			String id = (String) keys.nextElement();
+			SchemaValue v = this.getSyntax().createSchemaValue(
+				this.getSyntax().getObjectIdentifierType(),
+				id,
+				newOIDs.getProperty(id)
+			);
+			SchemaObject o = this.getSyntax().createSchemaObject(
+				this.getSyntax().getObjectIdentifierType(),
+				v.toString()
+			);
+			o.addValue(id,v);
+			boolean b = this.addObject(o);
+		}
 	}
 
 	/**
