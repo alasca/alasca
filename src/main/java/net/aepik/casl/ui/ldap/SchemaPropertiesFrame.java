@@ -132,9 +132,9 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 	public SchemaPropertiesFrame ( Window parent, Schema s, String sName )
 	{
 		super();
-		setTitle("Propriétés Schéma [" + sName + "]");
+		setTitle("Propriétés du schéma " + sName);
 		setModal(true);
-		setSize(400, 500);
+		setSize(400, 400);
 		setResizable(false);
 		setLocationRelativeTo(parent);
 

@@ -193,8 +193,8 @@ public class SchemaObjectEditorFrame
 	**/
 	private void build() {
 
-		setTitle( "Propriétés Objet [" + objetSchema.getId() + "]" );
-		setSize( 600, 400 );
+		setTitle( "Propriétés de l'objet " + objetSchema.getId());
+		setSize( 650, 400 );
 		setResizable( false );
 		setLocationRelativeTo( mainFrame );
 
