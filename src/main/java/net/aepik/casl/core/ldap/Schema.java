@@ -114,6 +114,10 @@ public class Schema extends Observable
 	{
 		try
 		{
+			if (o == null || o.getId() == null)
+			{
+				return false;
+			}
 			if (!contains(o.getId()))
 			{
 				objets.put(o.getId(), o);
@@ -189,6 +193,10 @@ public class Schema extends Observable
 	{
 		try
 		{
+			if (id == null || objets == null)
+			{
+				return false;
+			}
 			if (objets.containsKey(id))
 			{
 				return true;
