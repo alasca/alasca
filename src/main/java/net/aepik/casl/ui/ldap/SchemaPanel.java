@@ -63,19 +63,24 @@ public class SchemaPanel extends JPanel
 	private static final long serialVersionUID = 0;
 
 	/**
+	 * Menu item to rename a node
+	 */
+	public JMenuItem item_rename = new JMenuItem("Renommer...");
+
+	/**
 	 * L'item de suppression
 	 */
-	public JMenuItem item_supprimer = new JMenuItem( "Supprimer" );
+	public JMenuItem item_supprimer = new JMenuItem("Supprimer");
 
 	/**
 	 * L'item propriété
 	 */
-	public JMenuItem item_propriete = new JMenuItem( "Modifier..." );
+	public JMenuItem item_propriete = new JMenuItem("Modifier...");
 
 	/**
 	 * L'item propriété 2 (pour la table)
 	 */
-	public JMenuItem item_propriete2 = new JMenuItem( "Modifier..." );
+	public JMenuItem item_propriete2 = new JMenuItem("Modifier...");
 
 	/**
 	 * Le schema
@@ -146,6 +151,8 @@ public class SchemaPanel extends JPanel
 		item_supprimer.addMouseListener(l);
 		item_propriete.addActionListener(l);
 		item_propriete.addMouseListener(l);
+                item_rename.addActionListener(l);
+                item_rename.addMouseListener(l);
 		table.addMouseListener(l);
 		item_propriete2.addActionListener(l);
 		item_propriete2.addMouseListener(l);
@@ -213,6 +220,8 @@ public class SchemaPanel extends JPanel
 		item_supprimer.removeMouseListener(l);
 		item_propriete.removeActionListener(l);
 		item_propriete.removeMouseListener(l);
+                item_rename.removeActionListener(l);
+                item_rename.removeMouseListener(l);
 		table.removeMouseListener(l);
 		item_propriete2.removeActionListener(l);
 		item_propriete2.removeMouseListener(l);
@@ -439,60 +448,60 @@ public class SchemaPanel extends JPanel
 		return null;
 	}
 
-	private void initPanel() {
-
+	private void initPanel ()
+	{
 		// - Panel de droite : la table des valeurs -
 
 		table.removeEditor();
-		table.setShowGrid( false );
-		table.setRowSelectionAllowed( false );
+		table.setShowGrid(false);
+		table.setRowSelectionAllowed(false);
 
-		JPanel tableContainer = new JPanel( new BorderLayout() );
-		tableContainer.add( table.getTableHeader(), BorderLayout.NORTH );
-		tableContainer.add( table, BorderLayout.CENTER );
-		tableContainer.setBorder( BorderFactory.createEmptyBorder( 1, 1, 1, 1 ) );
-		tableContainer.setBackground( table.getBackground() );
+		JPanel tableContainer = new JPanel(new BorderLayout());
+		tableContainer.add(table.getTableHeader(), BorderLayout.NORTH);
+		tableContainer.add(table, BorderLayout.CENTER);
+		tableContainer.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+		tableContainer.setBackground(table.getBackground());
 
-		JScrollPane tableScroller = new JScrollPane( tableContainer );
-		tableScroller.setBorder( null );
-		tablePanel = new SimpleInternalFrame( "" );
-		tablePanel.setContent( tableScroller );
-		tablePanel.setBorder( null );
-		tablePanel.setOpaque( true );
+		JScrollPane tableScroller = new JScrollPane(tableContainer);
+		tableScroller.setBorder(null);
+		tablePanel = new SimpleInternalFrame("");
+		tablePanel.setContent(tableScroller);
+		tablePanel.setBorder(null);
+		tablePanel.setOpaque(true);
 
 		// - Panel de gauche : l'arbre -
 
-		arbre.getSelectionModel().setSelectionMode( TreeSelectionModel.SINGLE_TREE_SELECTION );
-		arbre.setBorder( BorderFactory.createEmptyBorder( 5, 5, 5, 5 ) );
-		arbre.setRootVisible( false );
+		arbre.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		arbre.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		arbre.setRootVisible(false);
 		arbre.setExpandsSelectedPaths(true);
 
-		JScrollPane arbreScroller = new JScrollPane( arbre );
-		arbreScroller.setBorder( null );
-		arbrePanel = new SimpleInternalFrame( "" );
-		arbrePanel.setContent( arbreScroller );
-		arbrePanel.setBorder( null );
+		JScrollPane arbreScroller = new JScrollPane(arbre);
+		arbreScroller.setBorder(null);
+		arbrePanel = new SimpleInternalFrame("");
+		arbrePanel.setContent(arbreScroller);
+		arbrePanel.setBorder(null);
 
 		// - Menu popup pour l'arbre -
 
-		popupMenuArbre.add( item_propriete );
-		popupMenuArbre.add( item_supprimer );
+		popupMenuArbre.add(item_propriete);
+		popupMenuArbre.add(item_rename);
+		popupMenuArbre.add(item_supprimer);
 
 		// - Menu popup pour la table -
 
-		popupMenuTable.add( item_propriete2 );
+		popupMenuTable.add(item_propriete2);
 
 		// - Organisation générale -
 
-		JSplitPane frame = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, arbrePanel, tablePanel );
-		frame.setContinuousLayout( true );
-		frame.setResizeWeight( 0.25 );
-		frame.setBorder( null );
-		//frame.setBorder( BorderFactory.createLineBorder( (new JLabel()).getBackground() ) );
-		frame.setOpaque( true );
+		JSplitPane frame = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, arbrePanel, tablePanel);
+		frame.setContinuousLayout(true);
+		frame.setResizeWeight(0.25);
+		frame.setBorder(null);
+		frame.setOpaque(true);
 
-		setLayout( new BorderLayout() );
-		add( frame, BorderLayout.CENTER );
-		setOpaque( true );
+		setLayout(new BorderLayout());
+		add(frame, BorderLayout.CENTER);
+		setOpaque(true);
 	}
 }
