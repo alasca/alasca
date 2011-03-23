@@ -1,7 +1,5 @@
 /*
- * ManagerListener.java		0.1		20/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,94 +36,119 @@ import javax.swing.JMenuItem;
  * Cette classe écoute tous les événements qui interviennent sur
  * le modèle et sur la vue. C'est lui qui gère l'intéraction entre
  * la vue du manager des schémas et le manager lui-même.
-**/
+ */
+public class ManagerListener implements ActionListener, MouseListener, WindowListener
+{
 
-public class ManagerListener
-		implements
-			ActionListener,
-			MouseListener,
-			WindowListener {
+	/**
+	 * Window object.
+	 **/
+	private ManagerFrame managerFrame;
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
-
-	/** La fenêtre **/
-	private ManagerFrame managerFrame ;
-
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
-
-	public ManagerListener( ManagerFrame mf ) {
-		managerFrame = mf ;
+	/**
+	 * Build this listener.
+	 * @param mf ManagerFrame object.
+	 */
+	public ManagerListener ( ManagerFrame mf )
+	{
+		managerFrame = mf;
 	}
-
-////////////////////////////////
-// Méthodes publiques
-////////////////////////////////
 
 	/**
 	 * Gère les actions basique de la fenêtre.
 	 * @param e Un événement.
-	**/
-	public void actionPerformed( ActionEvent e ) {
-
+	 */
+	public void actionPerformed ( ActionEvent e )
+	{
 		Object o = e.getSource();
-
-		// On ferme la fenêtre.
-		if( o==managerFrame.item_quit ) {
-			windowClosing( null );
-
-		// On souhaite afficher la liste des plugins
-		} else if( o==managerFrame.item_plugins ) {
-
-			PluginManagerFrame f = new PluginManagerFrame(
-					managerFrame,
-					managerFrame.getManager().getPluginManager() );
-			f.setVisible( true );
-
-		// On affiche les crédits.
-		} else if( o==managerFrame.item_authors ) {
-			new CreditsFrameLauncher( managerFrame, managerFrame.getManager() );
+		if (o == managerFrame.item_quit)
+		{
+			this.windowClosing(null);
 		}
+		if (o == managerFrame.item_plugins)
+		{
+			PluginManagerFrame f = new PluginManagerFrame(
+				managerFrame,
+				managerFrame.getManager().getPluginManager()
+			);
+			this.mouseDescription(null);
+			f.setVisible(true);
+		}
+		if (o == managerFrame.item_authors)
+		{
+			this.mouseDescription(null);
+			new CreditsFrameLauncher(managerFrame, managerFrame.getManager());
+		}
+	}
+
+	public void mouseClicked ( MouseEvent e )
+	{
 	}
 
 	/**
 	 * Gère la description dans la barre de status.
 	 * @param e L'événement de la souris.
 	**/
-	public void mouseDescription( MouseEvent e ) {
-
-		Object o = e.getSource();
-
-		if( managerFrame!=null ) {
-
-			if( o instanceof JMenuItem && e.getComponent().isEnabled() ) {
-				managerFrame.setStatusDescription( ((JMenuItem) o).getText() );
-			} else {
-				managerFrame.setStatusDescription( null );
+	public void mouseDescription( MouseEvent e )
+	{
+		if (e != null)
+		{
+			Object o = e.getSource();
+			if (managerFrame != null && o instanceof JMenuItem && e.getComponent().isEnabled())
+			{
+				managerFrame.setStatusDescription(((JMenuItem) o).getText());
+				return;
 			}
 		}
+		managerFrame.setStatusDescription(null);
 	}
 
-	// Les méthodes liées à la souris.
-	public void mouseClicked( MouseEvent e ) {}
-	public void mouseEntered( MouseEvent e ) { mouseDescription( e ); }
-	public void mouseExited( MouseEvent e ) { mouseDescription( e ); }
-	public void mousePressed( MouseEvent e ) {}
-	public void mouseReleased( MouseEvent e ) {}
+	public void mouseEntered ( MouseEvent e )
+	{
+		this.mouseDescription(e);
+	}
 
-	// Les méthode liées à la fenêtre.
-	public void windowActivated( WindowEvent e ) {}
-	public void windowClosed( WindowEvent e ) {}
- 	public void windowClosing( WindowEvent e ) {
- 		managerFrame.setVisible( false );
+	public void mouseExited ( MouseEvent e )
+	{
+		this.mouseDescription(e);
+	}
+
+	public void mousePressed ( MouseEvent e )
+	{
+	}
+
+	public void mouseReleased ( MouseEvent e )
+	{
+	}
+
+	public void windowActivated ( WindowEvent e )
+	{
+	}
+
+	public void windowClosed ( WindowEvent e )
+	{
+	}
+
+ 	public void windowClosing ( WindowEvent e )
+	{
+ 		managerFrame.setVisible(false);
  		System.exit(0);
  	}
-	public void windowDeactivated( WindowEvent e ) {}
-	public void windowDeiconified( WindowEvent e ) {}
-	public void windowIconified( WindowEvent e ) {}
-	public void windowOpened( WindowEvent e ) {}
+
+	public void windowDeactivated ( WindowEvent e )
+	{
+	}
+
+	public void windowDeiconified ( WindowEvent e )
+	{
+	}
+
+	public void windowIconified ( WindowEvent e )
+	{
+	}
+
+	public void windowOpened ( WindowEvent e )
+	{
+	}
 
 }

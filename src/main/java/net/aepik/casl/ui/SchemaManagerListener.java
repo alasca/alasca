@@ -113,6 +113,7 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 		if (o == managerPanel.item_openFile)
 		{
 			LoadFileFrame sf = new LoadFileFrame(managerFrame, manager);
+			this.managerFrame.setStatusDescription(null);
 			sf.setVisible(true);
 		}
 
@@ -127,6 +128,7 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 				JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.WARNING_MESSAGE
 			);
+			this.managerFrame.setStatusDescription(null);
 			if (valid == JOptionPane.OK_OPTION)
 			{
 				String id = managerPanel.getSelectedSchemaPanelId();
@@ -145,6 +147,7 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 				JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.WARNING_MESSAGE
 			);
+			this.managerFrame.setStatusDescription(null);
 			if (valid == JOptionPane.OK_OPTION)
 			{
 				manager.removeAll();
@@ -162,6 +165,8 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 			jfcProgramme.setApproveButtonText("Enregistrer");
 			jfcProgramme.setApproveButtonToolTipText("Cliquer apres avoir nommé le fichier");
 			jfcProgramme.setAcceptAllFileFilterUsed(false);
+
+			this.managerFrame.setStatusDescription(null);
 
 			if (jfcProgramme.showDialog(managerFrame, null) == JFileChooser.APPROVE_OPTION)
 			{
@@ -238,6 +243,7 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 				"Renommer un schéma",
 				JOptionPane.QUESTION_MESSAGE
 			);
+			this.managerFrame.setStatusDescription(null);
 			if (result != null && result.length() != 0)
 			{
 				if (manager.isSchemaIdExists(result))
@@ -266,6 +272,7 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 			String schemaId = managerPanel.getSelectedSchemaPanelId();
 			Schema currentSchema = manager.getSchema(schemaId);
 			SchemaPropertiesFrame spf = new SchemaPropertiesFrame(managerFrame, currentSchema, schemaId);
+			this.managerFrame.setStatusDescription(null);
 			spf.setVisible(true);
 		}
 
@@ -278,6 +285,7 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 				"Rechercher un objet",
 				JOptionPane.QUESTION_MESSAGE
 			);
+			this.managerFrame.setStatusDescription(null);
 			if (result != null && result.length() != 0)
 			{
 				String schemaId = managerPanel.getSelectedSchemaPanelId();
