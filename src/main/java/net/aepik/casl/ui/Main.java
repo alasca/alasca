@@ -23,7 +23,6 @@ import net.aepik.casl.core.util.Config;
 import net.aepik.casl.ui.CreditsFrame;
 import net.aepik.casl.ui.ManagerFrame;
 import net.aepik.casl.ui.ManagerListener;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -48,23 +47,37 @@ import javax.swing.UIManager;
 public class Main
 {
 
-	private CreditsFrame creditsFrame ;
+	private CreditsFrame creditsFrame;
 
-	private Manager manager ;
+	private Manager manager;
 
-	private ManagerFrame managerFrame ;
+	private ManagerFrame managerFrame;
 
-	private ManagerListener managerListener ;
+	private ManagerListener managerListener;
 
-	private Image icone ;
+	private String configFile;
 
-	private int loadingValue ;
+	private Image icone;
 
-	private JProgressBar loadingStatus ;
+	private int loadingValue;
+
+	private JProgressBar loadingStatus;
 
 	public Main() throws Exception
 	{
-		loadingStatus = new JProgressBar(0, 4);
+		this.configFile = Config.getResourcesPath() + "/config.xml";
+		this.icone = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() + "/casl.png");
+
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		};
+
+		loadingStatus = new JProgressBar(0, 3);
 		loadingStatus.setValue(0);
 		loadingStatus.setStringPainted(true);
 		loadingStatus.setOpaque(false);
@@ -75,7 +88,7 @@ public class Main
 		p1.add(loadingStatus);
 		p1.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		Manager tmp = new Manager(Config.getResourcesPath() + "/config.xml");
+		Manager tmp = new Manager(configFile);
 		creditsFrame = new CreditsFrame(null, tmp, p1, false);
 		creditsFrame.setSize(300, 155);
 		creditsFrame.setUndecorated(true);
@@ -88,55 +101,63 @@ public class Main
 	{
 		synchronized(loadingStatus)
 		{
-			loadingStatus.setString("Chargement: configuration");
 			try
 			{
-				(new Thread()).sleep(300);
+				(new Thread()).sleep(200);
 			}
-			catch (Exception e) {};
-			manager = new Manager(Config.getResourcesPath() + "/config.xml");
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			};
+			manager = new Manager(this.configFile);
 			updateLoadingStatus();
 		}
 		synchronized(loadingStatus)
 		{
-			loadingStatus.setString("Chargement: plugins");
 			try
 			{
-				(new Thread()).sleep(100);
+				(new Thread()).sleep(200);
 			}
-			catch (Exception e) {};
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			};
 			manager.loadPluginManager();
 			updateLoadingStatus();
 		}
 		synchronized(loadingStatus)
 		{
-			loadingStatus.setString("Chargement: interface");
 			try
 			{
-				(new Thread()).sleep(100);
+				(new Thread()).sleep(200);
 			}
-			catch (Exception e) {};
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			};
 			managerFrame = new ManagerFrame(
 				manager,
 				manager.getProperty("FrameTitle"),
 				manager.getProperty("FrameStatus")
 			);
-			icone = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() + "/casl.png");
-			updateLoadingStatus();
-		}
-		synchronized(loadingStatus)
-		{
-			loadingStatus.setString("Chargement: CASL");
-			try
-			{
-				(new Thread()).sleep(100);
-			}
-			catch (Exception e) {};
 			managerListener = new ManagerListener(managerFrame);
 			managerFrame.addManagerListener(managerListener);
 			managerFrame.setIconImage(icone);
 			updateLoadingStatus();
 		}
+		synchronized(loadingStatus)
+		{
+			updateLoadingStatus();
+			try
+			{
+				(new Thread()).sleep(400);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			};
+		}
+
 		return managerFrame;
 	}
 
@@ -150,7 +171,7 @@ public class Main
 		creditsFrame.dispose();
 	}
 
-	public void openLoadingFrame()
+	private void openLoadingFrame()
 	{
 		creditsFrame.setVisible(true);
 	}
@@ -177,30 +198,18 @@ public class Main
 	public static void main (String[] args)
 	{
 		Main m = null;
+		JFrame f = null;
 		try
 		{
-			// Fixe look and feel.
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch (Exception e) {}
-		try
-		{
-			// Launch application.
 			m = new Main();
 			m.openLoadingFrame();
-			JFrame f = m.loadApplication();
-			try
-			{
-				(new Thread()).sleep(500);
-			}
-			catch (Exception e) {};
+			f = m.loadApplication();
 			m.closeLoadingFrame();
 			m.disposeLoadingFrame();
 			f.setVisible(true);
 		}
 		catch (Exception e)
 		{
-			// Unexpected error.
 			if (m != null)
 			{
 				m.closeLoadingFrame();
@@ -209,8 +218,7 @@ public class Main
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(
 				null,
-				"Une erreur est survenue pendant l'éxécution de l'application :\n\n"
-					+ e.toString() + "\n\n",
+				"Une erreur est survenue:\n\n" + e.toString() + "\n\n",
 				"Erreur critique",
 				JOptionPane.ERROR_MESSAGE
 			);
