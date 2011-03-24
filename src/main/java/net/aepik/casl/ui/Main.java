@@ -206,6 +206,7 @@ public class Main
 			f = m.loadApplication();
 			m.closeLoadingFrame();
 			m.disposeLoadingFrame();
+			System.out.println("Launching...");
 			f.setVisible(true);
 		}
 		catch (Exception e)
