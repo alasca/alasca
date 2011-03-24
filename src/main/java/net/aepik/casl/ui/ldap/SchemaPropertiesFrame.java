@@ -482,7 +482,11 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 
 		private JTextField varName;
 
+		private String varNameDefault;
+
 		private JTextField varValue;
+
+		private String varValueDefault;
 
 		private Properties list;
 
@@ -490,7 +494,9 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 		{
 			super();
 			varName = new JTextField(varname);
+			varNameDefault = varname;
 			varValue = new JTextField(varvalue);
+			varValueDefault = varvalue;
 			this.list = list;
 			setTitle("Editer");
 			setModal(true);
@@ -518,6 +524,10 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 			//
 			else if (o == boutonOk)
 			{
+				if (!varName.getText().equals(varNameDefault))
+				{
+					this.list.remove(varNameDefault);
+				}
 				this.list.setProperty(varName.getText(), varValue.getText());
 				SchemaPropertiesFrame.this.updateList();
 				SchemaPropertiesFrame.this.windowClosing(new WindowEvent(
