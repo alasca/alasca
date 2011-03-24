@@ -28,6 +28,7 @@ import java.awt.event.MouseListener;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -107,20 +108,23 @@ public class SchemaListener implements ActionListener, MouseListener, Observer, 
 		if (o == schemaPanel.item_rename)
 		{
 			lastSelectedPath = schemaPanel.getCurrentSelectedPath();
-			String result = JOptionPane.showInputDialog(
+			String id = lastSelectedPath.getLastPathComponent().toString();
+			SchemaObject so = this.schema.getObjectByName(id);
+			String result = (String) JOptionPane.showInputDialog(
 				schemaPanel,
 				"Spécifier le nouveau identifiant d'objet:",
 				"Renommer un noeud",
-				JOptionPane.QUESTION_MESSAGE
+				JOptionPane.QUESTION_MESSAGE,
+				UIManager.getIcon("OptionPane.questionIcon"),
+				null,
+				so.getId()
 			);
 			if (result != null && result.length() != 0)
 			{
-				String id = lastSelectedPath.getLastPathComponent().toString();
-				SchemaObject so = this.schema.getObjectByName(id);
 				so.setId(result);
 				this.schema.addOrReplaceObject(so);
-				this.schemaPanel.setSelectedPath(lastSelectedPath);
 				this.schemaPanel.updateTree();
+				this.schemaPanel.setSelectedPath(lastSelectedPath);
 			}
 		}
 	}
