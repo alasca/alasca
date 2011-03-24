@@ -109,13 +109,18 @@ public class SchemaListener implements ActionListener, MouseListener, Observer, 
 			lastSelectedPath = schemaPanel.getCurrentSelectedPath();
 			String result = JOptionPane.showInputDialog(
 				schemaPanel,
-				"Spécifier le nouveau nom pour ce noeud:",
+				"Spécifier le nouveau identifiant d'objet:",
 				"Renommer un noeud",
 				JOptionPane.QUESTION_MESSAGE
 			);
 			if (result != null && result.length() != 0)
 			{
-				System.out.println("rename");
+				String id = lastSelectedPath.getLastPathComponent().toString();
+				SchemaObject so = this.schema.getObjectByName(id);
+				so.setId(result);
+				this.schema.addOrReplaceObject(so);
+				this.schemaPanel.setSelectedPath(lastSelectedPath);
+				this.schemaPanel.updateTree();
 			}
 		}
 	}

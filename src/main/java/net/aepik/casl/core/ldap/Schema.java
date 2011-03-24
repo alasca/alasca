@@ -134,6 +134,30 @@ public class Schema extends Observable
 	}
 
 	/**
+	 * Ajoute un objet au schema même s'il existe.
+	 * @param o Un objet du schema.
+	 * @return True si l'ajout s'est bien passé, false sinon.
+	 */
+	public boolean addOrReplaceObject ( SchemaObject o )
+	{
+		try
+		{
+			if (o == null || o.getId() == null)
+			{
+				return false;
+			}
+			objets.put(o.getId(), o);
+			notifyUpdates();
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	/**
 	 * Ajoute un ensemble d'objets au schema.
 	 * @param v Un ensemble d'objets du schema.
 	 * @return True si l'opération a réussi, false sinon.

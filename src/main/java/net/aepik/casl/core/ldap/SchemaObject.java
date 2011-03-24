@@ -384,6 +384,15 @@ public class SchemaObject
 	}
 
 	/**
+	 * Change the unique identifier.
+	 * @param String The new id
+	 */
+	public void setId ( String id )
+	{
+		this.id = id;
+	}
+
+	/**
 	 * Positionne l'objet parent.
 	 * @param SchemaObject parent L'objet parent.
 	 */
