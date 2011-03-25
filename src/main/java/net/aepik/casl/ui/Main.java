@@ -198,15 +198,15 @@ public class Main
 	public static void main (String[] args)
 	{
 		Main m = null;
-		JFrame f = null;
+		ManagerFrame f = null;
 		try
 		{
 			m = new Main();
 			m.openLoadingFrame();
-			f = m.loadApplication();
+			f = (ManagerFrame) m.loadApplication();
+			System.out.println("CASL "+f.getManager().getProperty("Version"));
 			m.closeLoadingFrame();
 			m.disposeLoadingFrame();
-			System.out.println("Launching...");
 			f.setVisible(true);
 		}
 		catch (Exception e)

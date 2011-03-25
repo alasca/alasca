@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-<comment>CASL v0.2</comment>
-<entry key="FrameTitle">CASL 0.2</entry>
+<comment>CASL 0.3</comment>
+<entry key="FrameTitle">CASL 0.3</entry>
 <entry key="FrameStatus"> </entry>
 <entry key="IconFile">./lib/resources/casl.png</entry>
 <entry key="PluginDir">./lib/plugin</entry>
-<entry key="Version">0.2</entry>
+<entry key="Version">0.3</entry>
 </properties>
