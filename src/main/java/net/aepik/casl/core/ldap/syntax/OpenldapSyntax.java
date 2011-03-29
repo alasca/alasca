@@ -28,6 +28,11 @@ import net.aepik.casl.core.ldap.SchemaFileWriter;
 public class OpenldapSyntax extends RFCSyntax
 {
 
+        /**
+         * Syntax short name.
+         */
+        public static final String SHORTNAME = "OpenLDAP";
+
 	/**
 	 * Attribut definition (and used for type).
 	 */

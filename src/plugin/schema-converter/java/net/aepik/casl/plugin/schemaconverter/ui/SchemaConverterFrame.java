@@ -227,8 +227,7 @@ public class SchemaConverterFrame extends JFrame {
 		} else {
 
 			panelDictionnaires.add( dictionnaryList, BorderLayout.CENTER );
-			syntaxList = new JComboBox( convertisseur.getAvailableSyntaxes(
-					dictionnaryList.getSelectedItem().toString() ) );
+			syntaxList = new JComboBox(Schema.getSyntaxeNames(convertisseur.getAvailableSyntaxes(dictionnaryList.getSelectedItem().toString())));
 		}
 
 		// Panel liste Syntaxes -
@@ -285,7 +284,7 @@ public class SchemaConverterFrame extends JFrame {
 
 			syntaxList.removeAllItems();
 			String dictionnary = dictionnaryList.getSelectedItem().toString();
-			String[] tab = convertisseur.getAvailableSyntaxes( dictionnary );
+			String[] tab = Schema.getSyntaxeNames(convertisseur.getAvailableSyntaxes(dictionnary));
 			for( String s : tab )
 				syntaxList.addItem( s );
 		}

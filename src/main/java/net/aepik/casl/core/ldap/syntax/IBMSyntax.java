@@ -25,6 +25,11 @@ package net.aepik.casl.core.ldap.syntax;
 public class IBMSyntax extends RFCSyntax
 {
 
+        /**
+         * Syntax short name.
+         */
+        public static final String SHORTNAME = "IBM Directory Server";
+
 	/**
 	 * Attribute definition (and used for type).
 	 */

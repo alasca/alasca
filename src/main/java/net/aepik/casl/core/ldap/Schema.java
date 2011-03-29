@@ -21,6 +21,7 @@ package net.aepik.casl.core.ldap;
 
 import net.aepik.casl.core.History;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Arrays;
@@ -488,6 +489,42 @@ public class Schema extends Observable
 	}
 
 	/**
+	 * Return a syntax object by name.
+	 */
+	public static SchemaSyntax getSyntax ( String name )
+	{
+		try
+		{
+			String packageName = getSyntaxPackageName();
+			for (String syntaxe : getSyntaxes())
+			{
+				Class object = Class.forName(packageName+"."+syntaxe);
+				Field field = object.getField("SHORTNAME");
+				if (field != null && name.equals(field.get(null).toString()))
+				{
+					@SuppressWarnings("unchecked")
+					SchemaSyntax o = ((Class<SchemaSyntax>) Class.forName(packageName+"."+syntaxe)).newInstance();
+					return o;
+				}
+			}
+			for (String syntaxe : getSyntaxes())
+			{
+				if (name.equals(syntaxe))
+				{
+					@SuppressWarnings("unchecked")
+					SchemaSyntax o = ((Class<SchemaSyntax>) Class.forName(packageName+"."+syntaxe)).newInstance();
+					return o;
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
 	 * Retourne le nom du paquetage contenant toutes les syntaxes.
 	 * @return String Un nom de paquetage.
 	 */
@@ -536,7 +573,8 @@ public class Schema extends Observable
 						&& tmp.getName().startsWith(path))
 					{
 						int i = tmp.getName().lastIndexOf('/');
-						vectTmp.add(tmp.getName().substring(i+1, tmp.getName().length() - 6));
+						String classname = tmp.getName().substring(i+1, tmp.getName().length() - 6);
+						vectTmp.add(classname);
 					}
 				}
 				jarFile.close();
@@ -587,6 +625,40 @@ public class Schema extends Observable
 			Arrays.sort(result);
 		}
 		return result;
+	}
+
+	/**
+	 * Return syntaxes short name.
+	 */
+	public static String[] getSyntaxeNames ()
+	{
+		return getSyntaxeNames(getSyntaxes());
+	}
+
+	/**
+	 * Return syntaxes short name.
+	 */
+	public static String[] getSyntaxeNames ( String[] names )
+	{
+		String[] syntaxes = names;
+		try
+		{
+			String packageName = getSyntaxPackageName();
+			for (int i = 0; i < syntaxes.length; i++)
+			{
+				Class object = Class.forName(packageName+"."+syntaxes[i]);
+				Field field = object.getField("SHORTNAME");
+				if (field != null)
+				{
+					syntaxes[i] = field.get(null).toString();
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return syntaxes;
 	}
 
 	/**

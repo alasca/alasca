@@ -84,6 +84,11 @@ public class RFCSyntax extends SchemaSyntax
 {
 
 	/**
+	 * Syntax short name.
+	 */
+	public static final String SHORTNAME = "RFC 2252";
+
+	/**
 	 * Attribute definition (and used for type).
 	 */
 	private static final String RFC_ATTRIBUTE = "AttributeTypeDescription =";

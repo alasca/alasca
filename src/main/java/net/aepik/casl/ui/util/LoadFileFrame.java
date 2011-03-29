@@ -138,9 +138,7 @@ private static final long serialVersionUID = 0;
 
 					// On créer l'objet de la syntaxe dynamiquement.
 					String syntaxName = (String) syntaxes.getSelectedItem();
-					@SuppressWarnings("unchecked")
-					SchemaSyntax syntax = ((Class<SchemaSyntax>) Class.forName(
-							Schema.getSyntaxPackageName() + "." + syntaxName )).newInstance();
+					SchemaSyntax syntax = Schema.getSyntax(syntaxName);
 
 					// On charge.
 					SchemaFile schemaFile = Schema.createAndLoad(syntax, filename.getText(), true);
@@ -250,7 +248,7 @@ private static final long serialVersionUID = 0;
 
 		// On injecte le nom des classes de syntaxes possibles
 		// dynamiquement.
-		String[] syntaxesName = Schema.getSyntaxes();
+		String[] syntaxesName = Schema.getSyntaxeNames();
 		for( int i=0; syntaxesName!=null && i<syntaxesName.length; i++ ) {
 			syntaxes.addItem( syntaxesName[i] );
 		}

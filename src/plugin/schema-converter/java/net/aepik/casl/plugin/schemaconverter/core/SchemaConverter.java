@@ -85,8 +85,7 @@ public class SchemaConverter {
 		// On fait confiance à l'utilisateur.
 
 		@SuppressWarnings("unchecked")
-		SchemaSyntax syntax = ((Class<SchemaSyntax>) Class.forName(
-				schema.getSyntaxPackageName() + "." + syntaxName )).newInstance();
+		SchemaSyntax syntax = Schema.getSyntax(syntaxName);
 
 		// Impossible de traduire si le traducteur n'est pas chargé.
 		// Sinon, l'opération (assez lourde) consiste à récupérer les objets

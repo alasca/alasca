@@ -25,6 +25,11 @@ package net.aepik.casl.core.ldap.syntax;
 public class SUNDSSyntax extends RFCSyntax
 {
 
+        /**
+         * Syntax short name.
+         */
+        public static final String SHORTNAME = "SUN Directory Server";
+
 	/**
 	 * Attribute definition (and used for type).
 	 */

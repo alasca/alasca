@@ -31,6 +31,11 @@ import net.aepik.casl.core.ldap.parser.ADWriter;
 
 public class ADSyntax extends RFCSyntax {
 
+        /**
+         * Syntax short name.
+         */
+        public static final String SHORTNAME = "Active Directory";
+
 ////////////////////////////////
 // Constantes
 ////////////////////////////////
