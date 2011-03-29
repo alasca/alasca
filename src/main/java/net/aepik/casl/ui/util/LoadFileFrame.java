@@ -22,6 +22,7 @@ import net.aepik.casl.core.ldap.Schema;
 import net.aepik.casl.core.ldap.SchemaFile;
 import net.aepik.casl.core.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaSyntax;
+import net.aepik.casl.core.util.Pref;
 import net.aepik.casl.ui.util.DescriptiveInternalFrame;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -34,6 +35,7 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.lang.SuppressWarnings;
+import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -161,7 +163,20 @@ private static final long serialVersionUID = 0;
 						JOptionPane.showMessageDialog( this, "Le fichier est déjà ouvert.", "Erreur", JOptionPane.ERROR_MESSAGE );
 
 					// Sinon, ok.
-					} else {
+					}
+					else
+					{
+						Vector<String> files = new Vector<String>();
+						for (String value : Pref.getArray("latestOpenFiles"))
+						{
+							files.add(value);
+						}
+						files.add(filename.getText());
+						if (files.size() > 5)
+						{
+							files.removeElementAt(0);
+						}
+						Pref.set("latestOpenFiles", (String[]) files.toArray(new String[0]));
 						windowClosing( null );
 					}
 
