@@ -300,7 +300,9 @@ public class ManagerFrame extends JFrame
 			{
 				File file = new File(files[i]);
 				int index = files.length - i;
-				menu.add(new JMenuItem(index+": "+file.getName()));
+				JMenuItem im = new JMenuItem(index+": "+file.getName());
+				im.addActionListener(this.listener);
+				menu.add(im);
 			}
 			menu.setEnabled(true);
 		}

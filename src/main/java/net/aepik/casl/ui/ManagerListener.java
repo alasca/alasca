@@ -21,14 +21,17 @@ package net.aepik.casl.ui;
 
 import net.aepik.casl.core.Manager;
 import net.aepik.casl.core.util.Config;
+import net.aepik.casl.core.util.Pref;
 import net.aepik.casl.ui.ldap.SchemaManagerListener;
 import net.aepik.casl.ui.ldap.SchemaManagerPanel;
+import net.aepik.casl.ui.util.LoadFileFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.net.URL;
 import javax.swing.JMenuItem;
 
@@ -78,6 +81,25 @@ public class ManagerListener implements ActionListener, MouseListener, WindowLis
 		{
 			this.mouseDescription(null);
 			new CreditsFrameLauncher(managerFrame, managerFrame.getManager());
+		}
+		if (o instanceof JMenuItem)
+		{
+			JMenuItem mi = (JMenuItem) o;
+			String[] files = Pref.getArray(Pref.PREF_LASTOPENFILES);
+			String[] syntaxes = Pref.getArray(Pref.PREF_LASTOPENSYNTAXES);
+			for (int i = 0; i < files.length; i++)
+			{
+				String file = files[i];
+				String syntaxe = syntaxes[i];
+				if (mi.getText().endsWith((new File(file)).getName()))
+				{
+					LoadFileFrame sf = new LoadFileFrame(
+						this.managerFrame,
+						this.managerFrame.getManager().getSchemaManager()
+					);
+					sf.loadFile(file, syntaxe);
+				}
+			}
 		}
 	}
 

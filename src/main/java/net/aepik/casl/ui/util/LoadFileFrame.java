@@ -145,7 +145,7 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 		}
 		if (o == boutonOk && filename.getText().length() != 0)
 		{
-			if (!this.loadFile(filename.getText()))
+			if (!this.loadFile(filename.getText(), (String) this.syntaxes.getSelectedItem()))
 			{
 				JOptionPane.showMessageDialog(
 					this,
@@ -273,7 +273,7 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 	/**
 	 * Load a file.
 	 */
-	public boolean loadFile ( String filename )
+	public boolean loadFile ( String filename, String syntaxe )
 	{
 		if (!(new File(filename)).exists())
 		{
@@ -282,8 +282,7 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 		}
 		try
 		{
-			String syntaxName = (String) syntaxes.getSelectedItem();
-			SchemaSyntax syntax = Schema.getSyntax(syntaxName);
+			SchemaSyntax syntax = Schema.getSyntax(syntaxe);
 			SchemaFile schemaFile = Schema.createAndLoad(syntax, filename, true);
 			Schema schema = schemaFile.getSchema();
 			if (schema == null)
@@ -304,17 +303,22 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 				return false;
 			}
 			Vector<String> files = Pref.getVector(Pref.PREF_LASTOPENFILES);
+			Vector<String> syntaxes = Pref.getVector(Pref.PREF_LASTOPENSYNTAXES);
 			int index = files.indexOf(filename);
 			if (index >= 0)
 			{
 				files.removeElementAt(index);
+				syntaxes.removeElementAt(index);
 			}
 			files.add(filename);
+			syntaxes.add(syntaxe);
 			if (files.size() > 10)
 			{
 				files.removeElementAt(0);
+				syntaxes.removeElementAt(0);
 			}
 			Pref.set(Pref.PREF_LASTOPENFILES, files.toArray(new String[0]));
+			Pref.set(Pref.PREF_LASTOPENSYNTAXES, syntaxes.toArray(new String[0]));
 			manager.addSchema((new File(filename)).getName(), schema);
 		}
 		catch (Exception e)

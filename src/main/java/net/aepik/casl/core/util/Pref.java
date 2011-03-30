@@ -27,7 +27,9 @@ public class Pref
 
 	public final static String PREF_VERSION = "version";
 
-	public final static String PREF_LASTOPENFILES = "latestOpenFiles";
+	public final static String PREF_LASTOPENFILES = "recentFiles";
+
+	public final static String PREF_LASTOPENSYNTAXES = "recentSyntaxes";
 
 	private static Preferences preferences = null;
 
