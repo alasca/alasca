@@ -38,7 +38,6 @@ public class Pref
 
 	public static String get ( String key )
 	{
-		System.out.println(Pref.preferences.get(key, null));
 		return Pref.preferences.get(key, null);
 	}
 
