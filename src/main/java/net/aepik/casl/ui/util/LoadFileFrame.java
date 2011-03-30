@@ -154,7 +154,10 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 					JOptionPane.ERROR_MESSAGE
 				);
 			}
-			windowClosing(null);
+			else
+			{
+				windowClosing(null);
+			}
 		}
 		if (o == boutonAnnuler)
 		{
@@ -295,21 +298,24 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 				this.errorMessage = "Le format du fichier est incorrect." + message;
 				return false;
 			}
-			if (!manager.addSchema((new File(filename)).getName(), schema))
+			if (manager.isSchemaIdExists((new File(filename)).getName()))
 			{
 				this.errorMessage = "Le fichier est déjà ouvert.";
 				return false;
 			}
 			Vector<String> files = Pref.getVector(Pref.PREF_LASTOPENFILES);
-			if (!files.contains(filename))
+			int index = files.indexOf(filename);
+			if (index >= 0)
 			{
-				files.add(filename);
-				if (files.size() > 10)
-				{
-					files.removeElementAt(0);
-				}
-				Pref.set(Pref.PREF_LASTOPENFILES, files.toArray(new String[0]));
+				files.removeElementAt(index);
 			}
+			files.add(filename);
+			if (files.size() > 10)
+			{
+				files.removeElementAt(0);
+			}
+			Pref.set(Pref.PREF_LASTOPENFILES, files.toArray(new String[0]));
+			manager.addSchema((new File(filename)).getName(), schema);
 		}
 		catch (Exception e)
 		{
