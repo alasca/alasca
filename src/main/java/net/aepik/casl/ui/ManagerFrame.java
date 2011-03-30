@@ -294,12 +294,20 @@ public class ManagerFrame extends JFrame
 		JMenu menu = this.getExistingJMenu(path);
 		menu.removeAll();
 		String[] files = Pref.getArray(Pref.PREF_LASTOPENFILES);
-		for (int i = files.length-1; i >= 0; i--) 
-		{       
-			File file = new File(files[i]);
-			int index = files.length - i;
-			menu.add(new JMenuItem(index+": "+file.getName()));
-		}       
+		if (files.length > 0)
+		{
+			for (int i = files.length-1; i >= 0; i--)
+			{
+				File file = new File(files[i]);
+				int index = files.length - i;
+				menu.add(new JMenuItem(index+": "+file.getName()));
+			}
+			menu.setEnabled(true);
+		}
+		else
+		{
+			menu.setEnabled(false);
+		}
 	}
 
 ////////////////////////////////
