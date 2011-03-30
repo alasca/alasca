@@ -84,15 +84,13 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 			JMenu menu_fichier = managerFrame.getExistingJMenu("Fichier");
 			if (menu_fichier != null)
 			{
+				JMenu menu = new JMenu("Derniers ouverts");
 				menu_fichier.add(managerPanel.item_closeAllFiles, 0);
 				menu_fichier.add(managerPanel.item_closeFile, 0);
 				menu_fichier.add(new JSeparator(), 0);
 				menu_fichier.add(managerPanel.item_saveFile, 0);
+				menu_fichier.add(menu, 0);
 				menu_fichier.add(managerPanel.item_openFile, 0);
-				for (JMenuItem item : managerPanel.item_lastOpenFiles)
-				{
-					menu_fichier.add(item, 0);
-				}
 			}
 			JMenu menu_edition = managerFrame.getExistingJMenu("Edition");
 			if (menu_edition != null)
@@ -355,6 +353,7 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 		{
 			managerFrame.setTitle(manager.getCurrentSchemaId());
 			managerFrame.updateButtons();
+			managerFrame.updateRecentFilesMenu("Fichier/Derniers ouverts");
 		}
 	}
 

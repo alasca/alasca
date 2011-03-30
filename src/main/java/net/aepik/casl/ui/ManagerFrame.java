@@ -21,6 +21,7 @@ package net.aepik.casl.ui;
 
 import net.aepik.casl.core.Manager;
 import net.aepik.casl.core.Plugin;
+import net.aepik.casl.core.util.Pref;
 import net.aepik.casl.ui.ldap.SchemaManagerListener;
 import net.aepik.casl.ui.ldap.SchemaManagerPanel;
 import java.awt.BorderLayout;
@@ -28,7 +29,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.lang.String;
+import java.io.File;
 import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.MenuElement;
@@ -44,76 +45,95 @@ import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.SingleSelectionModel;
 
-public class ManagerFrame extends JFrame {
+public class ManagerFrame extends JFrame
+{
 
 	private static final long serialVersionUID = 0;
 
-////////////////////////////////
-// Constantes
-////////////////////////////////
+	/**
+	 * L'item de menu Liste des plugins
+	 */
+	public JMenuItem item_plugins = new JMenuItem("Liste des extentions");
 
-	/** L'item de menu Liste des plugins **/
-	public JMenuItem item_plugins = new JMenuItem( "Liste des extentions" );
-	/** L'item de menu quitter **/
-	public JMenuItem item_quit = new JMenuItem( "Quitter" );
-	/** L'item de menu A Propos **/
-	public JMenuItem item_authors = new JMenuItem( "A Propos..." );
+	/**
+	 * L'item de menu quitter
+	 */
+	public JMenuItem item_quit = new JMenuItem("Quitter");
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * L'item de menu A Propos
+	 */
+	public JMenuItem item_authors = new JMenuItem("A Propos...");
 
-	/** Le manager général **/
-	private Manager manager ;
-	/** le listener général **/
-	private ManagerListener listener ;
-	/** Le gestionnaire graphique du manager de schémas **/
-	private SchemaManagerPanel schemaManagerPanel ;
+	/**
+	 * Le manager général
+	 */
+	private Manager manager;
 
-	/** La barre de menu **/
-	private JMenuBar menu ;
-	/** Le titre original de la fenêtre **/
-	private String titre ;
-	/** Le barre de status en bas de la fenêtre **/
-	private JLabel statusDescription ;
-	/** Le texte par défaut dans la barre de status **/
-	private String statusDefaultText ;
+	/**
+	 * Le listener général
+	 */
+	private ManagerListener listener;
 
-	private Vector<JMenuItem> pluginButtons ;
+	/**
+	 * Le gestionnaire graphique du manager de schémas
+	 */
+	private SchemaManagerPanel schemaManagerPanel;
 
-	/** L'ensemble des boutons concernant les plugins **/
-	//private JMenuItem[] pluginButtons ;
+	/**
+	 * La barre de menu
+	 */
+	private JMenuBar menu;
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	/**
+	 * Le titre original de la fenêtre
+	 */
+	private String titre;
 
-	public ManagerFrame( Manager m, String defaultTitre, String defaultStatus ) {
+	/**
+	 * Le barre de status en bas de la fenêtre
+	 */
+	private JLabel statusDescription;
 
-		super( defaultTitre );
-		setSize( 750, 550 );
-		setLocationRelativeTo( null );
+	/**
+	 * Le texte par défaut dans la barre de status
+	 */
+	private String statusDefaultText;
 
-		menu = new JMenuBar();
-		titre = defaultTitre ;
-		statusDescription = new JLabel( defaultStatus );
-		statusDefaultText = defaultStatus ;
+	/**
+	 * Plugins buttons.
+	 */
+	private Vector<JMenuItem> pluginButtons;
 
-		manager = m;
-		listener = null ;
-		schemaManagerPanel = new SchemaManagerPanel( manager.getSchemaManager() );
-
-		pluginButtons = new Vector<JMenuItem>();
+	/**
+	 * Build a new ManagerFrame object.
+	 */
+	public ManagerFrame ( Manager m, String defaultTitre, String defaultStatus )
+	{
+		super(defaultTitre);
+		this.setSize(750, 550);
+		this.setLocationRelativeTo(null);
+		this.menu = new JMenuBar();
+		this.titre = defaultTitre;
+		this.statusDescription = new JLabel(defaultStatus);
+		this.statusDefaultText = defaultStatus;
+		this.manager = m;
+		this.listener = null;
+		this.schemaManagerPanel = new SchemaManagerPanel(this.manager.getSchemaManager());
+		this.pluginButtons = new Vector<JMenuItem>();
 
 		initFrame();
 
-		SchemaManagerListener l = new SchemaManagerListener(
-				manager.getSchemaManager(),
-				schemaManagerPanel,
-				this );
-		schemaManagerPanel.addSchemaManagerListener( l );
+		this.schemaManagerPanel.addSchemaManagerListener(
+			new SchemaManagerListener(
+				this.manager.getSchemaManager(),
+				this.schemaManagerPanel,
+				this
+			)
+		);
 
 		updateButtons();
+		updateRecentFilesMenu("Fichier/Derniers ouverts");
 	}
 
 ////////////////////////////////
@@ -248,18 +268,38 @@ public class ManagerFrame extends JFrame {
 	}
 
 	/**
-	 * Mets à jours le status des boutons.
-	**/
-	public void updateButtons() {
-
+	 * Update button status.
+	 */
+	public void updateButtons ()
+	{
 		Plugin[] plugins = manager.getPluginManager().getPlugins();
-
-		for( int i=0; plugins!=null && i<plugins.length; i++ ) {
-			if( plugins[i].canRun() )
-				pluginButtons.elementAt(i).setEnabled( true );
+		for (int i = 0; plugins != null && i < plugins.length; i++)
+		{
+			if (plugins[i].canRun())
+			{
+				pluginButtons.elementAt(i).setEnabled(true);
+			}
 			else
-				pluginButtons.elementAt(i).setEnabled( false );
+			{
+				pluginButtons.elementAt(i).setEnabled(false);
+			}
 		}
+	}
+
+	/**
+	 * Update recent files menu.
+	 */
+	public void updateRecentFilesMenu ( String path )
+	{
+		JMenu menu = this.getExistingJMenu(path);
+		menu.removeAll();
+		String[] files = Pref.getArray(Pref.PREF_LASTOPENFILES);
+		for (int i = files.length-1; i >= 0; i--) 
+		{       
+			File file = new File(files[i]);
+			int index = files.length - i;
+			menu.add(new JMenuItem(index+": "+file.getName()));
+		}       
 	}
 
 ////////////////////////////////
@@ -284,67 +324,65 @@ public class ManagerFrame extends JFrame {
 
 	/**
 	 * Initialise la frame.
-	**/
-	private void initFrame() {
+	 */
+	private void initFrame ()
+	{
 
 		// - La barre de menu -
 
-		JMenu menu_fichiers = new JMenu( "Fichier" );
+		JMenu menu_fichiers = new JMenu("Fichier");
 		menu_fichiers.addSeparator();
-		menu_fichiers.add( item_quit );
-		JMenu menu_edition = new JMenu( "Edition" );
-		JMenu menu_plugins = new JMenu( "Outils" );
-		JMenu menu_help = new JMenu( "Aide" );
-		menu_help.add( item_authors );
-
-		menu.add( menu_fichiers );
-		menu.add( menu_edition );
-		menu.add( menu_plugins );
-		menu.add( menu_help );
+		menu_fichiers.add(item_quit);
+		JMenu menu_edition = new JMenu("Edition");
+		JMenu menu_plugins = new JMenu("Outils");
+		JMenu menu_help = new JMenu("Aide");
+		menu_help.add(item_authors);
+		menu.add(menu_fichiers);
+		menu.add(menu_edition);
+		menu.add(menu_plugins);
+		menu.add(menu_help);
 
 		// - Plugins & menu -
 
 		Plugin[] plugins = manager.getPluginManager().getPlugins();
-
-		for( int i=0; plugins!=null && i<plugins.length; i++ ) {
-
+		for (int i = 0; plugins != null && i < plugins.length; i++)
+		{
 			String path = plugins[i].getCategory();
-			if( path.length()!=0 )
-				path += "/" ;
+			if (path.length() != 0)
+			{
+				path += "/";
+			}
 			path += plugins[i].getName();
-
-			insertPluginIn( menu_plugins, plugins[i], path );
-			plugins[i].setRelativeTo( this );
+			insertPluginIn(menu_plugins, plugins[i], path);
+			plugins[i].setRelativeTo(this);
 		}
-
-		if( menu_plugins.getItemCount()==0 )
-			menu.remove( menu_plugins );
-
-		menu_plugins.add( new JSeparator(), 0 );
-		menu_plugins.add( item_plugins, 0 );
+		if (menu_plugins.getItemCount() == 0)
+		{
+			menu.remove(menu_plugins);
+		}
+		menu_plugins.add(new JSeparator(), 0);
+		menu_plugins.add(item_plugins, 0);
 
 		// - Description -
 
-		statusDescription.setBorder( BorderFactory.createEmptyBorder( 2, 4, 2, 0 ) );
+		statusDescription.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 0));
 
 		// - Organisation Générale -
 
-		JPanel mainPanel = new JPanel( new BorderLayout() );
-		mainPanel.add( menu, BorderLayout.NORTH );
-		mainPanel.add( schemaManagerPanel, BorderLayout.CENTER );
-		mainPanel.add( statusDescription, BorderLayout.SOUTH );
-		getContentPane().add( mainPanel );
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add(menu, BorderLayout.NORTH);
+		mainPanel.add(schemaManagerPanel, BorderLayout.CENTER);
+		mainPanel.add(statusDescription, BorderLayout.SOUTH);
+		getContentPane().add(mainPanel);
 
 		// - Raccourcis clavier -
 
-		menu_fichiers.setMnemonic( KeyEvent.VK_F );
-		menu_edition.setMnemonic( KeyEvent.VK_E );
-		menu_plugins.setMnemonic( KeyEvent.VK_O );
-		menu_help.setMnemonic( KeyEvent.VK_A );
-
-		item_authors.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_F12, 0 ) );
-		item_plugins.setAccelerator( KeyStroke.getKeyStroke(
-				KeyEvent.VK_P, KeyEvent.CTRL_MASK ) );
+		menu_fichiers.setMnemonic(KeyEvent.VK_F);
+		menu_edition.setMnemonic(KeyEvent.VK_E);
+		menu_plugins.setMnemonic(KeyEvent.VK_O);
+		menu_help.setMnemonic(KeyEvent.VK_A);
+		item_authors.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
+		item_plugins.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_MASK));
 	}
 
 	private void insertPluginIn( JMenu menu, Plugin plugin, String path ) {
