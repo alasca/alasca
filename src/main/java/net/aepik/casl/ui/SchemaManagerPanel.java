@@ -20,6 +20,7 @@
 package net.aepik.casl.ui.ldap;
 
 import net.aepik.casl.core.ldap.Schema;
+import net.aepik.casl.core.util.Pref;
 import net.aepik.casl.core.SchemaManager;
 import net.aepik.casl.ui.util.SimpleTabbedPaneUI;
 import java.awt.BorderLayout;
@@ -104,6 +105,11 @@ public class SchemaManagerPanel extends JPanel
 	 * L'item de menu Enregistrer pour le popup
 	 */
 	public JMenuItem item_saveFile2 = new JMenuItem( "Enregistrer..." );
+
+	/**
+	 * Latest open files menu item.
+	 */
+	public JMenuItem[] item_lastOpenFiles = new JMenuItem[5];
 
 	/**
 	 * Le manager de schemas
@@ -361,6 +367,15 @@ public class SchemaManagerPanel extends JPanel
 		JPanel ongletsPanel = new JPanel(new BorderLayout());
 		ongletsPanel.add(onglets, BorderLayout.CENTER);
 		ongletsPanel.setBorder((new JMenuBar()).getBorder());
+
+		//
+		// Last open files.
+		//
+		String[] files = Pref.getArray(Pref.PREF_LASTOPENFILES);
+		for (int i = 0; i < files.length; i++)
+		{
+			this.item_lastOpenFiles[i] = new JMenuItem(files[i]);
+		}
 
 		//
 		// Organisation Générale

@@ -19,10 +19,10 @@
  
 package net.aepik.casl.ui.ldap;
 
+import net.aepik.casl.core.SchemaManager;
 import net.aepik.casl.core.ldap.Schema;
 import net.aepik.casl.core.ldap.SchemaFile;
 import net.aepik.casl.core.ldap.SchemaFileWriter;
-import net.aepik.casl.core.SchemaManager;
 import net.aepik.casl.core.ldap.SchemaObject;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.ui.util.LoadFileFrame;
@@ -89,6 +89,10 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 				menu_fichier.add(new JSeparator(), 0);
 				menu_fichier.add(managerPanel.item_saveFile, 0);
 				menu_fichier.add(managerPanel.item_openFile, 0);
+				for (JMenuItem item : managerPanel.item_lastOpenFiles)
+				{
+					menu_fichier.add(item, 0);
+				}
 			}
 			JMenu menu_edition = managerFrame.getExistingJMenu("Edition");
 			if (menu_edition != null)

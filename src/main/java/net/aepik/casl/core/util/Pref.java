@@ -20,11 +20,14 @@
 package net.aepik.casl.core.util;
 
 import java.util.prefs.Preferences;
+import java.util.Vector;
 
 public class Pref
 {
 
 	public final static String PREF_VERSION = "version";
+
+	public final static String PREF_LASTOPENFILES = "latestOpenFiles";
 
 	private static Preferences preferences = null;
 
@@ -47,6 +50,16 @@ public class Pref
 			return new String[0];
 		}
 		return str.split(";");
+	}
+
+	public static Vector<String> getVector ( String key )
+	{
+		Vector<String> files = new Vector<String>();
+		for (String value : Pref.getArray(key))
+		{
+			files.add(value);
+		}
+		return files;
 	}
 
 	public static void loadPreferences ()

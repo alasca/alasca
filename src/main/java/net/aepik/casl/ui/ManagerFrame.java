@@ -1,7 +1,5 @@
 /*
- * ManagerFrame.java		0.1		20/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +23,6 @@ import net.aepik.casl.core.Manager;
 import net.aepik.casl.core.Plugin;
 import net.aepik.casl.ui.ldap.SchemaManagerListener;
 import net.aepik.casl.ui.ldap.SchemaManagerPanel;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;

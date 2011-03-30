@@ -166,17 +166,16 @@ private static final long serialVersionUID = 0;
 					}
 					else
 					{
-						Vector<String> files = new Vector<String>();
-						for (String value : Pref.getArray("latestOpenFiles"))
+						Vector<String> files = Pref.getVector(Pref.PREF_LASTOPENFILES);
+						if (!files.contains(filename.getText()))
 						{
-							files.add(value);
+							files.add(filename.getText());
+							if (files.size() > 5)
+							{
+								files.removeElementAt(0);
+							}
+							Pref.set(Pref.PREF_LASTOPENFILES, files.toArray(new String[0]));
 						}
-						files.add(filename.getText());
-						if (files.size() > 5)
-						{
-							files.removeElementAt(0);
-						}
-						Pref.set("latestOpenFiles", (String[]) files.toArray(new String[0]));
 						windowClosing( null );
 					}
 
