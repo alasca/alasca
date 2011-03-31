@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package net.aepik.casl.ui;
+package net.aepik.casl;
 
 import net.aepik.casl.core.Manager;
 import net.aepik.casl.core.util.Config;
@@ -24,23 +24,13 @@ import net.aepik.casl.ui.CreditsFrame;
 import net.aepik.casl.ui.ManagerFrame;
 import net.aepik.casl.ui.ManagerListener;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.lang.Runnable;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JTextArea;
-import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -63,11 +53,8 @@ public class Launcher
 
 	private JProgressBar loadingStatus;
 
-	public Launcher() throws Exception
+	public Launcher () throws Exception
 	{
-		this.configFile = Config.getResourcesPath() + "/config.xml";
-		this.icone = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() + "/casl.png");
-
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -75,26 +62,21 @@ public class Launcher
 		catch (Exception e)
 		{
 			e.printStackTrace();
-		};
-
-		loadingStatus = new JProgressBar(0, 3);
-		loadingStatus.setValue(0);
-		loadingStatus.setStringPainted(true);
-		loadingStatus.setOpaque(false);
-		loadingStatus.setBorder(null);
-		loadingValue = 0;
-
+		}
 		JPanel p1 = new JPanel(new BorderLayout());
 		p1.add(loadingStatus);
 		p1.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-
-		Manager tmp = new Manager(configFile);
-		creditsFrame = new CreditsFrame(null, tmp, p1, false);
-		creditsFrame.setSize(300, 155);
-		creditsFrame.setUndecorated(true);
-
-		JPanel p2 = (JPanel) creditsFrame.getContentPane().getComponent(0);
-		p2.setBorder( BorderFactory.createLineBorder(Color.darkGray, 1));
+                this.configFile = Config.getResourcesPath() + "/config.xml";
+                this.icone = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() + "/casl.png");
+                this.loadingStatus = new JProgressBar(0, 3);
+                this.loadingStatus.setValue(0);
+                this.loadingStatus.setStringPainted(true);
+                this.loadingStatus.setOpaque(false);
+                this.loadingStatus.setBorder(null);
+                this.loadingValue = 0;
+		this.creditsFrame = new CreditsFrame(null, new Manager(configFile), p1, false);
+		this.creditsFrame.setSize(300, 155);
+		this.creditsFrame.setUndecorated(true);
 	}
 
 	public JFrame loadApplication() throws Exception
@@ -108,7 +90,7 @@ public class Launcher
 			catch (Exception e)
 			{
 				e.printStackTrace();
-			};
+			}
 			manager = new Manager(this.configFile);
 			updateLoadingStatus();
 		}
@@ -121,7 +103,7 @@ public class Launcher
 			catch (Exception e)
 			{
 				e.printStackTrace();
-			};
+			}
 			manager.loadPluginManager();
 			updateLoadingStatus();
 		}
@@ -134,7 +116,7 @@ public class Launcher
 			catch (Exception e)
 			{
 				e.printStackTrace();
-			};
+			}
 			managerFrame = new ManagerFrame(
 				manager,
 				manager.getProperty("FrameTitle"),
@@ -156,28 +138,28 @@ public class Launcher
 			catch (Exception e)
 			{
 				e.printStackTrace();
-			};
+			}
 		}
 
 		return managerFrame;
 	}
 
-	public void closeLoadingFrame()
+	public void closeLoadingFrame ()
 	{
 		creditsFrame.setVisible(false);
 	}
 
-	public void disposeLoadingFrame()
+	public void disposeLoadingFrame ()
 	{
 		creditsFrame.dispose();
 	}
 
-	private void openLoadingFrame()
+	private void openLoadingFrame ()
 	{
 		creditsFrame.setVisible(true);
 	}
 
-	public void updateLoadingStatus()
+	public void updateLoadingStatus ()
 	{
 		if (SwingUtilities.isEventDispatchThread())
 		{
@@ -196,7 +178,7 @@ public class Launcher
 		}
 	}
 
-	public static void main (String[] args)
+	public static void main ( String[] args )
 	{
 		Launcher m = null;
 		ManagerFrame f = null;

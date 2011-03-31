@@ -1,7 +1,5 @@
 /*
- * CreditsFrameLauncher.java		0.2		10/07/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,31 +27,33 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-public class CreditsFrameLauncher extends JDialog implements ActionListener {
+public class CreditsFrameLauncher extends JDialog implements ActionListener
+{
 
 	private static final long serialVersionUID = 0;
 
 	private JButton closeButton;
-	private CreditsFrame creditsFrame ;
 
-	public CreditsFrameLauncher( ManagerFrame f, Manager m ) {
+	private CreditsFrame creditsFrame;
 
-		closeButton = new JButton( "Fermer" );
-		closeButton.addActionListener( this );
-
-		JPanel p = new JPanel( new FlowLayout( FlowLayout.RIGHT ) );
-		p.add( closeButton );
-
-		creditsFrame = new CreditsFrame( f, m, p, true );
-		creditsFrame.setModal( true );
-		creditsFrame.setVisible( true );
+	public CreditsFrameLauncher ( ManagerFrame f, Manager m )
+	{
+		this.closeButton = new JButton("Fermer");
+		this.closeButton.addActionListener(this);
+		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		p.add(closeButton);
+		this.creditsFrame = new CreditsFrame(f, m, p, true);
+		this.creditsFrame.setModal(true);
+		this.creditsFrame.setVisible(true);
 	}
 
-	public void actionPerformed( ActionEvent e ) {
-
+	public void actionPerformed ( ActionEvent e )
+	{
 		Object o = e.getSource();
-
-		if( o==closeButton )
-			creditsFrame.dispose();
+		if (o == this.closeButton)
+		{
+			this.creditsFrame.dispose();
+		}
 	}
+
 }

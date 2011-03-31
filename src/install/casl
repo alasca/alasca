@@ -38,8 +38,8 @@ esac
 CASL_JAR="`find ${CASL_LIB_PATH} -name *.jar -print | perl -p0e 's/\n/:/g;s/:$//g'`"
 
 if [ "${CASL_DEBUG_ON}" == "1" ]; then
-  java -cp ${CASL_JAR} net.aepik.casl.ui.Launcher $*
+  java -cp ${CASL_JAR} net.aepik.casl.Launcher $*
 else
-  java -cp ${CASL_JAR} net.aepik.casl.ui.Launcher $* > /dev/null 2>&1
+  java -cp ${CASL_JAR} net.aepik.casl.Launcher $* > /dev/null 2>&1
 fi
 

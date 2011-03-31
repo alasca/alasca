@@ -24,7 +24,6 @@ import net.aepik.casl.core.util.Config;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -142,9 +141,10 @@ public class CreditsFrame extends JDialog {
 		mainPanel.add( footerPanel, BorderLayout.SOUTH );
 		mainPanel.setBackground( Color.white );
 
-		if( licence )
-			mainPanel.add( licenceScroller, BorderLayout.CENTER );
-
-		add( mainPanel );
+		if (licence)
+		{
+			mainPanel.add(licenceScroller, BorderLayout.CENTER);
+		}
+		add(mainPanel);
 	}
 }
