@@ -44,7 +44,7 @@ import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-public class Main
+public class Launcher
 {
 
 	private CreditsFrame creditsFrame;
@@ -63,7 +63,7 @@ public class Main
 
 	private JProgressBar loadingStatus;
 
-	public Main() throws Exception
+	public Launcher() throws Exception
 	{
 		this.configFile = Config.getResourcesPath() + "/config.xml";
 		this.icone = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() + "/casl.png");
@@ -198,11 +198,11 @@ public class Main
 
 	public static void main (String[] args)
 	{
-		Main m = null;
+		Launcher m = null;
 		ManagerFrame f = null;
 		try
 		{
-			m = new Main();
+			m = new Launcher();
 			m.openLoadingFrame();
 			f = (ManagerFrame) m.loadApplication();
 			System.out.println("CASL "+f.getManager().getProperty("Version"));

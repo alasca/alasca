@@ -85,7 +85,7 @@
 	<target name="makejar" depends="clean,compile">
 		<jar destfile="${CASL_TARGETDIR}/${CASL_NAME}-${CASL_VERSION}.jar">
 			<manifest>
-				<attribute name="Main-Class" value="net.aepik.casl.ui.Main" />
+				<attribute name="Main-Class" value="net.aepik.casl.Launcher" />
 				<attribute name="Class-Path" value="${manifest.classpath}" />
 			</manifest>
 			<fileset dir="${CASL_BUILDDIR}/main">
