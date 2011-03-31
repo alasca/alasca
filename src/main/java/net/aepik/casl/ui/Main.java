@@ -147,6 +147,7 @@ public class Main
 		}
 		synchronized(loadingStatus)
 		{
+			manager.getSchemaManager().notifyUpdates();
 			updateLoadingStatus();
 			try
 			{
