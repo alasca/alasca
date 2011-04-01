@@ -60,15 +60,30 @@ public class SchemaFile
 	/**
 	 * Construit un objet SchemaFile.
 	 * @param filename Le nom du fichier schema.
+	 * @param schema Le schema
+	 */
+	public SchemaFile (String filename, Schema schema)
+	{
+		this.error    = false;
+		this.schema   = schema;
+		this.filename = filename;
+		this.reader   = schema.getSyntax().createSchemaReader();
+		this.writer   = schema.getSyntax().createSchemaWriter();
+	}
+
+	/**
+	 * Construit un objet SchemaFile.
+	 * @param filename Le nom du fichier schema.
 	 * @param reader L'interface d'entrée.
+	 * @param writer L'interface de sortie.
 	 */
 	public SchemaFile (String filename, SchemaFileReader reader, SchemaFileWriter writer)
 	{
 		this.error    = false;
-		this.schema   = null ;
-		this.filename = filename ;
-		this.reader   = reader ;
-		this.writer   = writer ;
+		this.schema   = null;
+		this.filename = filename;
+		this.reader   = reader;
+		this.writer   = writer;
 	}
 
 	/**
