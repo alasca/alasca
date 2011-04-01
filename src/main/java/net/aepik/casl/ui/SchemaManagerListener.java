@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006-2010 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,26 +20,19 @@
 package net.aepik.casl.ui.ldap;
 
 import net.aepik.casl.core.SchemaManager;
-import net.aepik.casl.core.ldap.Schema;
 import net.aepik.casl.core.ldap.SchemaFile;
-import net.aepik.casl.core.ldap.SchemaFileWriter;
 import net.aepik.casl.core.ldap.SchemaObject;
-import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.ui.util.LoadFileFrame;
 import net.aepik.casl.ui.ManagerFrame;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JOptionPane;
 import javax.swing.event.ChangeEvent;
@@ -49,7 +42,7 @@ import javax.swing.event.ChangeListener;
  * Cette classe écoute tous les événements qui interviennent sur
  * le modèle et sur la vue. C'est lui qui gère l'intéraction entre
  * la vue du manager des schémas et le manager lui-même.
-**/
+ */
 public class SchemaManagerListener implements ActionListener, ChangeListener, MouseListener, Observer
 {
 
@@ -110,195 +103,85 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 	public void actionPerformed (ActionEvent e)
 	{
 		Object o = e.getSource();
-
-		// On ouvre une fenêtre pour charger un fichier.
+		this.managerFrame.setStatusDescription(null);
 		if (o == managerPanel.item_openFile)
 		{
-			LoadFileFrame sf = new LoadFileFrame(managerFrame, manager);
-			this.managerFrame.setStatusDescription(null);
-			sf.setVisible(true);
+			this.loadFileAction();
 		}
-
-		// On ferme le fichier sélectionné dans l'onglet.
-		// On avertit une fois avant de fermer.
 		if (o == managerPanel.item_closeFile || o == managerPanel.item_closeFile2)
 		{
-			int valid = JOptionPane.showConfirmDialog(
-				managerFrame,
-				"Fermer le fichier ?\nLes modifications sur le fichier seront perdues.",
-				"Confirmation fermeture",
-				JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.WARNING_MESSAGE
-			);
-			this.managerFrame.setStatusDescription(null);
-			if (valid == JOptionPane.OK_OPTION)
-			{
-				String id = managerPanel.getSelectedSchemaPanelId();
-				manager.removeSchema(id);
-			}
+			this.closeFileAction();
 		}
-
-		// On fermer tous les fichiers.
-		// On avertit tout de même une fois avant de fermer.
 		if (o == managerPanel.item_closeAllFiles)
 		{
-			int valid = JOptionPane.showConfirmDialog(
-				managerFrame,
-				"Fermer tous les fichiers ?\nToutes les modifications seront perdues.",
-				"Confirmation fermeture",
-				JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.WARNING_MESSAGE
-			);
-			this.managerFrame.setStatusDescription(null);
-			if (valid == JOptionPane.OK_OPTION)
-			{
-				manager.removeAll();
-			}
+			this.closeFilesAction();
 		}
-
-		// On souhaite sauvergarder le fichier.
-		// On lance un mini-explorateur de fichier pour nommer le fichier
-		// que l'on souhaite créer.
 		if (o == managerPanel.item_saveFile || o == managerPanel.item_saveFile2)
 		{
-			JFileChooser jfcProgramme = new JFileChooser(".");
-			jfcProgramme.setMultiSelectionEnabled(false);
-			jfcProgramme.setDialogTitle("Enregistrer un fichier");
-			jfcProgramme.setApproveButtonText("Enregistrer");
-			jfcProgramme.setApproveButtonToolTipText("Cliquer apres avoir nommé le fichier");
-			jfcProgramme.setAcceptAllFileFilterUsed(false);
-
-			this.managerFrame.setStatusDescription(null);
-
-			if (jfcProgramme.showDialog(managerFrame, null) == JFileChooser.APPROVE_OPTION)
-			{
-				try
-				{
-					boolean ok = true;
-
-					// On récupère le schéma sélectionné.
-					String schemaId = managerPanel.getSelectedSchemaPanelId();
-					Schema currentSchema = manager.getSchema(schemaId);
-					SchemaSyntax syntax = currentSchema.getSyntax();
-
-					// On créer le flux de sortie.
-					String filename = jfcProgramme.getSelectedFile().getCanonicalPath();
-					SchemaFileWriter schemaWriter = syntax.createSchemaWriter();
-					SchemaFile schemaFile = new SchemaFile(filename, null, schemaWriter);
-					schemaFile.setSchema(currentSchema);
-					File file = new File(filename);
-
-					// Test if file already exists.
-					if (file.exists())
-					{
-						int result = JOptionPane.showConfirmDialog(
-							managerFrame,
-							"Le fichier existe déjà, voulez vous l'écraser ?",
-							"Confirmation",
-							JOptionPane.YES_NO_OPTION
-						);
-						if (result == JOptionPane.YES_OPTION)
-						{
-							file.delete();
-						}
-						else
-						{
-							ok = false;
-						}
-					}
-
-					// SAve schema into file.
-					if (ok && !schemaFile.write())
-					{
-						JOptionPane.showMessageDialog(
-							managerFrame,
-							"Le fichier existe déjà, ou le format des données est incorrect.",
-							"Erreur",
-							JOptionPane.ERROR_MESSAGE
-						);
-					}
-				}
-				catch (IOException ioe)
-				{
-					JOptionPane.showMessageDialog(
-						managerFrame,
-						"Impossible d'enregistrer le fichier.",
-						"Erreur",
-						JOptionPane.ERROR_MESSAGE
-					);
-				}
-				JOptionPane.showMessageDialog(
-					managerFrame,
-					"Le schéma a été enregistré avec succès.",
-					"Succès",
-					JOptionPane.INFORMATION_MESSAGE
-				);
-			}
+			this.saveFileAction();
 		}
-
-		// On renomme le fichier en cours d'utilisation
 		if (o == managerPanel.item_renameFile || o == managerPanel.item_renameFile2)
 		{
-			String result = JOptionPane.showInputDialog(
-				managerFrame,
-				"Spécifier le nouveau nom pour ce schéma :",
-				"Renommer un schéma",
-				JOptionPane.QUESTION_MESSAGE
-			);
-			this.managerFrame.setStatusDescription(null);
-			if (result != null && result.length() != 0)
-			{
-				if (manager.isSchemaIdExists(result))
-				{
-					JOptionPane.showMessageDialog(
-						managerFrame,
-						"Un schéma du même nom est déjà ouvert.",
-						"Erreur",
-						JOptionPane.ERROR_MESSAGE
-					);
-				}
-				else
-				{
-					String schemaId = managerPanel.getSelectedSchemaPanelId();
-					Schema s = manager.getSchema(schemaId);
-					manager.removeSchema(schemaId);
-					manager.addSchema(result, s);
-					managerPanel.selectSchemaPanel(result);
-				}
-			}
+			this.renameFileAction();
 		}
-
-		// On souhaite afficher les propriétés du schéma en cours.
 		if (o == managerPanel.item_propriety || o == managerPanel.item_propriety2)
 		{
-			String schemaId = managerPanel.getSelectedSchemaPanelId();
-			Schema currentSchema = manager.getSchema(schemaId);
-			SchemaPropertiesFrame spf = new SchemaPropertiesFrame(managerFrame, currentSchema, schemaId);
-			this.managerFrame.setStatusDescription(null);
-			spf.setVisible(true);
+			this.displaySchemaPropertiesAction();
 		}
-
-		// Recherche d'un attribut ou classe d'objet
 		if (o == managerPanel.item_search || o == managerPanel.item_search2)
 		{
-			String result = JOptionPane.showInputDialog(
-				managerFrame,
-				"Nom de l'attribut ou de la classe d'objet :",
-				"Rechercher un objet",
-				JOptionPane.QUESTION_MESSAGE
-			);
-			this.managerFrame.setStatusDescription(null);
-			if (result != null && result.length() != 0)
-			{
-				String schemaId = managerPanel.getSelectedSchemaPanelId();
-				Schema s = manager.getSchema(schemaId);
-				SchemaObject so = s.getObjectByName(result);
-				SchemaPanel sp = managerPanel.getSelectedSchemaPanel();
-				sp.setSelectedPath(so);
-				sp.updateTable();
-			}
+			this.searchSchemaObjectAction();
 		}
+	}
 
+	/**
+	 * Action to close a file.
+	 */
+	private void closeFileAction ()
+	{
+		int valid = JOptionPane.showConfirmDialog(
+			this.managerFrame,
+			"Fermer le fichier ?\nLes modifications sur le fichier seront perdues.",
+			"Confirmation fermeture",
+			JOptionPane.OK_CANCEL_OPTION,
+			JOptionPane.WARNING_MESSAGE
+		);
+		if (valid == JOptionPane.OK_OPTION)
+		{
+			String id = this.managerPanel.getSelectedSchemaPanelId();
+			this.manager.removeSchema(id);
+		}
+	}
+
+	/**
+	 * Action to close all files.
+	 */
+	private void closeFilesAction ()
+	{
+		int valid = JOptionPane.showConfirmDialog(
+			this.managerFrame,
+			"Fermer tous les fichiers ?\nToutes les modifications seront perdues.",
+			"Confirmation fermeture",
+			JOptionPane.OK_CANCEL_OPTION,
+			JOptionPane.WARNING_MESSAGE
+		);
+		if (valid == JOptionPane.OK_OPTION)
+		{
+			this.manager.removeAll();
+		}
+	}
+
+	/**
+	 * Action to display current schema properties.
+	 */
+	private void displaySchemaPropertiesAction ()
+	{
+		String schemaId = managerPanel.getSelectedSchemaPanelId();
+		(new SchemaPropertiesFrame(
+			managerFrame,
+			manager.getSchema(schemaId),
+			schemaId
+		)).setVisible(true);
 	}
 
 	/**
@@ -311,19 +194,149 @@ public class SchemaManagerListener implements ActionListener, ChangeListener, Mo
 	}
 
 	/**
+	 * Action to load file
+	 */
+	private void loadFileAction ()
+	{
+		LoadFileFrame sf = new LoadFileFrame(this.managerFrame, this.manager);
+		this.managerFrame.setStatusDescription(null);
+		sf.setVisible(true);
+	}
+
+	/**
 	 * Gère l'ensemble des événements de la souris.
 	 * @param e L'événement de la souris.
 	 */
 	public void mouseAction (MouseEvent e)
 	{
-		if (e != null)
+		if (e != null && e.isPopupTrigger())
 		{
-			Object o = e.getSource();
-			if (e.isPopupTrigger())
+			managerPanel.showPopupMenu(e.getComponent(), e.getX(), e.getY());
+		}
+	}
+
+	/**
+	 * Action to rename a file.
+	 */
+	private void renameFileAction ()
+	{
+		String result = JOptionPane.showInputDialog(
+			this.managerFrame,
+			"Spécifier le nouveau nom pour ce schéma :",
+			"Renommer un schéma",
+			JOptionPane.QUESTION_MESSAGE
+		);
+		if (result == null || result.length() == 0)
+		{
+			JOptionPane.showMessageDialog(
+				this.managerFrame,
+				"Aucun nom renseigné.",
+				"Erreur",
+				JOptionPane.ERROR_MESSAGE
+			);
+			return;
+		}
+		if (this.manager.isSchemaIdExists(result))
+		{
+			JOptionPane.showMessageDialog(
+				this.managerFrame,
+				"Un schéma du même nom est déjà ouvert.",
+				"Erreur",
+				JOptionPane.ERROR_MESSAGE
+			);
+			return;
+		}
+		String schemaId = managerPanel.getSelectedSchemaPanelId();
+		manager.removeSchema(schemaId);
+		manager.addSchema(result, manager.getSchema(schemaId));
+		managerPanel.selectSchemaPanel(result);
+	}
+
+	/**
+	 * Action to save a file.
+	 */
+	private void saveFileAction ()
+	{
+		JFileChooser jfcProgramme = new JFileChooser(".");
+		jfcProgramme.setMultiSelectionEnabled(false);
+		jfcProgramme.setDialogTitle("Enregistrer un fichier");
+		jfcProgramme.setApproveButtonText("Enregistrer");
+		jfcProgramme.setApproveButtonToolTipText("Cliquer apres avoir nommé le fichier");
+		jfcProgramme.setAcceptAllFileFilterUsed(false);
+		if (jfcProgramme.showDialog(managerFrame, null) != JFileChooser.APPROVE_OPTION)
+		{
+			return;
+		}
+		File file = jfcProgramme.getSelectedFile();
+		if (file.exists())
+		{
+			int result = JOptionPane.showConfirmDialog(
+				managerFrame,
+				"Le fichier existe déjà, voulez vous l'écraser ?",
+				"Confirmation",
+				JOptionPane.YES_NO_OPTION
+			);
+			if (result == JOptionPane.YES_OPTION)
 			{
-				managerPanel.showPopupMenu(e.getComponent(), e.getX(), e.getY());
+				file.delete();
+			}
+			else
+			{
+				return;
 			}
 		}
+		SchemaFile schemaFile = new SchemaFile(
+			file.getAbsolutePath(),
+			this.manager.getSchema(
+				this.managerPanel.getSelectedSchemaPanelId()
+			)
+		);
+		if (!schemaFile.write())
+		{
+			JOptionPane.showMessageDialog(
+				managerFrame,
+				"Le format des données est incorrect.",
+				"Erreur",
+				JOptionPane.ERROR_MESSAGE
+			);
+			file.delete();
+			return;
+		}
+		JOptionPane.showMessageDialog(
+			this.managerFrame,
+			"Le schéma a été enregistré avec succès.",
+			"Succès",
+			JOptionPane.INFORMATION_MESSAGE
+		);
+	}
+
+	/**
+	 * Action to search an object into the current schema.
+	 */
+	private void searchSchemaObjectAction ()
+	{
+		String result = JOptionPane.showInputDialog(
+			managerFrame,
+			"Nom de l'attribut ou de la classe d'objet :",
+			"Rechercher un objet",
+			JOptionPane.QUESTION_MESSAGE
+		);
+		if (result == null || result.length() == 0)
+		{
+			JOptionPane.showMessageDialog(
+				this.managerFrame,
+				"Aucun nom renseigné.",
+				"Erreur",
+				JOptionPane.ERROR_MESSAGE
+			);
+			return;
+		}
+		SchemaObject object = this.manager.getSchema(
+			this.managerPanel.getSelectedSchemaPanelId()
+		).getObjectByName(result);
+		SchemaPanel panel = this.managerPanel.getSelectedSchemaPanel();
+		panel.setSelectedPath(object);
+		panel.updateTable();
 	}
 
 	/**
