@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 package net.aepik.casl.ui;
 
 import net.aepik.casl.core.Manager;
@@ -25,9 +24,7 @@ import net.aepik.casl.core.util.Pref;
 import net.aepik.casl.ui.ldap.SchemaManagerListener;
 import net.aepik.casl.ui.ldap.SchemaManagerPanel;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.Vector;
@@ -39,11 +36,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
-import javax.swing.SingleSelectionModel;
 
 public class ManagerFrame extends JFrame
 {
@@ -187,7 +181,9 @@ public class ManagerFrame extends JFrame
 			// Sinon, on retourne le menu trouvé.
 
 			if( cats.length==1 )
+			{
 				return result ;
+			}
 
 			// On continue, donc on refabrique le chemin correct.
 			// Si le chemin est vide, on s'arrête.
@@ -196,18 +192,24 @@ public class ManagerFrame extends JFrame
 			for( int i=1; i<cats.length; i++ ) {
 				subPath += cats[i];
 				if( i!=cats.length-1 )
+				{
 					subPath += "/" ;
+				}
 			}
 
 			if( subPath.length()==0 )
+			{
 				return result ;
+			}
 
 			// On descends dans l'arborescence jusqu'au bout, si c'est possible.
 			// Dans tous les cas, on retourne le menu le plus profond.
 
 			JMenu query = searchMenu( result, subPath );
 			if( query!=null )
+			{
 				result = query;
+			}
 		}
 
 		return result ;
@@ -262,9 +264,13 @@ public class ManagerFrame extends JFrame
 	public void setTitle( String t ) {
 
 		if( t!=null )
+		{
 			super.setTitle( titre + " - " + t );
+		}
 		else
+		{
 			super.setTitle( titre );
+		}
 	}
 
 	/**
@@ -395,108 +401,85 @@ public class ManagerFrame extends JFrame
 		item_plugins.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_MASK));
 	}
 
-	private void insertPluginIn( JMenu menu, Plugin plugin, String path ) {
-
-		String[] pathTab = path.split( "/" );
-
-		// On est à la fin.
-		// On cherche la position dans le menu (ordre alphabétique) et on
-		// ajoute le plugin (listener de plugin). L'ajout du plugin se fait
-		// après toutes les catégories.
-		if( pathTab.length==1 ) {
-
-			Component[] sousMenus = menu.getMenuComponents();
-			int position = -1 ;
-
-			for( int i=sousMenus.length-1;
-					i>=0 && position==-1; i-- ) {
-
-				Component c = sousMenus[i] ;
-				if( c instanceof JMenu )
-					position = i+1 ;
-				else if( c instanceof JMenuItem
-						&& pathTab[0].compareTo( ((JMenuItem) c).getText() )>0 )
-					position = i+1 ;
+	private void insertPluginIn (JMenu menu, Plugin plugin, String path)
+	{
+		String[] pathTab = path.split("/");
+		if (pathTab.length <= 0)
+		{
+			return;
+		}
+		Component[] sousMenus = menu.getMenuComponents();
+		if (pathTab.length == 1)
+		{
+			int position = -1;
+			for (int i = sousMenus.length - 1; i >= 0 && position == -1; i--)
+			{
+				Component c = sousMenus[i];
+				if (c instanceof JMenu || (c instanceof JMenuItem && pathTab[0].compareTo(((JMenuItem) c).getText()) > 0))
+				{
+					position = i+1;
+				}
 			}
-
 			// Si pas de catégorie trouvée, et que le nom du plugin est
 			// inférieur alphabétiquement à tous les autres noms figurant dans
 			// le menu, alors on l'ajoute à la première position.
-
-			if( position==-1 )
+			if (position == -1)
+			{
 				position++;
-
-			// On cherche l'éventuelle barre de séparation.
-
-			if( position>0 ) {
-				if( sousMenus[position-1] instanceof JMenu ) {
-					menu.insertSeparator( position );
-					position++;
+			}
+			if (position > 0 && sousMenus[position-1] instanceof JMenu)
+			{
+				menu.insertSeparator(position);
+				position++;
+			}
+			JMenuItem item = new JMenuItem(plugin.getName());
+			item.addActionListener(new PluginListener(plugin));
+			menu.insert(item, position);
+			this.pluginButtons.add(item);
+		}
+		else
+		{
+			JMenu menu2 = null;
+			for (int i = 0; i < sousMenus.length && menu2 == null; i++)
+			{
+				Component c = sousMenus[i];
+				if (c instanceof JMenu && ((JMenu) c).getText().equals(pathTab[0]))
+				{
+					menu2 = (JMenu) c;
 				}
 			}
-
-			// Finalement, au ajoute au menu.
-			// On créer le listener de plugin.
-
-			JMenuItem item = new JMenuItem( plugin.getName() );
-			item.addActionListener( new PluginListener( plugin ) );
-			menu.insert( item, position );
-			pluginButtons.add( item );
-
-		// On vaance récursivement dans le sous-menu en fonction du path.
-		// On créer les sous-menu, si nécessaire.
-		} else if( pathTab.length>1 ) {
-
-			Component[] sousMenus = menu.getMenuComponents();
-
-			// On recherche un sous menu ayant un nom correspondant
-			// à pathTab[0]. Si il n'y en a pas, on le créer.
-
-			JMenu menu2 = null ;
-			for( int i=0; i<sousMenus.length && menu2==null; i++ ) {
-				Component c = sousMenus[i] ;
-				if( c instanceof JMenu && ((JMenu) c).getText().equals( pathTab[0] ) )
-					menu2 = (JMenu) c ;
+			if (menu2 == null)
+			{
+				menu2 = new JMenu(pathTab[0]);
 			}
-
-			if( menu2==null )
-				menu2 = new JMenu( pathTab[0] );
-
-			// On refabrique le path.
-
 			String newPath = "" ;
-			for( int i=1; i<pathTab.length; i++ ) {
+			for (int i = 1; i < pathTab.length; i++)
+			{
 				newPath += pathTab[i];
-				if( i!=pathTab.length-1 )
-					newPath += "/" ;
-			}
-
-			// On cherche la position d'insertion.
-
-			int position = -1;
-			for( int i=0; i<sousMenus.length && position==-1; i++ ) {
-				Component c = sousMenus[i] ;
-				if( c instanceof JMenuItem )
-					position = i ;
-				else if( c instanceof JMenu
-						&& pathTab[0].compareTo( ((JMenu) c).getText() )<0 )
-					position = i ;
-			}
-
-			if( position==-1 )
-				position = sousMenus.length ;
-
-			// On cherche l'éventuelle barre de séparation.
-
-			if( position<sousMenus.length ) {
-				if( !(sousMenus[position] instanceof JMenu)
-						&& !(sousMenus[position] instanceof JSeparator) ) {
-					menu.insertSeparator( position );
+				if (i != pathTab.length - 1)
+				{
+					newPath += "/";
 				}
 			}
-
-			menu.insert( menu2, position );
-			insertPluginIn( menu2, plugin, newPath );
+			int position = -1;
+			for (int i = 0; i < sousMenus.length && position == -1; i++)
+			{
+				Component c = sousMenus[i];
+				if (c instanceof JMenuItem || (c instanceof JMenu && pathTab[0].compareTo(((JMenu) c).getText()) < 0))
+				{
+					position = i;
+				}
+			}
+			if (position == -1)
+			{
+				position = sousMenus.length;
+			}
+			if (position < sousMenus.length && !(sousMenus[position] instanceof JMenu) && !(sousMenus[position] instanceof JSeparator))
+			{
+				menu.insertSeparator(position);
+			}
+			menu.insert(menu2, position);
+			this.insertPluginIn(menu2, plugin, newPath);
 		}
 	}
 
@@ -535,13 +518,17 @@ public class ManagerFrame extends JFrame
 		for( int i=1; i<cats.length; i++ ) {
 			newPath += cats[i];
 			if( i!=cats.length-1 )
+			{
 				newPath += "/" ;
+			}
 		}
 
 		// Test d'arrêt.
 
 		if( subPath.length()==0 )
+		{
 			return currentMenu;
+		}
 
 		for( int i=0; result==null && i<tmp.length; i++ ) {
 			if( tmp[i] instanceof JMenu && cats[0].equals( ((JMenu) tmp[i]).getText() ) ) {
@@ -550,8 +537,12 @@ public class ManagerFrame extends JFrame
 		}
 
 		if( result!=null )
+		{
 			return result ;
+		}
 		else
+		{
 			return currentMenu ;
+		}
 	}
 }

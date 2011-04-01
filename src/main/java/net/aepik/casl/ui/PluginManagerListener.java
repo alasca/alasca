@@ -1,7 +1,5 @@
 /*
- * PluginManagerListener.java		0.1		11/07/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,21 +23,28 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListModel;
 
-public class PluginManagerListener
-		implements ListSelectionListener {
+public class PluginManagerListener implements ListSelectionListener
+{
 
-	public void valueChanged( ListSelectionEvent lse ) {
-
-		if( lse.getSource() instanceof JList
-				&& ((JList) lse.getSource()).getModel() instanceof DefaultListModel
-				&& lse.getValueIsAdjusting()==false ) {
-			DefaultListModel listModel = (DefaultListModel) ((JList) lse.getSource()).getModel();
-
-			for( int x=0; x<listModel.getSize(); x++ )
-				listModel.setElementAt( listModel.getElementAt(x), x );
+	public void valueChanged (ListSelectionEvent e)
+	{
+		if (!(e.getSource() instanceof JList))
+		{
+			return;
+		}
+		if (!(((JList) e.getSource()).getModel() instanceof DefaultListModel))
+		{
+			return;
+		}
+		if (e.getValueIsAdjusting())
+		{
+			return;
+		}
+		DefaultListModel listModel = (DefaultListModel) ((JList) e.getSource()).getModel();
+		for (int x = 0; x < listModel.getSize(); x++)
+		{
+			listModel.setElementAt(listModel.getElementAt(x), x);
 		}
 	}
 
