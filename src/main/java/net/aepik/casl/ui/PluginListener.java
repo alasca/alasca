@@ -1,7 +1,5 @@
 /*
- * PluginListener.java		0.1		20/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,41 +20,37 @@
 package net.aepik.casl.ui;
 
 import net.aepik.casl.core.Plugin;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
  * Cet écouteur permet de lancer un plugin à partir d'un bouton.
  * Il est utilisé principalement dans la barre de menu.
-**/
+ */
 
-public class PluginListener implements ActionListener {
+public class PluginListener implements ActionListener
+{
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * Le plugin à prendre en compte
+	 */
+	private Plugin plugin;
 
-	/** Le plugin à prendre en compte **/
-	private Plugin plugin ;
-
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
-
-	public PluginListener( Plugin p ) {
+	/**
+	 * Build a new PluginListener object.
+	 * @param p A Plugin object.
+	 */
+	public PluginListener ( Plugin p )
+	{
 		plugin = p;
 	}
-
-////////////////////////////////
-// Methodes publiques
-////////////////////////////////
 
 	/**
 	 * Gère le démarrage du plugin.
 	 * @param e L'action soulevée par un clic de souris.
-	**/
-	public void actionPerformed( ActionEvent e ) {
+	 */
+	public void actionPerformed ( ActionEvent e )
+	{
 		(new Thread( plugin )).start();
 	}
 }
