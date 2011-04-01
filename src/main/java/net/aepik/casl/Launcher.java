@@ -55,26 +55,17 @@ public class Launcher
 
 	public Launcher () throws Exception
 	{
-		try
-		{
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		JPanel p1 = new JPanel(new BorderLayout());
-		p1.add(loadingStatus);
-		p1.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-                this.configFile = Config.getResourcesPath() + "/config.xml";
-                this.icone = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() + "/casl.png");
                 this.loadingStatus = new JProgressBar(0, 3);
                 this.loadingStatus.setValue(0);
                 this.loadingStatus.setStringPainted(true);
                 this.loadingStatus.setOpaque(false);
                 this.loadingStatus.setBorder(null);
-                this.loadingValue = 0;
-		this.creditsFrame = new CreditsFrame(null, new Manager(configFile), p1, false);
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(loadingStatus);
+		panel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		this.configFile = Config.getResourcesPath() + "/config.xml";
+		this.icone = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() + "/casl.png");
+		this.creditsFrame = new CreditsFrame(null, new Manager(configFile), panel, false);
 		this.creditsFrame.setSize(300, 155);
 		this.creditsFrame.setUndecorated(true);
 	}
@@ -184,6 +175,14 @@ public class Launcher
 		ManagerFrame f = null;
 		try
 		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (Exception e1)
+		{
+			e1.printStackTrace();
+		}
+		try
+		{
 			m = new Launcher();
 			m.openLoadingFrame();
 			f = (ManagerFrame) m.loadApplication();
@@ -192,17 +191,17 @@ public class Launcher
 			m.disposeLoadingFrame();
 			f.setVisible(true);
 		}
-		catch (Exception e)
+		catch (Exception e2)
 		{
 			if (m != null)
 			{
 				m.closeLoadingFrame();
 				m.disposeLoadingFrame();
 			}
-			e.printStackTrace();
+			e2.printStackTrace();
 			JOptionPane.showMessageDialog(
 				null,
-				"Une erreur est survenue:\n\n" + e.toString() + "\n\n",
+				"Une erreur est survenue:\n\n" + e2.toString() + "\n\n",
 				"Erreur critique",
 				JOptionPane.ERROR_MESSAGE
 			);
