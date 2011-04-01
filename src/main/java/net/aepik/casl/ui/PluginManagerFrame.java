@@ -1,7 +1,5 @@
 /*
- * PluginsManager.java		0.1		20/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,23 +22,14 @@ package net.aepik.casl.ui;
 import net.aepik.casl.core.Plugin;
 import net.aepik.casl.core.PluginManager;
 import net.aepik.casl.ui.util.DescriptiveInternalFrame;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
@@ -48,93 +37,96 @@ import javax.swing.WindowConstants;
 /**
  * Fenêtre pour lister les extentions disponibles, avec leurs
  * descriptions respectives.
-**/
-
-public class PluginManagerFrame extends JFrame implements ActionListener {
+ */
+public class PluginManagerFrame extends JFrame implements ActionListener
+{
 
 	private static final long serialVersionUID = 0;
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * La fen$etre parente
+	 */
+	private JFrame mainFrame;
 
-	/** La fen$etre parente **/
-	private JFrame mainFrame ;
-	/** Le manager de plugins **/
-	private PluginManager pluginManager ;
+	/**
+	 * Le manager de plugins
+	 */
+	private PluginManager pluginManager;
 
-	/** Le bouton fermer **/
-	private JButton closeButton = new JButton( "Fermer" );
+	/**
+	 * Le bouton fermer
+	 */
+	private JButton closeButton = new JButton("Fermer");
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
-
-	public PluginManagerFrame( JFrame owner, PluginManager pM ) {
-
+	/**
+	 * Build a new PluginManagerFrame object.
+	 * @param owner Parent frame
+	 * @param pM The plugin manager
+	 */
+	public PluginManagerFrame (JFrame owner, PluginManager pM)
+	{
 		super();
-		setSize( 500, 400 );
-		setResizable( false );
-		setLocationRelativeTo( owner );
-		setTitle( "Liste des extentions" );
-		setIconImage( owner.getIconImage() );
-		setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
-
-		mainFrame = owner ;
-		pluginManager = pM ;
-
-		for( int i=0; pluginManager.getPlugins()!=null
-				&& i<pluginManager.getPlugins().length; i++ ) {
-			pluginManager.getPlugins()[i].setRelativeTo( owner );
+		this.setSize(500, 400);
+		this.setResizable(false);
+		this.setLocationRelativeTo(owner);
+		this.setTitle("Liste des extentions");
+		this.setIconImage(owner.getIconImage());
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		this.mainFrame = owner;
+		this.pluginManager = pM;
+		if (this.pluginManager.getPlugins() != null)
+		{
+			for (Plugin plugin : this.pluginManager.getPlugins())
+			{
+				plugin.setRelativeTo(this.mainFrame);
+			}
 		}
-
-		initFrame();
+		this.initFrame();
 	}
 
-////////////////////////////////
-// Methodes publiques
-////////////////////////////////
-
-	public void actionPerformed( ActionEvent e ) {
-
+	/**
+	 * Manager actions of this object.
+	 */
+	public void actionPerformed ( ActionEvent e )
+	{
 		Object o =e.getSource();
-
-		if( o==closeButton ) {
-			setVisible( false );
+		if (o == closeButton)
+		{
+			setVisible(false);
 			dispose();
 		}
 	}
 
-////////////////////////////////
-// Methodes privées
-////////////////////////////////
+	/**
+	 * Initialize element of this frame.
+	 */
+	private void initFrame ()
+	{
+		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		buttonsPanel.add(this.closeButton);
 
-	private void initFrame() {
+		JScrollPane listeScroller = new JScrollPane(new PluginManagerPanel(pluginManager));
+		listeScroller.setBackground(Color.white);
+		listeScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		JPanel buttonsPanel = new JPanel( new FlowLayout( FlowLayout.RIGHT ) );
-		buttonsPanel.add( closeButton );
+		JPanel listePanel = new JPanel(new BorderLayout());
+		listePanel.add(listeScroller, BorderLayout.CENTER);
+		listePanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 3, 6));
 
-		PluginManagerPanel liste = new PluginManagerPanel( pluginManager );
-		JScrollPane listeScroller = new JScrollPane( liste );
-		listeScroller.setBackground( Color.white );
-		listeScroller.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS );
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add(listePanel, BorderLayout.CENTER);
+		mainPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
-		JPanel listePanel = new JPanel( new BorderLayout() );
-		listePanel.add( listeScroller, BorderLayout.CENTER );
-		listePanel.setBorder( BorderFactory.createEmptyBorder( 6, 6, 3, 6 ) );
-
-		JPanel mainPanel = new JPanel( new BorderLayout() );
-		mainPanel.add( listePanel, BorderLayout.CENTER );
-		mainPanel.add( buttonsPanel, BorderLayout.SOUTH );
-
-		getContentPane().add( new DescriptiveInternalFrame(
-				mainFrame.getIconImage(),
+		this.closeButton.addActionListener(this);
+		this.getContentPane().add(
+			new DescriptiveInternalFrame(
+				this.mainFrame.getIconImage(),
 				"Sélectionner un plugin à éxécuter.\nUn plugin est éxécutable si"
 				+ " toutes les conditions de son éxécution sont"
 				+ " réunies.",
-				mainPanel ) );
-
-		closeButton.addActionListener( this );
+				mainPanel
+			)
+		);
 	}
 
 }
