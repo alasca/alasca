@@ -31,9 +31,11 @@
 		<flattenmapper />
 	</pathconvert>
 
-	<typedef  uri="antlib:net.sf.antcontrib">
+	<typedef uri="antlib:net.sf.antcontrib">
 		 <classpath refid="compile.classpath" />
 	</typedef>
+
+	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="compile.classpath" />
 
 	<target name="clean">
 		<delete dir="${CASL_DISTDIR}" failonerror="false" />
@@ -44,11 +46,24 @@
 		<mkdir dir="${CASL_TARGETDIR}/lib/plugin" />
 		<mkdir dir="${CASL_BUILDDIR}/main" />
 		<mkdir dir="${CASL_BUILDDIR}/plugin" />
+		<mkdir dir="${CASL_BUILDDIR}/reports" />
 		<ac:for list="${CASL_PLUGINLIST}" param="plugin">
 			<sequential>
 				<mkdir dir="${CASL_BUILDDIR}/plugin/@{plugin}" />
 			</sequential>
 		</ac:for>
+	</target>
+
+	<target name="check" depends="prepare">
+		<pmd rulesetfiles="basic,imports,unusedcode,strings,braces,codesize">
+			<formatter type="text" toFile="${CASL_BUILDDIR}/reports/pmd_report.log"/>
+			<formatter type="xml" toFile="${CASL_BUILDDIR}/reports/pmd_report.xml"/>
+			<fileset dir="src/main">
+				<include name="**/*.java"/>
+			</fileset>
+		</pmd>
+		<loadfile srcFile="${CASL_BUILDDIR}/reports/pmd_report.log" property="pmdreports"/>
+		<echo message="${pmdreports}"/>
 	</target>
 
 	<target name="compile" depends="prepare">
