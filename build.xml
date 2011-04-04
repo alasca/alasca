@@ -58,7 +58,7 @@
 		<pmd rulesetfiles="basic,imports,unusedcode,strings,braces,codesize">
 			<formatter type="text" toFile="${CASL_BUILDDIR}/reports/pmd_report.log"/>
 			<formatter type="xml" toFile="${CASL_BUILDDIR}/reports/pmd_report.xml"/>
-			<fileset dir="src/main">
+			<fileset dir="src">
 				<include name="**/*.java"/>
 			</fileset>
 		</pmd>
@@ -66,7 +66,7 @@
 		<echo message="${pmdreports}"/>
 	</target>
 
-	<target name="compile" depends="prepare">
+	<target name="compile" depends="prepare,check">
 		<javac srcdir="src/main"
 			destdir="${CASL_BUILDDIR}/main"
 			debug="${COMPILE.DEBUG}"
