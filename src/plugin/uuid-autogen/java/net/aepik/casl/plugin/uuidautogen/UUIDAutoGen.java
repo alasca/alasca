@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006-2010 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,70 +21,74 @@ package net.aepik.casl.plugin.uuidautogen;
 
 import net.aepik.casl.core.PluginImpl;
 import net.aepik.casl.core.ldap.Schema;
-import net.aepik.casl.core.SchemaManager;
-import net.aepik.casl.core.ldap.SchemaSyntax;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
-public class UUIDAutoGen extends PluginImpl {
+public class UUIDAutoGen extends PluginImpl
+{
 
 	/**
 	 * Indique si le plugin peut-être éxécuté.
 	 * @return boolean True si c'est le cas, false sinon.
-	**/
-	public boolean canRun() {
-
+	 */
+	public boolean canRun ()
+	{
 		Schema schema = schemaManager.getCurrentSchema();
-
-		if( schema!=null && schema.getSyntax().toString().equals( "ADSyntax" ) )
+		if (schema != null && schema.getSyntax().toString().equals("ADSyntax"))
+		{
 			return true;
+		}
 		return false;
 	}
 
 	/**
 	 * Retourne une catégorie.
 	 * @return String Une catégorie.
-	**/
-	public String getCategory() {
+	 */
+	public String getCategory ()
+	{
 		return "Active Directory";
 	}
 
 	/**
 	 * Retourne une description du plugin.
 	 * @return String Une description.
-	**/
-	public String getDescription() {
-		return "Cet outil permet de générer des identifiants uniques pour"
-				+ " chaque objet sélectionné du schéma en cours.";
+	 */
+	public String getDescription ()
+	{
+		return "Cet outil permet de générer des identifiants uniques pour chaque objet sélectionné du schéma en cours.";
 	}
 
 	/**
 	 * Retourne le nom du plugin.
 	 * @return String Un nom sous forme de chaîne de caractères.
-	**/
-	public String getName() {
+	 */
+	public String getName ()
+	{
 		return "Générateur d'UUID";
 	}
 
 	/**
 	 * Retourne la version du plugin.
 	 * @return String Une version.
-	**/
-	public String getVersion() { return "1.0.1"; }
+	 */
+	public String getVersion ()
+	{
+		return "1.0.1";
+	}
 
 	/**
 	 * Permet de lancer l'application.
-	**/
-	public void run() {
-
-		if( canRun() ) {
-			String schemaId = schemaManager.getCurrentSchemaId();
-			Schema schema = schemaManager.getCurrentSchema();
-
-			UUIDAutoGenFrame f = new UUIDAutoGenFrame( parentFrame, schema );
-			f.setTitle( getName() + " [" + schemaId + "]" );
-			f.setVisible( true );
+	 */
+	public void run ()
+	{
+		if (!this.canRun())
+		{
+			return;
 		}
+		String schemaId = schemaManager.getCurrentSchemaId();
+		Schema schema = schemaManager.getCurrentSchema();
+		UUIDAutoGenFrame f = new UUIDAutoGenFrame(parentFrame, schema);
+		f.setTitle(getName() + " [" + schemaId + "]");
+		f.setVisible(true);
 	}
 
 }

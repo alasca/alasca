@@ -1,7 +1,5 @@
 /*
- * UUIDAutoGenTableModel.java		0.1		26/05/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,99 +20,99 @@
 package net.aepik.casl.plugin.uuidautogen;
 
 import net.aepik.casl.core.ldap.SchemaObject;
-
 import javax.swing.table.AbstractTableModel;
 
 /**
  * Ce modèle de données pour une JTable permet de faire afficher deux colonnes.
  * La première colonne contient des cases cochables pour les objets de schémas
  * de la seconde colonne.
-**/
+ */
 
-public class UUIDAutoGenTableModel extends AbstractTableModel {
+public class UUIDAutoGenTableModel extends AbstractTableModel
+{
 
 	private static final long serialVersionUID = 0;
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	private SchemaObject[] objets;
 
-	private SchemaObject[] objets ;
 	private Boolean[] datas;
-	private boolean[] ok;				// Indique si on peut éditer l'objet.
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	private boolean[] ok;		// Is object editable ?
 
 	/**
-	 * Construit un nouveau model de données.
-	**/
-	public UUIDAutoGenTableModel( SchemaObject[] objets ) {
-
+	 * Buid a new UUIDAutoGenTableModel.
+	 */
+	public UUIDAutoGenTableModel ( SchemaObject[] objets )
+	{
 		this.objets = objets;
 		this.datas = new Boolean[objets.length];
 		this.ok = new boolean[objets.length];
-
-		for( int i=0; i<objets.length; i++ ) {
-
-			if( objets[i].isKeyExists( "SchemaIDGUID:" ) )
-				ok[i] = false;
-			else
-				ok[i] = true;
-
-			datas[i] = new Boolean( !ok[i] );
-		}
-	}
-
-////////////////////////////////
-// Methodes publiques
-////////////////////////////////
-
-	public int getRowCount() { return datas.length ; }
-
-    public Class getColumnClass( int c ) {
-		return getValueAt( 0, c ).getClass();
-	}
-
-	public int getColumnCount() { return 3; }
-
-	public Object getValueAt( int row, int column ) {
-
-		if( datas.length>0
-				&& row>=0
-				&& row<datas.length
-				&& column>=0
-				&& column<datas.length ) {
-
-			if( column==0 ) {
-				return datas[row];
-
-			} else if( column==1 ) {
-				return objets[row].getId() ;
-
-			} else if( column==2 ) {
-				return objets[row].getName();
+		for (int i = 0; i < objets.length; i++)
+		{
+			if (objets[i].isKeyExists("SchemaIDGUID:"))
+			{
+				this.ok[i] = false;
 			}
+			else
+			{
+				this.ok[i] = true;
+			}
+			this.datas[i] = Boolean.valueOf(!this.ok[i]);
 		}
+	}
 
+	public int getRowCount ()
+	{
+		return this.datas.length;
+	}
+
+	public Class getColumnClass ( int c )
+	{
+		return this.getValueAt(0, c).getClass();
+	}
+
+	public int getColumnCount ()
+	{
+		return 3;
+	}
+
+	public Object getValueAt ( int row, int column )
+	{
+		if (this.datas.length <= 0 || row < 0)
+		{
+			return null;
+		}
+		if (column < 0 || column >= this.datas.length)
+		{
+			return null;
+		}
+		switch(column)
+		{
+			case 0:
+				return this.datas[row];
+			case 1:
+				return this.objets[row].getId();
+			case 2:
+				return this.objets[row].getName();
+		}
 		return null;
 	}
 
-    public boolean isCellEditable( int row, int column ) {
-
-        if( datas.length>0
-        		&& row>=0
-        		&& row<datas.length
-        		&& column==0 ) {
-			return ok[row];
-        }
+	public boolean isCellEditable ( int row, int column )
+	{
+		if (this.datas.length > 0 && row >= 0 && row < this.datas.length && column == 0)
+		{
+			return this.ok[row];
+		}
 		return false;
-    }
+	}
 
-	public void setValueAt( Object obj, int row, int column ) {
-
-		if( column==0 && obj instanceof Boolean )
-			datas[row] = (Boolean) obj;
+	public void setValueAt ( Object obj, int row, int column )
+	{
+		if (column == 0 && obj instanceof Boolean)
+		{
+			this.datas[row] = (Boolean) obj;
+		}
 	}
 }
+
