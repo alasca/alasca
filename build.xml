@@ -121,7 +121,9 @@
 	<target name="make" depends="makejar">
 		<move file="${CASL_TARGETDIR}/${CASL_NAME}-${CASL_VERSION}.jar" todir="${CASL_TARGETDIR}/lib" />
 		<copy todir="${CASL_TARGETDIR}/lib">
-			<fileset dir="lib"/>
+			<fileset dir="lib">
+				<exclude name="build/**"/>
+			</fileset>
 		</copy>
 		<copy todir="${CASL_TARGETDIR}/lib/resources">
 			<fileset dir="src/main/resources"/>
