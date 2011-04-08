@@ -36,6 +36,7 @@
 	</typedef>
 
 	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="compile.classpath" />
+	<taskdef name="jacobe" classname="com.tiobe.jacobe.JacobeTask" classpathref="compile.classpath"/>
 
 	<target name="clean">
 		<delete dir="${CASL_DISTDIR}" failonerror="false" />
@@ -64,6 +65,10 @@
 		</pmd>
 		<loadfile srcFile="${CASL_BUILDDIR}/reports/pmd_report.log" property="pmdreports"/>
 		<echo message="${pmdreports}"/>
+	</target>
+
+	<target name="beautify">
+		<jacobe input="src" cfg="src/build/jacobe.cfg" javadoc="private" quiet="false" overwrite="true" nobackup="true" />
 	</target>
 
 	<target name="compile" depends="prepare,check">
