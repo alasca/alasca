@@ -59,11 +59,6 @@ public class PluginManager
 	private Plugin[] plugins;
 
 	/**
-	 * L'ensemble des plugins triés par ordres alphabétique
-	 */
-	private Plugin[] pluginsAlpha;
-
-	/**
 	 * Build a new PluginManager object.
 	 * @param m A Manager object.
 	 * @param path A path.
@@ -73,7 +68,6 @@ public class PluginManager
 		this.manager = m;
 		this.path = path ;
 		this.plugins = new Plugin[0];
-		this.pluginsAlpha = new Plugin[0];
 	}
 
 	/**
@@ -145,7 +139,7 @@ public class PluginManager
 	 */
 	public Plugin[] getPlugins ()
 	{
-		return pluginsAlpha;
+		return plugins;
 	}
 
 	/**
@@ -158,7 +152,7 @@ public class PluginManager
 		String filename = file.getName();
 		if (filename.length() <= 4 || !filename.substring(filename.length()-4).equals(".jar"))
 		{
-			return null;
+			return new String[0];
 		}
 		Enumeration<JarEntry> entries = null;
 		try
