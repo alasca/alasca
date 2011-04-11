@@ -18,7 +18,9 @@
 
 package net.aepik.casl.core;
 
-import java.io.File ;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
@@ -80,31 +82,59 @@ public class PluginManager
 
 	/**
 	 * Build a Plugin instance.
-	 * @param name The name of the instance.
+	 * @param file A jar file
+	 * @param classname The class to instanciate
 	 * @return Plugin A Plugin object.
 	 */
-	public static Plugin createPluginInstance (String name)
+	public static Plugin createPluginInstance (File file, String classname)
 	{
-		if (name.length() <= 6 || !name.substring(name.length()-6).equals(".class"))
+		if (classname.length() <= 6 || !classname.substring(classname.length()-6).equals(".class"))
 		{
 			return null;
 		}
-		Class classTmp = Class.forName(
-			name.substring(0, name.length()-6).replace('/', '.'),
-			false,
-			new URLClassLoader(new URL[]{
-				file.toURI().toURL()
-			})
-		);
-		Class[] interfaces = ((Class<?>) classTmp.getSuperclass()).getInterfaces();
-		for (int i = 0; i < interfaces.length; i++)
+		try
 		{
-			if (interfaces[i].getName().equals(PLUGIN_INTERFACE_NAME))
+			Class classTmp = Class.forName(
+				classname.substring(0, classname.length()-6).replace('/', '.'),
+				false,
+				new URLClassLoader(new URL[]{
+					file.toURI().toURL()
+				})
+			);
+			//
+			// Verify that the plugin inherit from the CASL plugin interface.
+			//
+			boolean interfacesOk = false;;
+			Class[] interfaces = ((Class<?>) classTmp.getSuperclass()).getInterfaces();
+			for (int i = 0; i < interfaces.length && !interfacesOk; i++)
 			{
-				ok = true;
-				pluginMainClass = classTmp;
+				if (interfaces[i].getName().equals(PLUGIN_INTERFACE_NAME))
+				{
+					interfacesOk = true;
+				}
+			}
+			if (interfacesOk)
+			{
+				return (Plugin) classTmp.newInstance();
 			}
 		}
+		catch (ClassNotFoundException e1)
+		{
+			e1.printStackTrace();
+		}
+		catch (IllegalAccessException e2)
+		{
+			e2.printStackTrace();
+		}
+		catch (InstantiationException e3)
+		{
+			e3.printStackTrace();
+		}
+		catch (MalformedURLException e4)
+		{
+			e4.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -140,6 +170,7 @@ public class PluginManager
 		Vector<Plugin> pluginsVector = new Vector<Plugin>();
 		for (File file : pluginsDir.listFiles())
 		{
+			Plugin plugin = null;
 			String filename = file.getName();
 			if (file.isDirectory())
 			{
@@ -151,45 +182,19 @@ public class PluginManager
 			}
 			try
 			{
-				boolean ok = false;
-				Class pluginMainClass = null;
-				JarFile jar = new JarFile(file);
-				Enumeration<JarEntry> jarFiles = jar.entries();
-				while (!ok && jarFiles.hasMoreElements())
+				Enumeration<JarEntry> jarFiles = (new JarFile(file)).entries();
+				while (jarFiles.hasMoreElements() && plugin == null)
 				{
-					JarEntry jarFile = jarFiles.nextElement();
-					String jarName = jarFile.getName();
-					if (jarName.length() <= 6 || !jarName.substring(jarName.length()-6).equals(".class"))
-					{
-						continue;
-					}
-					String className = jarName.substring(0, jarName.length()-6).replace('/', '.');
-					Class classTmp = Class.forName(
-						className,
-						false,
-						new URLClassLoader(new URL[]{
-							file.toURI().toURL()
-						})
-					);
-					Class[] interfaces = ((Class<?>) classTmp.getSuperclass()).getInterfaces();
-					for (int i = 0; i < interfaces.length && !ok; i++)
-					{
-						if (interfaces[i].getName().equals(PLUGIN_INTERFACE_NAME))
-						{
-							ok = true;
-							pluginMainClass = classTmp;
-						}
-					}
-				}
-				jar.close();
-				if (ok)
-				{
-					pluginsVector.add((Plugin) pluginMainClass.newInstance());
+					plugin = createPluginInstance(file, jarFiles.nextElement().getName());
 				}
 			}
-			catch (Exception e)
+			catch (IOException e1)
 			{
-				ok = false;
+				e1.printStackTrace();
+			}
+			if (plugin != null)
+			{
+				pluginsVector.add(plugin);
 			}
 		}
 		if (pluginsVector.size() == 0)
