@@ -27,167 +27,175 @@ import java.util.Vector;
 import java.util.jar.*;
 
 /**
- * Un objet PluginsManager gÃ¨re l'ensemble des plugins de l'application.
- * Ce manager permet d'Ã©xÃ©cuter les plugins, de les lister, de les instancier
- * en mÃ©moire.
-**/
+ * Un objet PluginsManager gère l'ensemble des plugins de l'application.
+ * Ce manager permet d'éxécuter les plugins, de les lister, de les instancier
+ * en mémoire.
+ */
 
-public class PluginManager {
+public class PluginManager
+{
 
-////////////////////////////////
-// Constantes
-////////////////////////////////
+	/*
+	 * Le nom de l'interface de plugin dans le paquetage.
+	 */
+	public final static String PLUGIN_INTERFACE_NAME = "net.aepik.casl.core.Plugin";
 
-	/** Le nom de l'interface de plugin dans le paquetage. **/
-	public final static String PLUGIN_INTERFACE_NAME = "net.aepik.casl.core.Plugin" ;
+	/**
+	 * Le manager de l'application
+	 */
+	private Manager manager;
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * Le chemin du répertoire contenant tous les plugins
+	 */
+	private String path;
 
-	/** Le manager de l'application **/
-	private Manager manager ;
-	/** Le chemin du rÃ©pertoire contenant tous les plugins **/
-	private String path ;
-	/** L'ensemble des plugins **/
-	private Plugin[] plugins ;
-	private Plugin[] pluginsAlpha ;
-	/** L'ensemble des noms de jarFile **/
-	private File[] pluginsFiles ;
+	/**
+	 * L'ensemble des plugins
+	 */
+	private Plugin[] plugins;
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	/**
+	 * L'ensemble des plugins triés par ordres alphabétique
+	 */
+	private Plugin[] pluginsAlpha;
 
-	public PluginManager( Manager m, String path ) {
-		manager = m;
+	/**
+	 * L'ensemble des noms de jarFile
+	 */
+	private File[] pluginsFiles;
+
+	/**
+	 * Build a new PluginManager object.
+	 * @param m A Manager object.
+	 * @param path A path.
+	 */
+	public PluginManager (Manager m, String path)
+	{
+		this.manager = m;
 		this.path = path ;
 		this.plugins = new Plugin[0];
 		this.pluginsAlpha = new Plugin[0];
 	}
 
-////////////////////////////////
-// MÃ©thodes publiques
-////////////////////////////////
+	/**
+	 * Build a Plugin instance.
+	 * @param name The name of the instance.
+	 * @return Plugin A Plugin object.
+	 */
+	public static Plugin createPluginInstance (String name)
+	{
+		if (name.length() <= 6 || !name.substring(name.length()-6).equals(".class"))
+		{
+			return null;
+		}
+		Class classTmp = Class.forName(
+			name.substring(0, name.length()-6).replace('/', '.'),
+			false,
+			new URLClassLoader(new URL[]{
+				file.toURI().toURL()
+			})
+		);
+		Class[] interfaces = ((Class<?>) classTmp.getSuperclass()).getInterfaces();
+		for (int i = 0; i < interfaces.length; i++)
+		{
+			if (interfaces[i].getName().equals(PLUGIN_INTERFACE_NAME))
+			{
+				ok = true;
+				pluginMainClass = classTmp;
+			}
+		}
+	}
 
 	/**
 	 * Retourne le manager de l'application.
 	 * @return Manager Le manager de l'application.
-	**/
-	public Manager getManager() { return manager; }
+	 */
+	public Manager getManager ()
+	{
+		return manager;
+	}
 
 	/**
 	 * Retourne l'ensemble des plugins.
 	 * @return String[] L'ensemble des noms de plugins.
-	**/
-	public Plugin[] getPlugins() { return pluginsAlpha; }
+	 */
+	public Plugin[] getPlugins ()
+	{
+		return pluginsAlpha;
+	}
 
 	/**
-	 * Trouve les plugins dans le rÃ©pertoire des plugins.
-	 * Pour accÃ©der aux plugins, il faut appeler la mÃ©thode getPlugins().
-	 * @return boolean True si le chargement des plugins a rÃ©ussi, false sinon.
-	**/
-	public boolean loadPlugins() {
-
-		// On teste si le rÃ©pertoire des plugins existe. Si ca n'est pas
-		// le cas, on ne va pas plus loin.
-
-		File pluginsDir = new File( path );
-		if( !pluginsDir.exists() )
-			return false ;
-
-		// On rÃ©cupÃ¨re la liste des fichiers contenus dans le rÃ©pertoire
-		// des plugins. Puis on parcours cette liste pour charger chaque
-		// plugin. La liste des plugins correctement chargÃ©s est dans le
-		// vecteur pluginsVector.
-
-		pluginsFiles = pluginsDir.listFiles();
+	 * Trouve les plugins dans le répertoire des plugins.
+	 * Pour accéder aux plugins, il faut appeler la méthode getPlugins().
+	 * @return boolean True si le chargement des plugins a réussi, false sinon.
+	 */
+	public boolean loadPlugins ()
+	{
+		File pluginsDir = new File(path);
+		if (!pluginsDir.exists())
+		{
+			return false;
+		}
 		Vector<Plugin> pluginsVector = new Vector<Plugin>();
-
-		for( int i=0; pluginsFiles!=null && i<pluginsFiles.length; i++ ) {
-
-			// On teste si le plugin est uniquement un fichier .jar
-			// Si ca n'est pas le cas, on passe au suivant.
-
-			String pluginName = pluginsFiles[i].getName();
-			if( pluginsFiles[i].isDirectory()
-					|| pluginName.length()<=4
-					|| !pluginName.substring(
-						pluginName.length()-4 ).equals( ".jar" ) )
+		for (File file : pluginsDir.listFiles())
+		{
+			String filename = file.getName();
+			if (file.isDirectory())
+			{
 				continue;
-
-			// L'Ã©tape suivante consiste donc Ã  charger le plugin
-			// dynamiquement dans la JVM Java Ã  l'aide de la classe
-			// URLClassLoader. A la moindre erreur de chargement,
-			// le plugin ne sera pas gardÃ©.
-
-			boolean ok = false ;
-			try {
-
-				File pluginFile = pluginsFiles[i];
-				URL pluginURL = pluginFile.toURI().toURL();
-				URLClassLoader loader = new URLClassLoader( new URL[]{ pluginURL } );
-	
-				// On charge chaque maintenant le fichier en mÃ©moire. Par la
-				// suite, on va crÃ©er l'instance et la stocker dans le
-				// vecteur de plugin.
-
-				JarFile jar = new JarFile( pluginFile );
+			}
+			if (filename.length() <= 4 || !filename.substring(filename.length()-4).equals(".jar"))
+			{
+				continue;
+			}
+			try
+			{
+				boolean ok = false;
+				Class pluginMainClass = null;
+				JarFile jar = new JarFile(file);
 				Enumeration<JarEntry> jarFiles = jar.entries();
-				Class pluginMainClass = null ;
-
-				while( !ok && jarFiles.hasMoreElements() ) {
+				while (!ok && jarFiles.hasMoreElements())
+				{
 					JarEntry jarFile = jarFiles.nextElement();
-
-					// Pour chaque fichier dans le jar, on regarde si c'est un
-					// fichier de classe Java.
-
-					if( jarFile.getName().length()>6
-							&& jarFile.getName().substring(
-								jarFile.getName().length()-6 ).equals( ".class" ) ) {
-
-						// Et que cette classe implÃ©mente l'interface Plugin.
-						// Pour ca, on rÃ©cupÃ¨re tout d'abord le nom complet de
-						// la classe, puis les interfaces qu'elle implÃ©mente
-						// en la chargeant dynamiquement.
-
-						String className = jarFile.getName().substring( 0, jarFile.getName().length()-6 );
-						className = className.replace( '/', '.' );
-
-						Class classTmp = Class.forName( className, false, loader );
-						Class<?> classSuperclass = classTmp.getSuperclass();
-						Class[] classInterfaces = classSuperclass.getInterfaces();
-
-						for( int j=0; classInterfaces!=null && !ok && j<classInterfaces.length; j++ ) {
-							if( classInterfaces[j].getName().equals( PLUGIN_INTERFACE_NAME ) ) {
-								ok = true ;
-								pluginMainClass = classTmp ;
-							}
+					String jarName = jarFile.getName();
+					if (jarName.length() <= 6 || !jarName.substring(jarName.length()-6).equals(".class"))
+					{
+						continue;
+					}
+					String className = jarName.substring(0, jarName.length()-6).replace('/', '.');
+					Class classTmp = Class.forName(
+						className,
+						false,
+						new URLClassLoader(new URL[]{
+							file.toURI().toURL()
+						})
+					);
+					Class[] interfaces = ((Class<?>) classTmp.getSuperclass()).getInterfaces();
+					for (int i = 0; i < interfaces.length && !ok; i++)
+					{
+						if (interfaces[i].getName().equals(PLUGIN_INTERFACE_NAME))
+						{
+							ok = true;
+							pluginMainClass = classTmp;
 						}
 					}
 				}
-
 				jar.close();
-
-				// Si ok est true, cela veut dire que le plugin est correct.
-				// On l'ajoute donc Ã  la liste des plugins, aprÃ¨s l'avoir
-				// instanciÃ©.
-	
-				if( ok ) {
-					pluginsVector.add( (Plugin) pluginMainClass.newInstance() );
+				if (ok)
+				{
+					pluginsVector.add((Plugin) pluginMainClass.newInstance());
 				}
-
-			} catch( Exception debug ) {
+			}
+			catch (Exception e)
+			{
 				ok = false;
 			}
 		}
-
-		if( pluginsVector.size()==0 )
-			return false ;
-
-		// On remet tout dans le tableau fixe des plugins.
-		// Seul les plugins correctement chargÃ©s sont prÃ©sents.
-
+		if (pluginsVector.size() == 0)
+		{
+			return false;
+		}
 		plugins = new Plugin[ pluginsVector.size() ];
 		pluginsAlpha = new Plugin[ plugins.length ];
 		int compteur = 0;
