@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.jar.*;
@@ -63,11 +64,6 @@ public class PluginManager
 	private Plugin[] pluginsAlpha;
 
 	/**
-	 * L'ensemble des noms de jarFile
-	 */
-	private File[] pluginsFiles;
-
-	/**
 	 * Build a new PluginManager object.
 	 * @param m A Manager object.
 	 * @param path A path.
@@ -83,56 +79,53 @@ public class PluginManager
 	/**
 	 * Build a Plugin instance.
 	 * @param file A jar file
-	 * @param classname The class to instanciate
+	 * @param filename The class to instanciate
 	 * @return Plugin A Plugin object.
 	 */
-	public static Plugin createPluginInstance (File file, String classname)
+	public static Plugin createPluginInstance (File file, String filename) throws IllegalAccessException, InstantiationException
 	{
-		if (classname.length() <= 6 || !classname.substring(classname.length()-6).equals(".class"))
+		if (filename.length() <= 6 || !filename.substring(filename.length()-6).equals(".class"))
 		{
 			return null;
 		}
+		URLClassLoader loader = null;
 		try
 		{
-			Class classTmp = Class.forName(
-				classname.substring(0, classname.length()-6).replace('/', '.'),
-				false,
-				new URLClassLoader(new URL[]{
-					file.toURI().toURL()
-				})
-			);
-			//
-			// Verify that the plugin inherit from the CASL plugin interface.
-			//
-			boolean interfacesOk = false;;
-			Class[] interfaces = ((Class<?>) classTmp.getSuperclass()).getInterfaces();
-			for (int i = 0; i < interfaces.length && !interfacesOk; i++)
-			{
-				if (interfaces[i].getName().equals(PLUGIN_INTERFACE_NAME))
-				{
-					interfacesOk = true;
-				}
-			}
-			if (interfacesOk)
-			{
-				return (Plugin) classTmp.newInstance();
-			}
+			loader = new URLClassLoader(new URL[]{
+				file.toURI().toURL()
+			});
 		}
-		catch (ClassNotFoundException e1)
+		catch (MalformedURLException e1)
 		{
 			e1.printStackTrace();
+			return null;
 		}
-		catch (IllegalAccessException e2)
+		Class class1 = null;
+		try
+		{
+			class1 = Class.forName(
+				filename.substring(0, filename.length()-6).replace('/', '.'),
+				false,
+				loader
+			);
+		}
+		catch (ClassNotFoundException e2)
 		{
 			e2.printStackTrace();
+			return null;
 		}
-		catch (InstantiationException e3)
+		boolean instanciate = false;
+		Class[] interfaces = ((Class<?>) class1.getSuperclass()).getInterfaces();
+		for (int i = 0; i < interfaces.length && !instanciate; i++)
 		{
-			e3.printStackTrace();
+			if (interfaces[i].getName().equals(PLUGIN_INTERFACE_NAME))
+			{
+				instanciate = true;
+			}
 		}
-		catch (MalformedURLException e4)
+		if (instanciate)
 		{
-			e4.printStackTrace();
+			return (Plugin) class1.newInstance();
 		}
 		return null;
 	}
@@ -156,6 +149,37 @@ public class PluginManager
 	}
 
 	/**
+	 * List jar files.
+	 * @param file A jar file.
+	 * @return String[] Entry name into the jar file.
+	 */
+	private static String[] listJarEntries (File file)
+	{
+		String filename = file.getName();
+		if (filename.length() <= 4 || !filename.substring(filename.length()-4).equals(".jar"))
+		{
+			return null;
+		}
+		Enumeration<JarEntry> entries = null;
+		try
+		{
+			entries = (new JarFile(file)).entries();
+		}
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+			return new String[0];
+		}
+		JarEntry[] files = Collections.list(entries).toArray(new JarEntry[0]);
+		String[] filenames = new String[files.length];
+		for (int i = 0; i < files.length; i++)
+		{
+			filenames[i] = files[i].getName();
+		}
+		return filenames;
+	}
+
+	/**
 	 * Trouve les plugins dans le répertoire des plugins.
 	 * Pour accéder aux plugins, il faut appeler la méthode getPlugins().
 	 * @return boolean True si le chargement des plugins a réussi, false sinon.
@@ -170,27 +194,28 @@ public class PluginManager
 		Vector<Plugin> pluginsVector = new Vector<Plugin>();
 		for (File file : pluginsDir.listFiles())
 		{
-			Plugin plugin = null;
-			String filename = file.getName();
 			if (file.isDirectory())
 			{
 				continue;
 			}
-			if (filename.length() <= 4 || !filename.substring(filename.length()-4).equals(".jar"))
-			{
-				continue;
-			}
+			Plugin plugin = null;
 			try
 			{
-				Enumeration<JarEntry> jarFiles = (new JarFile(file)).entries();
-				while (jarFiles.hasMoreElements() && plugin == null)
+				String[] files = listJarEntries(file);
+				for (int i = 0; i < files.length && plugin == null; i++)
 				{
-					plugin = createPluginInstance(file, jarFiles.nextElement().getName());
+					plugin = createPluginInstance(file, files[i]);
 				}
 			}
-			catch (IOException e1)
+			catch (IllegalAccessException e2)
 			{
-				e1.printStackTrace();
+				e2.printStackTrace();
+				continue;
+			}
+			catch (InstantiationException e3)
+			{
+				e3.printStackTrace();
+				continue;
 			}
 			if (plugin != null)
 			{
@@ -201,18 +226,9 @@ public class PluginManager
 		{
 			return false;
 		}
-		plugins = new Plugin[ pluginsVector.size() ];
-		pluginsAlpha = new Plugin[ plugins.length ];
-		int compteur = 0;
-		for( Enumeration<Plugin> e = pluginsVector.elements(); e.hasMoreElements(); ) {
-			plugins[ compteur ] = e.nextElement();
-			pluginsAlpha[ compteur ] = plugins[ compteur ];
-			compteur++;
-		}
-
-		Arrays.sort( pluginsAlpha );
-
-		return true ;
+		this.plugins = pluginsVector.toArray(new Plugin[0]);
+		Arrays.sort(this.plugins);
+		return true;
 	}
 
 }
