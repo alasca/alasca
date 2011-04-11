@@ -244,59 +244,45 @@ public class SchemaManager extends Observable implements Observer
 	 */
 	public boolean removeSchema ( String id )
 	{
-		try
+		if (!isSchemaIdExists(id))
 		{
-			if (isSchemaIdExists(id))
+			return false;
+		}
+		lastSchemaId = null;
+		currentSchemaId = null;
+		boolean isNextElement = false;
+		Enumeration<String> keys = schemas.keys();
+		while (keys.hasMoreElements())
+		{
+			String idTmp = keys.nextElement();
+			if (currentSchemaId == null)
 			{
-				lastSchemaId = null;
-				currentSchemaId = null;
-				int compteur = 0;
-				boolean ok = false;
-				boolean isNextElement = false;
-				String previousSchemaId = null;
-				Enumeration<String> keys = schemas.keys();
-				while (keys.hasMoreElements() && !ok)
+				if (isNextElement)
 				{
-					String idTmp = keys.nextElement();
-					if (currentSchemaId == null)
-					{
-						if (isNextElement)
-						{
-							currentSchemaId = idTmp;
-							isNextElement = false;
-						}
-						else if (idTmp.equals(id))
-						{
-							if (compteur > 0)
-							{
-								currentSchemaId = previousSchemaId;
-							}
-							else if (keys.hasMoreElements())
-							{
-								isNextElement = true;
-							}
-						}
-						else
-						{
-							previousSchemaId = idTmp;
-						}
-					}
-					if (!keys.hasMoreElements())
-					{
-						lastSchemaId = idTmp;
-					}
+					currentSchemaId = idTmp;
+					isNextElement = false;
 				}
-				getSchema(id).deleteObserver(this);
-				schemas.remove(id);
-				notifyUpdates();
-				return true;
+				else if (idTmp.equals(id) && keys.hasMoreElements())
+				{
+					isNextElement = true;
+				}
 			}
+			if (!keys.hasMoreElements())
+			{
+				lastSchemaId = idTmp;
+			}
+		}
+		try
+		{			
+			getSchema(id).deleteObserver(this);
 		}
 		catch (NullPointerException e)
 		{
 			e.printStackTrace();
 		}
-		return false;
+		schemas.remove(id);
+		notifyUpdates();
+		return true;
 	}
 
 	/**
