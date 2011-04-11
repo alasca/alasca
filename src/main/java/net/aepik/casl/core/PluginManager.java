@@ -18,6 +18,7 @@
 
 package net.aepik.casl.core;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -28,6 +29,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.jar.*;
+
 
 /**
  * Un objet PluginsManager gère l'ensemble des plugins de l'application.
@@ -66,7 +68,7 @@ public class PluginManager
 	public PluginManager (Manager m, String path)
 	{
 		this.manager = m;
-		this.path = path ;
+		this.path = path;
 		this.plugins = new Plugin[0];
 	}
 
@@ -78,14 +80,16 @@ public class PluginManager
 	 */
 	public static Plugin createPluginInstance (File file, String filename) throws IllegalAccessException, InstantiationException
 	{
-		if (filename.length() <= 6 || !filename.substring(filename.length()-6).equals(".class"))
+		if (filename.length() <= 6
+			||
+				!filename.substring(filename.length() - 6).equals(".class"))
 		{
 			return null;
 		}
 		URLClassLoader loader = null;
 		try
 		{
-			loader = new URLClassLoader(new URL[]{
+			loader = new URLClassLoader(new URL[] {
 				file.toURI().toURL()
 			});
 		}
@@ -98,10 +102,8 @@ public class PluginManager
 		try
 		{
 			class1 = Class.forName(
-				filename.substring(0, filename.length()-6).replace('/', '.'),
-				false,
-				loader
-			);
+				filename.substring(0, filename.length() - 6).replace('/', '.'),
+				false, loader);
 		}
 		catch (ClassNotFoundException e2)
 		{
@@ -150,7 +152,9 @@ public class PluginManager
 	private static String[] listJarEntries (File file)
 	{
 		String filename = file.getName();
-		if (filename.length() <= 4 || !filename.substring(filename.length()-4).equals(".jar"))
+		if (filename.length() <= 4
+			||
+				!filename.substring(filename.length() - 4).equals(".jar"))
 		{
 			return new String[0];
 		}

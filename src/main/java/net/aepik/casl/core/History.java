@@ -16,11 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 package net.aepik.casl.core;
+
 
 import java.util.Enumeration;
 import java.util.Vector;
+
 
 /**
  * A History object allow to keep in memory a reading order.
@@ -104,7 +105,7 @@ public class History
 	 * Move an element at position i to the position j into the history.
 	 * @param int i Initial position of the element
 	 * @param int j Final position of the element
-	**/
+	 */
 	public void moveElement (int i, int j)
 	{
 		if (i >= 0 && i < datas.size() && j != i && j >= 0 && j < datas.size())
