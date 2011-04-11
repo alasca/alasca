@@ -19,6 +19,9 @@
 package net.aepik.casl.core.ldap.parser;
 
 import net.aepik.casl.core.ldap.Schema;
+import net.aepik.casl.core.ldap.SchemaObject;
+import net.aepik.casl.core.ldap.SchemaSyntax;
+import net.aepik.casl.core.ldap.SchemaValue;
 import java.io.IOException;
 
 /**
@@ -52,7 +55,59 @@ public class OpenldapWriter extends RFCWriter
 		{
 			return;
 		}
+		output.newLine();
 		super.write(schema);
+	}
+
+	/**
+	 * Return the string representation of a SchemaObject object.
+	 * @param object A SchemaObject object.
+	 * @return String Its String representation.
+	 */
+	public String valueOf (SchemaObject object)
+	{
+		if (object == null)
+		{
+			return "";
+		}
+		String str = "";
+                String eol = System.getProperty("line.separator");
+                String type = object.getType();
+                SchemaSyntax syntax = object.getSyntax();
+                if (type.equals(syntax.getObjectIdentifierType()))
+                {
+                        String[] keys = object.getKeys();
+                        SchemaValue value = object.getValue(keys[0]);
+                        str = keys[0] + " " + value.toString();
+                }
+		else
+		{
+	                String[] params_name = syntax.getParameters(type);
+                	str = object.getId() + eol;
+	                for (int i = 0; i < params_name.length; i++)
+	                {
+	                        if (object.isKeyExists(params_name[i]))
+	                        {
+	                                str += "\t" + params_name[i] + " " + object.getValue(params_name[i]) + eol;
+	                        }
+	                }
+	                str = str.trim();
+			str = "\t" + str;
+		}
+		if (type.equals(syntax.getObjectClassType()))
+		{
+			str = syntax.getObjectClassHeader() + " (" + eol + str + eol + ")";
+		}
+		if (type.equals(syntax.getAttributeType()))
+		{
+			str = syntax.getAttributeHeader() + " (" + eol + str + eol + ")";
+		}
+		if (type.equals(syntax.getObjectIdentifierType()))
+		{
+			str = syntax.getObjectIdentifierHeader() + " " + str;
+		}
+		str = "# " + object.getId() + eol + str + eol;
+		return str;
 	}
 
 }

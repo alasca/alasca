@@ -1,7 +1,5 @@
 /*
- * SchemaFileWriter.java		0.1		15/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,56 +38,62 @@ import java.io.IOException;
  * <br/><br/>
  * Pour plus de renseignements, lisez la RFC 2252 et notamment les
  * grammaires BNF proposées.
-**/
+ */
 
-public abstract class SchemaFileWriter {
+public abstract class SchemaFileWriter
+{
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
-
-	/** La sortie sur laquelle écrire **/
-	protected BufferedWriter output ;
-
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	/**
+	 * La sortie sur laquelle écrire
+	 */
+	protected BufferedWriter output;
 
 	/**
 	 * Construit un nouveau parser sans entrée.
-	**/
-	public SchemaFileWriter() {
-		this.output = null ;
+	 */
+	public SchemaFileWriter ()
+	{
+		this.output = null;
 	}
 
 	/**
 	 * Construit un nouveau parser à partir d'une entrée.
 	 * @param out Un objet Writer.
-	**/
-	public SchemaFileWriter( BufferedWriter out ) {
+	 */
+	public SchemaFileWriter (BufferedWriter out)
+	{
 		this.output = out ;
 	}
-
-////////////////////////////////
-// Methodes publiques
-////////////////////////////////
 
 	/**
 	 * Retourne le flux de sortie.
 	 * @return BufferedWriter Un flux.
-	**/
-	public BufferedWriter getOutput() { return output; }
-
-	/**
-	 * Ecrit l'ensemble des objets du schema dans le flux de sortie.
-	 * @param schema Le schéma à écrire.
-	**/
-	public abstract void write( Schema schema ) throws IOException;
+	 */
+	public BufferedWriter getOutput ()
+	{
+		return output;
+	}
 
 	/**
 	 * Modifie le flux de sortie.
 	 * @param out Le nouveau flux de sortie.
-	**/
-	public void setOutput( BufferedWriter out ) { this.output = out; }
+	 */
+	public void setOutput (BufferedWriter out)
+	{
+		this.output = out;
+	}
+
+	/**
+	 * Ecrit l'ensemble des objets du schema dans le flux de sortie.
+	 * @param schema Le schéma à écrire.
+	 */
+	public abstract void write (Schema schema) throws IOException;
+
+	/**
+	 * Return the string representation of a SchemaObject object.
+	 * @param object A SchemaObject object.
+	 * @return String Its String representation.
+	 */
+	public abstract String valueOf (SchemaObject object);
 
 }

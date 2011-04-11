@@ -265,10 +265,10 @@ public class ADWriter extends SchemaFileWriter {
 			{
 				String e = elem.nextElement();
 				if( e!=null ) {
-	         		output.write( e );
-         			output.newLine();
-         		}
-         	}
+		 		output.write( e );
+	 			output.newLine();
+	 		}
+	 	}
 
 			// Enfin, on ecrit la chaîne dans le fichier. On fait attention à
 			// ce que tout objet soit séparé par un retour à la ligne.
@@ -313,6 +313,20 @@ public class ADWriter extends SchemaFileWriter {
 			output.write( "-" );					output.newLine();
 			output.newLine();
 		}
+	}
+
+	/**
+	 * Return the string representation of a SchemaObject object.
+	 * @param object A SchemaObject object.
+	 * @return String Its String representation.
+	 */
+	public String valueOf (SchemaObject object)
+	{
+		if (object == null)
+		{
+			return "";
+		}
+		return object.toString();
 	}
 
 ////////////////////////////////
