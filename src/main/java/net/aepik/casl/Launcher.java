@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,6 +18,7 @@
 
 package net.aepik.casl;
 
+
 import net.aepik.casl.core.Manager;
 import net.aepik.casl.core.util.Config;
 import net.aepik.casl.ui.CreditsFrame;
@@ -33,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+
 
 public class Launcher
 {
@@ -55,24 +57,26 @@ public class Launcher
 
 	public Launcher () throws Exception
 	{
-                this.loadingStatus = new JProgressBar(0, 3);
-                this.loadingStatus.setValue(0);
-                this.loadingStatus.setStringPainted(true);
-                this.loadingStatus.setOpaque(false);
-                this.loadingStatus.setBorder(null);
+		this.loadingStatus = new JProgressBar(0, 3);
+		this.loadingStatus.setValue(0);
+		this.loadingStatus.setStringPainted(true);
+		this.loadingStatus.setOpaque(false);
+		this.loadingStatus.setBorder(null);
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(loadingStatus);
 		panel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		this.configFile = Config.getResourcesPath() + "/config.xml";
-		this.icone = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() + "/casl.png");
-		this.creditsFrame = new CreditsFrame(null, new Manager(configFile), panel, false);
+		this.icone = Toolkit.getDefaultToolkit().getImage(
+			Config.getResourcesPath() + "/casl.png");
+		this.creditsFrame = new CreditsFrame(null, new Manager(configFile),
+			panel, false);
 		this.creditsFrame.setSize(300, 155);
 		this.creditsFrame.setUndecorated(true);
 	}
 
-	public JFrame loadApplication() throws Exception
+	public JFrame loadApplication () throws Exception
 	{
-		synchronized(loadingStatus)
+		synchronized (loadingStatus)
 		{
 			try
 			{
@@ -85,7 +89,7 @@ public class Launcher
 			manager = new Manager(this.configFile);
 			updateLoadingStatus();
 		}
-		synchronized(loadingStatus)
+		synchronized (loadingStatus)
 		{
 			try
 			{
@@ -98,7 +102,7 @@ public class Launcher
 			manager.loadPluginManager();
 			updateLoadingStatus();
 		}
-		synchronized(loadingStatus)
+		synchronized (loadingStatus)
 		{
 			try
 			{
@@ -108,17 +112,15 @@ public class Launcher
 			{
 				e.printStackTrace();
 			}
-			managerFrame = new ManagerFrame(
-				manager,
+			managerFrame = new ManagerFrame(manager,
 				manager.getProperty("FrameTitle"),
-				manager.getProperty("FrameStatus")
-			);
+				manager.getProperty("FrameStatus"));
 			managerListener = new ManagerListener(managerFrame);
 			managerFrame.addManagerListener(managerListener);
 			managerFrame.setIconImage(icone);
 			updateLoadingStatus();
 		}
-		synchronized(loadingStatus)
+		synchronized (loadingStatus)
 		{
 			manager.getSchemaManager().notifyUpdates();
 			updateLoadingStatus();
@@ -160,16 +162,16 @@ public class Launcher
 		{
 			Runnable callMAJ = new Runnable()
 			{
-				public void run()
+				public void run ()
 				{
 					updateLoadingStatus();
 				}
-	    		};
+			};
 			SwingUtilities.invokeLater(callMAJ);
 		}
 	}
 
-	public static void main ( String[] args )
+	public static void main (String[] args)
 	{
 		Launcher m = null;
 		ManagerFrame f = null;
@@ -186,7 +188,7 @@ public class Launcher
 			m = new Launcher();
 			m.openLoadingFrame();
 			f = (ManagerFrame) m.loadApplication();
-			System.out.println("CASL "+f.getManager().getProperty("Version"));
+			System.out.println("CASL " + f.getManager().getProperty("Version"));
 			m.closeLoadingFrame();
 			m.disposeLoadingFrame();
 			f.setVisible(true);
@@ -199,12 +201,9 @@ public class Launcher
 				m.disposeLoadingFrame();
 			}
 			e2.printStackTrace();
-			JOptionPane.showMessageDialog(
-				null,
+			JOptionPane.showMessageDialog(null,
 				"Une erreur est survenue:\n\n" + e2.toString() + "\n\n",
-				"Erreur critique",
-				JOptionPane.ERROR_MESSAGE
-			);
+				"Erreur critique", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
