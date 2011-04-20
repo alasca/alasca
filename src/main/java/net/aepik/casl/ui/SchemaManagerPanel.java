@@ -361,7 +361,6 @@ public class SchemaManagerPanel extends JPanel
 		onglets.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		JPanel ongletsPanel = new JPanel(new BorderLayout());
 		ongletsPanel.add(onglets, BorderLayout.CENTER);
-		ongletsPanel.setBorder((new JMenuBar()).getBorder());
 
 		//
 		// Organisation Générale
