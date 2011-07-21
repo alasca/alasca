@@ -96,11 +96,11 @@ public class OpenldapWriter extends RFCWriter
 		}
 		if (type.equals(syntax.getObjectClassType()))
 		{
-			str = syntax.getObjectClassHeader() + " (" + eol + str + eol + ")";
+			str = syntax.getObjectClassHeader() + " (" + eol + str + eol + "\t)";
 		}
 		if (type.equals(syntax.getAttributeType()))
 		{
-			str = syntax.getAttributeHeader() + " (" + eol + str + eol + ")";
+			str = syntax.getAttributeHeader() + " (" + eol + str + eol + "\t)";
 		}
 		if (type.equals(syntax.getObjectIdentifierType()))
 		{
