@@ -327,9 +327,7 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 		JTextArea textAreaDescription = new JTextArea(
 			"Les propriétés du schéma peuvent être modifiées. Elles ne sont"
 			+ " pas pré-définies et sont fonction de la syntaxe employée"
-			+ " par ce schéma. Il n'est pas possible de lister toutes les"
-			+ " propriétés du schéma, pour cela référez vous à l'aide en"
-			+ " cliquant sur le lien plus bas."
+			+ " par ce schéma."
 		);
 		textAreaDescription.setEditable(false);
 		textAreaDescription.setLineWrap(true);
@@ -349,7 +347,7 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 		JScrollPane propertiesScroller = new JScrollPane(propertiesList);
 		propertiesScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		propertiesList.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-		propertiesList.setVisibleRowCount(4);
+		propertiesList.setVisibleRowCount(5);
 		propertiesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JPanel propertiesPanel = new JPanel(new BorderLayout());
