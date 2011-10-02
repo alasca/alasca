@@ -83,7 +83,7 @@ public class Openldap24Writer extends RFCWriter
 		else
 		{
 			String[] params_name = syntax.getParameters(type);
-			str = object.getId() + eol;
+			str = object.getId();
 			for (int i = 0; i < params_name.length; i++)
 			{
 				if (object.isKeyExists(params_name[i]))
@@ -105,7 +105,7 @@ public class Openldap24Writer extends RFCWriter
 		{
 			str = syntax.getObjectIdentifierHeader() + " " + str;
 		}
-		return str + eol;
+		return str;
 	}
 
 }
