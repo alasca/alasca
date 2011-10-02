@@ -19,7 +19,7 @@
 
 package net.aepik.casl.core.ldap.syntax;
 
-import net.aepik.casl.core.ldap.parser.OpenldapWriter;
+import net.aepik.casl.core.ldap.parser.Openldap24Writer;
 import net.aepik.casl.core.ldap.SchemaFileWriter;
 
 /**
@@ -31,27 +31,27 @@ public class OpenldapSyntax extends RFCSyntax
 	/**
 	 * Syntax short name.
 	 */
-	public static final String SHORTNAME = "OpenLDAP";
+	public static final String SHORTNAME = "OpenLDAP 2.4";
 
 	/**
 	 * Attribut definition (and used for type).
 	 */
-	public final static String OPENLDAP_ATTRIBUTE = "attributetype";
+	public final static String OPENLDAP_ATTRIBUTE = "olcAttributeTypes:";
 
 	/**
 	 * ObjectClass definition (and used for type).
 	 */
-	public final static String OPENLDAP_OBJECT = "objectclass";
+	public final static String OPENLDAP_OBJECT = "olcObjectclasses:";
 
 	/**
 	 * ObjectIdentifier definition (and used for type).
 	 */
-	public final static String OPENLDAP_OBJECTID = "objectidentifier";
+	public final static String OPENLDAP_OBJECTID = "olcObjectIdentifiers:";
 
 	/**
 	 * Build a new OpenldapSyntax object.
 	 */
-	public OpenldapSyntax()
+	public Openldap24Syntax()
 	{
 		super();
 		super.attributeHeader = OPENLDAP_ATTRIBUTE;
@@ -68,7 +68,7 @@ public class OpenldapSyntax extends RFCSyntax
 	 */
 	public SchemaFileWriter createSchemaWriter ()
 	{
-		return new OpenldapWriter();
+		return new Openldap24Writer();
 	}
 
 }
