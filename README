@@ -5,6 +5,5 @@
 
 1. Requirements
 
-  CASL uses JDIC v0.9.5 from https://jdic.dev.java.net/.
   JDIC needs libstdc++5 (still available under ubuntu 10.10).
 
