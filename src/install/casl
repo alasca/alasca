@@ -12,7 +12,7 @@ CASL_LIB_PATH="${CASL_ROOT_PATH}/lib"
 CASL_DEBUG_ON="0"
 
 JAVA_BIN_PATH="`which java`"
-JAVA_VERSION="`${JAVA_BIN_PATH} -version 2>&1 | head -n 1 | sed -e 's/[^ ]\+ [^ ]\+ "\(.*\)"/\1/'`"
+JAVA_VERSION="`${JAVA_BIN_PATH} -version 2>&1 | head -n 1 | sed -e 's/java version "\(.*\)"/\1/'`"
 JAVA_VERSION_SHORT="`echo ${JAVA_VERSION} | cut -d "." -f 1,2 | sed -e 's/\.//'`"
 
 # -----------------------------------------------------------------------------
