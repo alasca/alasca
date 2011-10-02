@@ -56,6 +56,8 @@ public class Openldap24Writer extends RFCWriter
 			return;
 		}
 		output.newLine();
+		//String name = schema.getProperties().getProperty("dn");
+		//name = name != null ? name : "casl";
 		super.write(schema);
 	}
 
