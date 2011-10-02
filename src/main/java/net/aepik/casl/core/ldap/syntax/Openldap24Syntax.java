@@ -25,7 +25,7 @@ import net.aepik.casl.core.ldap.SchemaFileWriter;
 /**
  * OpenLDAP syntax.
  */
-public class OpenldapSyntax extends RFCSyntax
+public class Openldap24Syntax extends RFCSyntax
 {
 
 	/**
