@@ -151,8 +151,8 @@ public class SchemaPanel extends JPanel
 		item_supprimer.addMouseListener(l);
 		item_propriete.addActionListener(l);
 		item_propriete.addMouseListener(l);
-                item_rename.addActionListener(l);
-                item_rename.addMouseListener(l);
+		item_rename.addActionListener(l);
+		item_rename.addMouseListener(l);
 		table.addMouseListener(l);
 		item_propriete2.addActionListener(l);
 		item_propriete2.addMouseListener(l);
@@ -220,8 +220,8 @@ public class SchemaPanel extends JPanel
 		item_supprimer.removeMouseListener(l);
 		item_propriete.removeActionListener(l);
 		item_propriete.removeMouseListener(l);
-                item_rename.removeActionListener(l);
-                item_rename.removeMouseListener(l);
+		item_rename.removeActionListener(l);
+		item_rename.removeMouseListener(l);
 		table.removeMouseListener(l);
 		item_propriete2.removeActionListener(l);
 		item_propriete2.removeMouseListener(l);

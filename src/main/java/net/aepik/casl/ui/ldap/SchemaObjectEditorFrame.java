@@ -137,7 +137,7 @@ public class SchemaObjectEditorFrame
 			if( checkNoBlankValues() ) {
 				saveValues();
 				windowClosing( null );
-				schema.notifyUpdates();
+				schema.notifyUpdates(true);
 			} else {
 				JOptionPane.showMessageDialog(
 					this,
@@ -196,7 +196,7 @@ public class SchemaObjectEditorFrame
 	private void build() {
 
 		setTitle( "Propriétés de l'objet " + objetSchema.getId());
-		setSize( 650, 400 );
+		setSize( 700, 400 );
 		setResizable( false );
 		setLocationRelativeTo( mainFrame );
 
@@ -442,78 +442,86 @@ public class SchemaObjectEditorFrame
 	/**
 	 * Sauvegarde les données dans l'objet.
 	**/
-	private void saveValues() {
-
+	private void saveValues()
+	{
 		Enumeration<String> k = values.keys();
 		Enumeration<JComponent> l = labels.elements();
 		Enumeration<JComponent> v = values.elements();
 		Enumeration<JCheckBox> c = valuesPresent.elements();
 		SchemaSyntax syntax = objetSchema.getSyntax();
 
-		while( v.hasMoreElements() && k.hasMoreElements() ) {
-
+		while (v.hasMoreElements() && k.hasMoreElements())
+		{
 			String key = k.nextElement();
 			JComponent label = l.nextElement();
 			JComponent composant = v.nextElement();
 			JCheckBox checkbox = c.nextElement();
 
+			// If SUP key, we have to modify the parent of this object.
+			// SUP element should be a JTextField.
+			if (key.compareToIgnoreCase("SUP") == 0 && composant instanceof JTextField)
+			{
+				SchemaObject parent = null;
+				if (checkbox.isSelected())
+				{
+					String parentName = ((JTextField) composant).getText().trim();
+					parent = parentName.length() > 0 ? schema.getObjectByName(parentName) : null;
+				}
+				objetSchema.setParent(parent);
+			}
+
 			// Si la checkbox n'est pas sélectionnée, il faut regarder si les
 			// valeurs sont présentes dans l'objet, auquel cas on les supprime.
-			if( !checkbox.isSelected() ) {
-
-				if( label instanceof JComboBox )
-					objetSchema.delValue( ((JComboBox) label).getSelectedItem().toString() );
+			if (!checkbox.isSelected())
+			{
+				if (label instanceof JComboBox)
+				{
+					objetSchema.delValue(((JComboBox) label).getSelectedItem().toString());
+				}
 				else
-					objetSchema.delValue( key );
+				{
+					objetSchema.delValue(key);
+				}
+			}
 
 			// Ajout => deux possiblités :
 			// - la clef est simple = c'est un JLabel
 			// - la clef est multiple = c'est un JComboBox.
-			} else {
-
-				if( label instanceof JLabel ) {
-
-					if( composant instanceof JLabel ) {
-
-						SchemaValue sv = syntax.createSchemaValue(
-								objetSchema.getType(),
-								key,
-								"" );
-						objetSchema.delValue( ((JLabel) label).getText() );
-						objetSchema.addValue( ((JLabel) label).getText(), sv );
-
-					} else if( composant instanceof JTextField ) {
-
-						SchemaValue sv = syntax.createSchemaValue(
-								objetSchema.getType(),
-								key,
-								((JTextField) composant).getText() );
-						objetSchema.delValue( ((JLabel) label).getText() );
-						objetSchema.addValue( ((JLabel) label).getText(), sv );
-
-					} else if( composant instanceof JComboBox ) {
-
-						SchemaValue sv = syntax.createSchemaValue(
-								objetSchema.getType(),
-								key,
-								((JComboBox) composant).getSelectedItem().toString() );
-						objetSchema.delValue( ((JLabel) label).getText() );
-						objetSchema.addValue( ((JLabel) label).getText(), sv );
-
+			else
+			{
+				if (label instanceof JLabel)
+				{
+					if (composant instanceof JLabel)
+					{
+						SchemaValue sv = syntax.createSchemaValue(objetSchema.getType(), key, "");
+						objetSchema.delValue(((JLabel) label).getText());
+						objetSchema.addValue(((JLabel) label).getText(), sv);
 					}
-
-				} else if( label instanceof JComboBox ) {
-
-					SchemaValue sv = syntax.createSchemaValue(
-							objetSchema.getType(),
-							((JComboBox) label).getSelectedItem().toString(),
-							"" );
-					objetSchema.delValue( ((JComboBox) label).getSelectedItem().toString() );
-					objetSchema.addValue( ((JComboBox) label).getSelectedItem().toString(), sv );
+					else if (composant instanceof JTextField)
+					{
+						SchemaValue sv = syntax.createSchemaValue(objetSchema.getType(), key,
+							((JTextField) composant).getText()
+						);
+						objetSchema.delValue(((JLabel) label).getText());
+						objetSchema.addValue(((JLabel) label).getText(), sv);
+					}
+					else if (composant instanceof JComboBox)
+					{
+						SchemaValue sv = syntax.createSchemaValue(objetSchema.getType(), key,
+							((JComboBox) composant).getSelectedItem().toString());
+						objetSchema.delValue(((JLabel) label).getText());
+						objetSchema.addValue(((JLabel) label).getText(), sv);
+					}
+				}
+				else if (label instanceof JComboBox)
+				{
+					SchemaValue sv = syntax.createSchemaValue(objetSchema.getType(),
+						((JComboBox) label).getSelectedItem().toString(), "");
+					objetSchema.delValue(((JComboBox) label).getSelectedItem().toString());
+					objetSchema.addValue(((JComboBox) label).getSelectedItem().toString(), sv);
 				}
 			}
 		}
-
 	}
 
 }

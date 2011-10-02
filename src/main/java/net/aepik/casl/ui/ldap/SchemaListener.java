@@ -151,11 +151,6 @@ public class SchemaListener implements ActionListener, MouseListener, Observer, 
 	public void update (Observable changed, Object arg)
 	{
 		schemaPanel.refreshParentSelectedNode();
-		if (lastSelectedPath != null)
-		{
-			schemaPanel.setSelectedPath(lastSelectedPath);
-			schemaPanel.updateTable();
-		}
 		if (schema.isSyntaxChangedSinceLastTime())
 		{
 			schemaPanel.updateTree();
@@ -163,6 +158,11 @@ public class SchemaListener implements ActionListener, MouseListener, Observer, 
 		else if (arg instanceof Boolean && ((Boolean) arg).booleanValue())
 		{
 			schemaPanel.updateTree();
+		}
+		if (lastSelectedPath != null)
+		{
+			schemaPanel.setSelectedPath(lastSelectedPath);
+			schemaPanel.updateTable();
 		}
 	}
 
