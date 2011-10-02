@@ -334,13 +334,21 @@ public class Schema extends Observable
 		while (result == null && it.hasMoreElements())
 		{
 			SchemaObject o = it.nextElement();
-			if (o.getName() == null)
+			String oName = o.getName();
+			if (oName == null)
 			{
 				continue;
 			}
-			if (o.getName().toLowerCase().equals(name.toLowerCase()))
+			if (oName.toLowerCase().equals(name.toLowerCase()))
 			{
 				result = o;
+				continue;
+			}
+			String oNameFirst = o.getNameFirstValue();
+			if (oNameFirst.toLowerCase().equals(name.toLowerCase()))
+			{
+				result = o;
+				continue;
 			}
 		}
 		return result;

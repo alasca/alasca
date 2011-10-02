@@ -17,6 +17,14 @@ attributetype (
 )
 
 attributetype (
+	CASLattributeType:2
+	NAME ( 'caslAttr2' 'cA2' )
+	DESC 'CASL test attribute 2'
+	EQUALITY 2.5.13.5
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+)
+
+attributetype (
 	1.3.6.1.4.1.250.1.57
 	NAME 'labeledURI'
 	DESC 'Uniform Resource Identifier with optional label as defined in RFC2079.'
