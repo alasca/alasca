@@ -334,8 +334,9 @@ public class SchemaObjectEditorFrame extends JFrame implements ActionListener, W
 	 */
 	private void init ()
 	{
+		String objectType = this.objetSchema.getType();
 		SchemaSyntax syntax = objetSchema.getSyntax();
-		String[] params_name = syntax.getParameters(this.objetSchema.getType());
+		String[] params_name = syntax.getParameters(objectType);
 
 		if (params_name == null || params_name.length == 0)
 		{
@@ -357,8 +358,25 @@ public class SchemaObjectEditorFrame extends JFrame implements ActionListener, W
 			JComponent label = null ;
 			JComponent composant = null ;
 			JCheckBox checkbox = new JCheckBox();
-			String[] param_values = syntax.getParameterDefaultValues(objetSchema.getType(), params_name[i]);
-			String[] param_others = syntax.getOthersParametersFor(objetSchema.getType(), params_name[i]);
+			String[] param_values;
+			String[] param_others = syntax.getOthersParametersFor(objectType, params_name[i]);
+
+			// If SUP parameters, add corresponding object names.
+			if (params_name[i].compareTo("SUP") == 0)
+			{
+	                        SchemaObject[] objects = this.schema.getObjectsInOrder(objectType);
+				param_values = new String[objects.length];
+				for (int j = 0; j < objects.length; j++)
+				{
+					param_values[j] = objects[j].getNameFirstValue();
+				}
+			}
+
+			// Else, read the syntax to find needed values.
+			else
+			{
+				param_values = syntax.getParameterDefaultValues(objectType, params_name[i]);
+			}
 
 			// Plusieurs clefs.
 			// C'est une liste de clefs possibles.
@@ -432,8 +450,8 @@ public class SchemaObjectEditorFrame extends JFrame implements ActionListener, W
 				this.labels.put(params_name[i], label);
 				this.values.put(params_name[i], composant);
 				this.valuesPresent.put(params_name[i], checkbox);
-				SchemaValue v = syntax.createSchemaValue(objetSchema.getType(), params_name[i], null);
-				if (v.isValues())
+				SchemaValue v = syntax.createSchemaValue(objectType, params_name[i], null);
+				if (v.isValues() && !(composant instanceof JComboBox))
 				{
 					composant.setEnabled(false);
 				}
@@ -461,12 +479,12 @@ public class SchemaObjectEditorFrame extends JFrame implements ActionListener, W
 
 			// If SUP key, we have to modify the parent of this object.
 			// SUP element should be a JTextField.
-			if (key.compareToIgnoreCase("SUP") == 0 && composant instanceof JTextField)
+			if (key.compareToIgnoreCase("SUP") == 0 && composant instanceof JComboBox)
 			{
 				SchemaObject parent = null;
 				if (checkbox.isSelected())
 				{
-					String parentName = ((JTextField) composant).getText().trim();
+					String parentName = ((JComboBox) composant).getSelectedItem().toString().trim();
 					parent = parentName.length() > 0 ? schema.getObjectByName(parentName) : null;
 				}
 				objetSchema.setParent(parent);
