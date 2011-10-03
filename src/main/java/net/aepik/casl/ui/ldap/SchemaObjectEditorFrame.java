@@ -1,6 +1,4 @@
 /*
- * SchemaObjectEditorFrame.java		0.2		05/07/2006
- * 
  * Copyright (C) 2006 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
@@ -28,9 +26,7 @@ import net.aepik.casl.core.util.Config;
 import net.aepik.casl.core.sddl.SDDL_ACLString;
 import net.aepik.casl.ui.util.NoEditableTableModel;
 import net.aepik.casl.ui.sddl.SDDL_ACLEditListener;
-
 import org.jdesktop.swingx.JXHeader;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -71,130 +67,104 @@ import javax.swing.event.ListSelectionListener;
 
 /**
  * Fenêtre qui permet de visualiser les données d'un objet du schéma.
-**/
-
-public class SchemaObjectEditorFrame
-		extends
-			JFrame
-		implements
-			ActionListener,
-			WindowListener
+ */
+public class SchemaObjectEditorFrame extends JFrame implements ActionListener, WindowListener
 {
 
 	private static final long serialVersionUID = 0;
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	/**
+	 * Le schéma concerné
+	 */
+	private Schema schema;
 
-	/** Le schéma concerné **/
-	private Schema schema ;
-	/** L'object concerné **/
-	private SchemaObject objetSchema ;
-	/** La fenêtre appelante **/
-	private JFrame mainFrame ;
+	/**
+	 * L'object concerné
+	 */
+	private SchemaObject objetSchema;
 
-	/** La liste des valeurs **/
-	private Hashtable<String,JComponent> values ;
-	/** La liste des labels **/
-	private Hashtable<String,JComponent> labels ;
-	/** La liste des valeurs présentes **/
-	private Hashtable<String,JCheckBox> valuesPresent ;
+	/**
+	 * La fenêtre appelante
+	 */
+	private JFrame mainFrame;
 
-	/** Le bouton Ok **/
-	private JButton boutonOk = new JButton( "Valider" );
-	/** Le bouton Annuler **/
-	private JButton boutonAnnuler = new JButton( "Annuler" );
+	/**
+	 * La liste des valeurs
+	 */
+	private Hashtable<String,JComponent> values;
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	/**
+	 * La liste des labels
+	 */
+	private Hashtable<String,JComponent> labels;
 
-	public SchemaObjectEditorFrame( JFrame f, Schema s, SchemaObject so ) {
+	/**
+	 * La liste des valeurs présentes
+	 */
+	private Hashtable<String,JCheckBox> valuesPresent;
+
+	/**
+	 * Le bouton Ok
+	 */
+	private JButton boutonOk = new JButton("Valider");
+
+	/**
+	 * Le bouton Annuler
+	 */
+	private JButton boutonAnnuler = new JButton("Annuler");
+
+	/**
+	 * Build a new SchemaObjectEditorFrame.
+	 * @param j The parent frame
+	 * @param s The schema where is the object to edit
+	 * @param so The object to edit
+	 */
+	public SchemaObjectEditorFrame ( JFrame f, Schema s, SchemaObject so )
+	{
 		super();
-
-		schema = s ;
-		objetSchema = so ;
-		mainFrame = f ;
-
+		schema = s;
+		objetSchema = so;
+		mainFrame = f;
 		init();
 		build();
 	}
 
-////////////////////////////////
-// Methodes publiques
-////////////////////////////////
-
-	public void actionPerformed( ActionEvent e ) {
-
+	/**
+	 * Gère les actions de la vue et permet de modifier les données.
+	 * @param e L'action soulevée par un élément du panel.
+	 */
+	public void actionPerformed ( ActionEvent e )
+	{
 		Object o = e.getSource();
-
-		// On a cliqué sur le bouton ok. Il faut sauvergarder toutes
-		// les données entrées par l'utilisateur, et mettre à jour
-		// l'objet. Ainsi que notifier au schéma de la mise à jour.
-		if( o==boutonOk ) {
-
-			if( checkNoBlankValues() ) {
-				saveValues();
-				windowClosing( null );
-				schema.notifyUpdates(true);
-			} else {
+		if (o == boutonOk)
+		{
+			if (this.checkNoBlankValues())
+			{
+				this.saveValues();
+				this.windowClosing(null);
+				this.schema.notifyUpdates(true);
+			}
+			else
+			{
 				JOptionPane.showMessageDialog(
 					this,
 					"Impossible de spécifier des valeurs nulles",
 					"Erreur",
-					JOptionPane.ERROR_MESSAGE );
+					JOptionPane.ERROR_MESSAGE
+				);
 			}
-
-		// On a cliqué sur le bouton annuler, aucune modification
-		// n'est nécessaire => on quitte simplement la fenêtre.
-		} else if( o==boutonAnnuler ) {
-			windowClosing( null );
+		}
+		else if (o == boutonAnnuler)
+		{
+			this.windowClosing(null);
 		}
 	}
 
-	public void windowActivated( WindowEvent e ) {}
-	public void windowClosed( WindowEvent e ) {}
- 	public void windowClosing( WindowEvent e ) { setVisible( false ); }
-	public void windowDeactivated( WindowEvent e ) {}
-	public void windowDeiconified( WindowEvent e ) {}
-	public void windowIconified( WindowEvent e ) {}
-	public void windowOpened( WindowEvent e ) {}
-
-////////////////////////////////
-// Methodes privées
-////////////////////////////////
-
 	/**
-	 * Teste si aucune valeur est vide.
-	 * @return boolean True si toutes les valeurs sont ok, c'est à dire non vide.
-	**/
-	private boolean checkNoBlankValues() {
-
-		boolean erreur = false ;
-
-		Enumeration<JComponent> v = values.elements();
-		Enumeration<JCheckBox> c = valuesPresent.elements();
-
-		while( !erreur && v.hasMoreElements() ) {
-
-			JComponent composant = v.nextElement();
-			JCheckBox checkbox = c.nextElement();
-
-			if( checkbox.isSelected()
-					&& composant instanceof JTextField
-					&& ((JTextField) composant).getText().length()==0 )
-				erreur = true ;
-		}
-
-		return !erreur ;
-	}
-
-	/**
-	 * Construit la fenêtre d'affichage.
-	**/
-	private void build() {
-
+	 * Build frame.
+	 */
+	private void build ()
+	{
 		setTitle( "Propriétés de l'objet " + objetSchema.getId());
 		setSize( 700, 400 );
 		setResizable( false );
@@ -338,111 +308,143 @@ public class SchemaObjectEditorFrame
 		boutonAnnuler.addActionListener( this );
 	}
 
-	private void init() {
-
-		labels = new Hashtable<String,JComponent>();
-		values = new Hashtable<String,JComponent>();
-		valuesPresent = new Hashtable<String,JCheckBox>();
-
-		// On determine la syntaxe utilisée, et les champs pris en compte.
-		// Il faut récupérer la syntaxe de l'objet.
-
-		SchemaSyntax syntax = objetSchema.getSyntax();
-		String[] params_name = syntax.getParameters( objetSchema.getType() );
-		Vector<String> parametresEffectues = new Vector<String>();
-
-		if( params_name!=null && params_name.length>0 ) {
-			for( int i=0; i<params_name.length; i++ ) {
-
-				if( parametresEffectues.contains( params_name[i] ) )
-					continue;
-
-				JComponent label = null ;
-				JComponent composant = null ;
-				JCheckBox checkbox = new JCheckBox();
-				String[] param_values = syntax.getParameterDefaultValues(
-						objetSchema.getType(), params_name[i] );
-				String[] param_others = syntax.getOthersParametersFor(
-						objetSchema.getType(), params_name[i] );
-
-				// Plusieurs clefs.
-				// C'est une liste de clefs possibles.
-				if( param_others!=null && param_others.length>1 ) {
-
-					label = new JComboBox( param_others );
-					composant = new JLabel();
-
-					boolean ok = false ;
-					for( int j=0; j<param_others.length && !ok; j++ ) {
-						if( objetSchema.isKeyExists( param_others[j] ) ) {
-							ok = true;
-							((JComboBox) label).setSelectedItem( param_others[j] );
-							checkbox.setSelected( true );
-						}
-					}
-
-					for( int j=0; j<param_others.length; j++ )
-						parametresEffectues.add( param_others[j] );
-
-				// Aucune valeur possible
-				// La présence du paramêtre suffit => JCheckBox.
-				} else if( param_values.length==0 ) {
-
-					label = new JLabel( params_name[i] );
-					composant = new JLabel("");
-					parametresEffectues.add( params_name[i] );
-					checkbox.setSelected( objetSchema.isKeyExists( params_name[i] ) );
-
-				// Une valeur, on regarde si c'est une valeur précise.
-				// - Si c'est une chaîne qui peut être quelconque => JTextField.
-				// - Si la valeur est en fait un objet => JTextField + Objet.
-				} else if( param_values.length==1 && param_values[0]!=null ) {
-
-					String tmp = objetSchema.isKeyExists( params_name[i] ) ?
-						objetSchema.getValue( params_name[i] ).toString() :
-						param_values[0] ;
-
-					label = new JLabel( params_name[i] );
-					composant = new JTextField( tmp, 30 );
-					parametresEffectues.add( params_name[i] );
-					checkbox.setSelected( objetSchema.isKeyExists( params_name[i] ) );
-
-				// Plusieurs valeurs.
-				// C'est une liste de choix possibles => JComboBox.
-				} else if( param_values.length>1 ) {
-
-					String tmp = objetSchema.isKeyExists( params_name[i] ) ?
-						objetSchema.getValue( params_name[i] ).toString() :
-						param_values[0] ;
-
-					label = new JLabel( params_name[i] );
-					composant = new JComboBox( param_values );
-					((JComboBox) composant).setSelectedItem( tmp );
-					parametresEffectues.add( params_name[i] );
-					checkbox.setSelected( objetSchema.isKeyExists( params_name[i] ) );
-				}
-
-				if( composant!=null && label!=null ) {
-					labels.put( params_name[i], label );
-					values.put( params_name[i], composant );
-					valuesPresent.put( params_name[i], checkbox );
-
-					SchemaValue v = syntax.createSchemaValue(
-							objetSchema.getType(),
-							params_name[i], null );
-
-					if( v.isValues() )
-						composant.setEnabled( false );
-				}
+	/**
+	 * Teste si aucune valeur est vide.
+	 * @return boolean True si toutes les valeurs sont ok, c'est à dire non vide.
+	**/
+	private boolean checkNoBlankValues ()
+	{
+		boolean erreur = false;
+		Enumeration<JComponent> v = values.elements();
+		Enumeration<JCheckBox> c = valuesPresent.elements();
+		while (!erreur && v.hasMoreElements())
+		{
+			JComponent composant = v.nextElement();
+			JCheckBox checkbox = c.nextElement();
+			if (checkbox.isSelected() && composant instanceof JTextField && ((JTextField) composant).getText().length() == 0)
+			{
+				erreur = true;
 			}
 		}
-
+		return !erreur;
 	}
 
 	/**
-	 * Sauvegarde les données dans l'objet.
+	 * Initialize graphical components with values.
+	 */
+	private void init ()
+	{
+		SchemaSyntax syntax = objetSchema.getSyntax();
+		String[] params_name = syntax.getParameters(this.objetSchema.getType());
+
+		if (params_name == null || params_name.length == 0)
+		{
+			return;
+		}
+
+		this.labels = new Hashtable<String,JComponent>();
+		this.values = new Hashtable<String,JComponent>();
+		this.valuesPresent = new Hashtable<String,JCheckBox>();
+		Vector<String> parametresEffectues = new Vector<String>();
+
+		for (int i = 0; i < params_name.length; i++)
+		{
+			if (parametresEffectues.contains(params_name[i]))
+			{
+				continue;
+			}
+
+			JComponent label = null ;
+			JComponent composant = null ;
+			JCheckBox checkbox = new JCheckBox();
+			String[] param_values = syntax.getParameterDefaultValues(objetSchema.getType(), params_name[i]);
+			String[] param_others = syntax.getOthersParametersFor(objetSchema.getType(), params_name[i]);
+
+			// Plusieurs clefs.
+			// C'est une liste de clefs possibles.
+			if (param_others != null && param_others.length > 1)
+			{
+				label = new JComboBox(param_others);
+				composant = new JLabel();
+				boolean ok = false;
+
+				for (int j = 0; j < param_others.length && !ok; j++)
+				{
+					if (objetSchema.isKeyExists(param_others[j]))
+					{
+						ok = true;
+						((JComboBox) label).setSelectedItem(param_others[j]);
+						checkbox.setSelected(true);
+					}
+				}
+				for (int j = 0; j < param_others.length; j++)
+				{
+					parametresEffectues.add(param_others[j]);
+				}
+
+			}
+
+			// Aucune valeur possible
+			// La présence du paramêtre suffit => JCheckBox.
+			else if (param_values.length == 0)
+			{
+				label = new JLabel(params_name[i]);
+				composant = new JLabel("");
+				parametresEffectues.add(params_name[i]);
+				checkbox.setSelected(objetSchema.isKeyExists(params_name[i]));
+
+			}
+
+			// Une valeur, on regarde si c'est une valeur précise.
+			// - Si c'est une chaîne qui peut être quelconque => JTextField.
+			// - Si la valeur est en fait un objet => JTextField + Objet.
+			else if (param_values.length == 1 && param_values[0] != null)
+			{
+				String tmp = objetSchema.isKeyExists( params_name[i] )
+				           ? objetSchema.getValue( params_name[i] ).toString()
+				           : param_values[0];
+
+				label = new JLabel(params_name[i]);
+				composant = new JTextField(tmp, 30);
+				parametresEffectues.add(params_name[i]);
+				checkbox.setSelected(objetSchema.isKeyExists(params_name[i]));
+
+			}
+
+			// Plusieurs valeurs.
+			// C'est une liste de choix possibles => JComboBox.
+			else if (param_values.length > 1)
+			{
+				String tmp = objetSchema.isKeyExists(params_name[i])
+				           ? objetSchema.getValue(params_name[i]).toString()
+				           : param_values[0];
+
+				label = new JLabel(params_name[i]);
+				composant = new JComboBox(param_values);
+				((JComboBox) composant).setSelectedItem(tmp);
+				parametresEffectues.add(params_name[i]);
+				checkbox.setSelected(objetSchema.isKeyExists(params_name[i]));
+			}
+
+			// Set elements into the frame.
+			if (composant != null && label != null)
+			{
+				this.labels.put(params_name[i], label);
+				this.values.put(params_name[i], composant);
+				this.valuesPresent.put(params_name[i], checkbox);
+				SchemaValue v = syntax.createSchemaValue(objetSchema.getType(), params_name[i], null);
+				if (v.isValues())
+				{
+					composant.setEnabled(false);
+				}
+			}
+		} // end for
+	}
+
+	/**
+	 * Save values into the object.
 	**/
-	private void saveValues()
+	private void saveValues ()
 	{
 		Enumeration<String> k = values.keys();
 		Enumeration<JComponent> l = labels.elements();
@@ -522,6 +524,35 @@ public class SchemaObjectEditorFrame
 				}
 			}
 		}
+	}
+
+	public void windowActivated ( WindowEvent e )
+	{
+	}
+
+	public void windowClosed ( WindowEvent e )
+	{
+	}
+
+	public void windowClosing ( WindowEvent e )
+	{
+		this.setVisible(false);
+	}
+
+	public void windowDeactivated ( WindowEvent e )
+	{
+	}
+
+	public void windowDeiconified ( WindowEvent e )
+	{
+	}
+
+	public void windowIconified ( WindowEvent e )
+	{
+	}
+
+	public void windowOpened ( WindowEvent e )
+	{
 	}
 
 }
