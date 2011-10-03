@@ -112,10 +112,17 @@ public abstract class SchemaFileReader
 	}
 
 	/**
-	 * Parcourt l'entrée et retourne l'ensemble des objets schéma lus.
-	 * @retour Le schéma lu.
+	 * Parse input lines to return schema objects.
+	 * @param String[] Input lines
+	 * @return Schema
 	 */
-	public abstract Schema read () throws IOException;
+	public abstract Schema parse ( String[] lines );
+
+	/**
+	 * Read input and return formatted lines.
+	 * @return String[] Input lines
+	 */
+	public abstract String[] read () throws IOException;
 
 	/**
 	 * Set the error line.

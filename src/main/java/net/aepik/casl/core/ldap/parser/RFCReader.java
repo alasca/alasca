@@ -34,117 +34,68 @@ public class RFCReader extends SchemaFileReader
 		super(syntax);
 	}
 
-	public Schema read() throws IOException
+        /**
+         * Parse input lines to return schema objects.
+         * @param String[] Input lines
+         * @return Schema
+         */
+        public Schema parse ( String[] lines )
 	{
-		if (input == null || syntax == null)
+		if (syntax == null)
 		{
 			return null;
 		}
 
-		Schema schema = new Schema( syntax );
+		Schema schema = new Schema(syntax);
 		SchemaObject object = null;
-		boolean createObject = false;
 		boolean initialiseObject = false;
-		boolean objectParameter = false;
 		boolean objectError = false;
 		Vector<SchemaObject> objects = new Vector<SchemaObject>();
 
 		int nbOccurences = 0;
 		int nbLines = 0;
-		int bracketHeight = 0;
-		int bracketLine = 0;
-		StringBuffer buffer = new StringBuffer();
-		StringBuffer bufferBackup = new StringBuffer();
 
-		//
-		// Du a des problèmes sur la lecture de fichier entre les
-		// différentes plateformes, on va lire le fichier ligne par
-		// ligne, en laissant Java s'occuper des caractères de fin de ligne
-		// et de fin de fichier.
-		//
-
-		String line;
-		while ((line = input.readLine()) != null && bracketHeight >= 0 && !objectError)
+		for (int l = 0; l < lines.length && !objectError; l++)
 		{
-			int debut = 0;
+			String line = lines[l];
 			char[] chars = line.toCharArray();
+			int bracketHeight = 0;
+			int openedBracketIndex = closedBracketIndex = null;
 
-			//
-			// Est une ligne, ou commence par un diese = un commentaire
-			// Inutile d'aller plus loin
-			//
-			if (chars.length == 0 || (chars.length > 0 && chars[0] == 35))
+			// Verification sur la syntaxe
+			for (int i = 0; i < chars.length; i++)
 			{
-				nbLines++;
+				switch (chars[i])
+				{
+					// Parenthèse ouvrante
+					// On rentre dans une définition de paramètres de l'objet.
+					// On indique qu'il faut créer l'objet.
+					case 40:
+						if (openedBracketIndex == null && bracketHeight == 0)
+						{
+							openedBracketIndex = i;
+						}
+						bracketHeight++;
+						break;
+
+					// Parenthèse fermante
+					// Si c'est une fin de définition de paramètres de l'objet,
+					// on indique qu'il faut initialiser l'objet.
+					case 41:
+						bracketHeight--;
+						if (closedBracketIndex == null && bracketHeight == 0)
+						{
+							closedBracketIndex = i;
+						}
+						break;
+				}
+			}
+
+			if (bracketHeight != 0)
+			{
+				objectError = true;
 				continue;
 			}
-
-			//
-			// Commence par un espace = continuité de la ligne précédente
-			//
-			if (chars[0] == 32 || chars[0] == 9)
-			{
-				debut++;
-			}
-
-			for (int i = debut; i < chars.length && bracketHeight >= 0 && !objectError; i++)
-			{
-				if (debut == chars.length - 1 && bracketHeight == 0)
-				{
-					bufferBackup = buffer;
-					buffer = new StringBuffer();
-					objectParameter = false;
-					createObject = true;
-				}
-				else
-				{
-					switch (chars[i])
-					{
-						//
-						// Parenthèse ouvrante !
-						// On rentre dans une définition de paramètres de l'objet.
-						// On indique qu'il faut créer l'objet.
-						//
-						case 40:
-							if (bracketHeight == 0)
-							{
-								bufferBackup = buffer;
-								buffer = new StringBuffer();
-								objectParameter = true;
-								createObject = true;
-							} else {
-								buffer.append(chars[i]);
-							}
-							bracketHeight++;
-							break;
-
-						//
-						// Parenthèse fermante !
-						// Si c'est une fin de définition de paramètres de l'objet,
-						// on indique qu'il faut initialiser l'objet.
-						//
-						case 41:
-							bracketHeight--;
-							if (bracketHeight == 0)
-							{
-								bufferBackup = buffer;
-								buffer = new StringBuffer();
-								objectParameter = false;
-								initialiseObject = true;
-								bracketLine = nbLines;
-							} else {
-								buffer.append(chars[i]);
-							}
-							break;
-
-						//
-						// On copie dans tous les autres cas.
-						//
-						default:
-							buffer.append(chars[i]);
-							break;
-					}
-				}
 
 				//
 				// Test if we are at the end of the line
@@ -281,6 +232,56 @@ public class RFCReader extends SchemaFileReader
 		}
 
 		return schema ;
+	}
+
+        /**
+         * Read input and return formatted lines.
+         * @return String[] Input lines
+         */
+        public String[] read ()
+	{
+		if (input == null)
+		{
+			return null;
+		}
+
+		int lineNumber = 0;
+		String buffer = null;
+		String line = null;
+		Vector<String> lines = new Vector<String>();
+
+		while ((line = input.readLine()) != null)
+		{
+			lineNumber++;
+			char[] chars = line.toCharArray();
+
+			// Ligne vide, commence par un diese
+			if (chars.length == 0 || (chars.length > 0 && chars[0] == 35))
+			{
+				continue;
+			}
+
+			// Commence par un espace ou une tabulation
+			if (chars[0] == 32 || chars[0] == 9)
+			{
+				if (buffer == null)
+				{
+					buffer = new String();
+				}
+				buffer.append(line.substring(1));
+				continue;
+			}
+
+			lines.add(buffer);
+			buffer = line;
+		}
+
+		if (lines.size() == 0)
+		{
+			this.setErrorMessage("Empty schema");
+			return null;
+		}
+		return lines.toArray();
 	}
 
 }
