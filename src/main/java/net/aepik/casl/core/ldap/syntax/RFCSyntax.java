@@ -456,6 +456,15 @@ public class RFCSyntax extends SchemaSyntax
 	}
 
 	/**
+	 * Return the shortname of this syntax.
+	 * @return String The shortname.
+	 */
+	public String getShortname ()
+	{
+		return SHORTNAME;
+	}
+
+	/**
 	 * Test si la chaîne de caractères désigne un attribut.
 	 * @param str Une chaîne de caractères.
 	 * @return boolean True si c'est le cas, false sinon.

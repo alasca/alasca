@@ -326,6 +326,12 @@ public abstract class SchemaSyntax
 	}
 
 	/**
+	 * Return the shortname of this syntax.
+	 * @return String The shortname.
+	 */
+	public abstract String getShortname ();
+
+	/**
 	 * Test si un caractère sous forme d'entier décimal
 	 * est un caractère alphabétique ou non.
 	 * @return boolean True si c'est le cas, false sinon.

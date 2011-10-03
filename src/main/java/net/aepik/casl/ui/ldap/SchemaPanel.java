@@ -430,7 +430,7 @@ public class SchemaPanel extends JPanel
 
 		arbreModel = new DefaultTreeModel(rootNode);
 		arbre.setModel(arbreModel);
-		arbrePanel.setTitle( "Schéma de syntaxe " + schema.getSyntax().toString() );
+		arbrePanel.setTitle( "Schéma de syntaxe " + schema.getSyntax().getShortname() );
 	}
 
 	private String getCurrentSelectedObjectId ()

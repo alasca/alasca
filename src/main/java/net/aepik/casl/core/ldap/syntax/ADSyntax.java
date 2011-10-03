@@ -334,4 +334,13 @@ public class ADSyntax extends RFCSyntax {
 		return searchOthersParametersFor( AD_OBJECT_PARAMETERS, paramName );
 	}
 
+	/**
+	 * Return the shortname of this syntax.
+	 * @return String The shortname.
+	 */
+	public String getShortname ()
+	{
+		return SHORTNAME;
+	}
+
 }

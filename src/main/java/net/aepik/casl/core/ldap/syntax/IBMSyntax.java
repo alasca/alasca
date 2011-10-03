@@ -52,4 +52,13 @@ public class IBMSyntax extends RFCSyntax
 		super.objectClassType = IBM_OBJECT.substring(0, IBM_OBJECT.length() - 1);
 	}
 
+	/**
+	 * Return the shortname of this syntax.
+	 * @return String The shortname.
+	 */
+	public String getShortname ()
+	{
+		return SHORTNAME;
+	}
+
 }

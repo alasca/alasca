@@ -25,10 +25,10 @@ package net.aepik.casl.core.ldap.syntax;
 public class SUNDSSyntax extends RFCSyntax
 {
 
-        /**
-         * Syntax short name.
-         */
-        public static final String SHORTNAME = "SUN Directory Server";
+	/**
+	 * Syntax short name.
+	 */
+	public static final String SHORTNAME = "SUN Directory Server";
 
 	/**
 	 * Attribute definition (and used for type).
@@ -92,6 +92,15 @@ public class SUNDSSyntax extends RFCSyntax
 		super.objectClassType = SUNDS_OBJECT.substring(0, SUNDS_OBJECT.length() - 1);
 		super.RFC_ATTRIBUTE_PARAMETERS = SUNDS_ATTRIBUTE_PARAMETERS;
 		super.RFC_OBJECT_PARAMETERS = SUNDS_OBJECT_PARAMETERS;
+	}
+
+	/**
+	 * Return the shortname of this syntax.
+	 * @return String The shortname.
+	 */
+	public String getShortname ()
+	{
+		return SHORTNAME;
 	}
 
 	/**

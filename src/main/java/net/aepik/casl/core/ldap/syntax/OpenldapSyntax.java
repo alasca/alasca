@@ -71,4 +71,13 @@ public class OpenldapSyntax extends RFCSyntax
 		return new OpenldapWriter();
 	}
 
+	/**
+	 * Return the shortname of this syntax.
+	 * @return String The shortname.
+	 */
+	public String getShortname ()
+	{
+		return SHORTNAME;
+	}
+
 }
