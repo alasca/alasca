@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006-2010 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,10 @@ import java.util.Vector;
 public class RFCReader extends SchemaFileReader
 {
 
+	/**
+	 * Build a new RFCReader object.
+	 * @param syntax The reader syntax.
+	 */
 	public RFCReader (SchemaSyntax syntax)
 	{
 		super(syntax);
@@ -47,20 +51,20 @@ public class RFCReader extends SchemaFileReader
 		}
 
 		Schema schema = new Schema(syntax);
-		SchemaObject object = null;
-		boolean initialiseObject = false;
-		boolean objectError = false;
 		Vector<SchemaObject> objects = new Vector<SchemaObject>();
 
-		int nbOccurences = 0;
-		int nbLines = 0;
+		int errorLineNumber = -1;
+		int bracketHeight = 0;
 
-		for (int l = 0; l < lines.length && !objectError; l++)
+		for (int l = 0; l < lines.length && errorLineNumber == -1; l++)
 		{
-			String line = lines[l];
+			String line = lines[l].trim().replaceAll("\\s+", " ").replaceAll("\\t+", " ");
+
 			char[] chars = line.toCharArray();
-			int bracketHeight = 0;
-			int openedBracketIndex = closedBracketIndex = null;
+			int openedBracketIndex = -1;
+			int closedBracketIndex = -1;
+			SchemaObject object = null;
+			bracketHeight = 0;
 
 			// Verification sur la syntaxe
 			for (int i = 0; i < chars.length; i++)
@@ -71,7 +75,7 @@ public class RFCReader extends SchemaFileReader
 					// On rentre dans une définition de paramètres de l'objet.
 					// On indique qu'il faut créer l'objet.
 					case 40:
-						if (openedBracketIndex == null && bracketHeight == 0)
+						if (openedBracketIndex == -1 && bracketHeight == 0)
 						{
 							openedBracketIndex = i;
 						}
@@ -83,7 +87,7 @@ public class RFCReader extends SchemaFileReader
 					// on indique qu'il faut initialiser l'objet.
 					case 41:
 						bracketHeight--;
-						if (closedBracketIndex == null && bracketHeight == 0)
+						if (closedBracketIndex == -1 && bracketHeight == 0)
 						{
 							closedBracketIndex = i;
 						}
@@ -93,116 +97,65 @@ public class RFCReader extends SchemaFileReader
 
 			if (bracketHeight != 0)
 			{
-				objectError = true;
+				errorLineNumber = l;
 				continue;
 			}
 
-				//
-				// Test if we are at the end of the line
-				//
-				if (i == chars.length - 1 && bracketHeight == 0 && !createObject && !initialiseObject)
-				{
-					bufferBackup = buffer;
-					buffer = new StringBuffer();
-					objectParameter = false;
-					createObject = true;
-					initialiseObject = true;
-				}
-
-				//
-				// Test des propriétés du schéma (tout sauf attributs
-				// et classes d'objets)
-				//
-				if (bufferBackup.toString().toLowerCase().startsWith("dn:"))
-				{
-					String str = bufferBackup.toString();
-					int index = str.indexOf(':');
-					String value = str.substring(index+1).trim();
-					schema.getProperties().setProperty("dn", value);
-					initialiseObject = false;
-					createObject = false;
-				}
-
-				//
-				// La définition d'un objet se fait obligatoirement en dehors
-				// d'un quelconque niveau de parenthèse.
-				//
-				if (createObject)
-				{
-					if (syntax.isObjectIdentifierHeader(bufferBackup.toString()))
-					{
-						object = syntax.createSchemaObject(syntax.getObjectIdentifierType(), null);
-					}
-					else if (syntax.isAttributeHeader(bufferBackup.toString()))
-					{
-						object = syntax.createSchemaObject(syntax.getAttributeType(), null);
-					}
-					else if (syntax.isObjectClassHeader(bufferBackup.toString()))
-					{
-						object = syntax.createSchemaObject(syntax.getObjectClassType(), null);
-					}
-					if (object != null)
-					{
-						buffer = new StringBuffer();
-						nbOccurences++;
-					}
-					createObject = false;
-				}
-
-				//
-				// Si on est en creation d'objet et que l'objet n'est pas null,
-				// on initialise cet objet à partir de ses paramêtres.
-				//
-				if (initialiseObject && object != null)
-				{
-					String def = bufferBackup.toString().trim().replaceAll("\\s+", " ").replaceAll("\\t+", " ");
-					if (object.initFromString(def))
-					{
-						objects.add(object);
-						object = null;
-					}
-					else
-					{
-						objectError = true;
-					}
-					initialiseObject = false;
-				}
-
-			}
-
-			//
-			// Si c'est un retour à la ligne
-			//
-			if (!objectParameter)
+			if (line.toLowerCase().startsWith("dn:"))
 			{
-				bufferBackup = buffer;
-				buffer = new StringBuffer();
-			}
-			else
-			{
-				buffer.append(" ");
+				int index = line.indexOf(':');
+				String value = line.substring(index+1).trim();
+				schema.getProperties().setProperty("dn", value);
+				continue;
 			}
 
-			nbLines++;
+			if (syntax.isObjectIdentifierHeader(line))
+			{
+				object = syntax.createSchemaObject(syntax.getObjectIdentifierType(), null);
+			}
+			else if (syntax.isAttributeHeader(line))
+			{
+				object = syntax.createSchemaObject(syntax.getAttributeType(), null);
+			}
+			else if (syntax.isObjectClassHeader(line))
+			{
+				object = syntax.createSchemaObject(syntax.getObjectClassType(), null);
+			}
+
+			if (object != null)
+			{
+				if (openedBracketIndex > -1 && closedBracketIndex > openedBracketIndex)
+				{
+					line = line.substring(openedBracketIndex+1, closedBracketIndex).trim();
+				}
+				if (object.initFromString(line))
+				{
+					objects.add(object);
+				}
+				else
+				{
+					errorLineNumber = l;
+				}
+			}
 		}
 
 		//
 		// Test errors. If an error occurs, we keep it in
 		// memory so that we could reuse it as a trace.
 		//
-		if (objectError)
+		if (errorLineNumber != -1)
 		{
-			this.setErrorMessage(bufferBackup.toString());
-			this.setErrorLine(nbLines+1);
+			this.setErrorMessage(lines[errorLineNumber]);
+			this.setErrorLine(errorLineNumber+1);
 			return null;
 		}
 		if (bracketHeight != 0)
 		{
 			this.setErrorMessage("Missing parentheses");
-			this.setErrorLine(bracketLine+2);
+			this.setErrorLine(errorLineNumber+1);
 			return null;
 		}
-		if (nbOccurences == 0 || !schema.addObjects(objects))
+		if (objects.size() == 0 || !schema.addObjects(objects))
 		{
 			this.setErrorMessage("Empty schema");
 			return null;
@@ -231,14 +184,14 @@ public class RFCReader extends SchemaFileReader
 			o.setParent(parent);
 		}
 
-		return schema ;
+		return schema;
 	}
 
         /**
          * Read input and return formatted lines.
          * @return String[] Input lines
          */
-        public String[] read ()
+        public String[] read () throws java.io.IOException
 	{
 		if (input == null)
 		{
@@ -268,11 +221,15 @@ public class RFCReader extends SchemaFileReader
 				{
 					buffer = new String();
 				}
-				buffer.append(line.substring(1));
+				buffer += " " + line.substring(1);
 				continue;
 			}
 
-			lines.add(buffer);
+			if (buffer != null)
+			{
+				lines.add(buffer);
+			}
+
 			buffer = line;
 		}
 
@@ -281,7 +238,8 @@ public class RFCReader extends SchemaFileReader
 			this.setErrorMessage("Empty schema");
 			return null;
 		}
-		return lines.toArray();
+
+		return lines.toArray(new String[0]);
 	}
 
 }

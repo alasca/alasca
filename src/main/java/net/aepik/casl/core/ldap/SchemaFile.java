@@ -146,12 +146,12 @@ public class SchemaFile
 			BufferedReader entree = new BufferedReader(
 				new FileReader(new File(this.filename)));
 			this.reader.setInput(entree);
-			Schema s = this.reader.read();
+			Schema s = this.reader.parse(this.reader.read());
 			entree.close();
 			if (s != null)
 			{
 				this.schema = s;
-				return true ;
+				return true;
 			}
 			this.error = true;
 		}
