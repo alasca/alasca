@@ -9,7 +9,7 @@ attributetype (
 	DESC 'Uniform Resource Identifier with optional label as defined in RFC2079.'
 	EQUALITY 2.5.13.5
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.1995
@@ -18,7 +18,7 @@ attributetype (
 	EQUALITY 1.3.6.1.4.1.1466.109.114.1
 	SUBSTR 2.5.13.7
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.1996
@@ -27,7 +27,7 @@ attributetype (
 	EQUALITY 1.3.6.1.4.1.1466.109.114.1
 	SUBSTR 2.5.13.7
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.1997
@@ -36,7 +36,7 @@ attributetype (
 	EQUALITY 1.3.6.1.4.1.1466.109.114.1
 	SUBSTR 2.5.13.7
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.1998
@@ -45,7 +45,7 @@ attributetype (
 	EQUALITY 1.3.6.1.4.1.1466.109.114.1
 	SUBSTR 2.5.13.7
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
-)
+	)
 
 objectclass (
 	1.3.18.0.2.6.377
@@ -53,7 +53,7 @@ objectclass (
 	DESC 'Describes a source relationship between the specified user and one or more EIM identifiers. The cn value is a stringified MD5 hash of the source registry UUID and normalized user name. ibm-eimUserAssoc includes both the identifier and source user information to resolve potential hash collisions.'
 	SUP top
 	MUST ( cn $ ibm-eimUserAssoc )
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.1999
@@ -63,7 +63,7 @@ attributetype (
 	SUBSTR 2.5.13.4
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.2000
@@ -72,7 +72,7 @@ attributetype (
 	EQUALITY 2.5.13.2
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.2001
@@ -80,7 +80,7 @@ attributetype (
 	DESC 'Additional information related to the user in the registry.'
 	EQUALITY 2.5.13.2
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
-)
+	)
 
 objectclass (
 	1.3.18.0.2.6.376
@@ -89,7 +89,7 @@ objectclass (
 	SUP top
 	MUST cn
 	MAY ( description $ ibm-eimAdditionalInformation $ ibm-eimAdminUserAssoc $ ibm-eimSourceUserAssoc )
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.2002
@@ -98,7 +98,7 @@ attributetype (
 	EQUALITY 2.5.13.1
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.12
 	SINGLE-VALUE
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.2003
@@ -108,7 +108,7 @@ attributetype (
 	SUBSTR 2.5.13.4
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.2004
@@ -116,7 +116,7 @@ attributetype (
 	DESC 'Identifies a target relation with the specified EIM identifier.  The value is the UUID of the ibm-eimIdentifier entry.  This attribute is used as the naming attribute for ibm-eimTargetRelationship entries.'
 	EQUALITY 2.5.13.2
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
-)
+	)
 
 objectclass (
 	1.3.18.0.2.6.383
@@ -125,7 +125,7 @@ objectclass (
 	SUP top
 	MUST ibm-eimTargetIdAssoc
 	MAY ibm-eimTargetUserName
-)
+	)
 
 objectclass (
 	1.3.18.0.2.6.378
@@ -134,7 +134,7 @@ objectclass (
 	SUP top
 	MUST ( cn $ ibm-eimTargetUserName )
 	MAY ( description $ ibm-eimAdditionalInformation $ ibm-eimTargetIdAssoc )
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.2005
@@ -142,7 +142,7 @@ attributetype (
 	DESC 'Used to associate a source or target registry with the specific ibm-eimRegistry instance.  The value is a string of the form: <aliasType>alias-type</aliasType><aliasValue>alias-value</aliasValue>.  Alias-type is DNSHostName, KerberosRealm, IssuerDN, RootDN, or some other descriptive type name.  Alias-value is the value for the alias.'
 	EQUALITY 2.5.13.2
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
-)
+	)
 
 objectclass (
 	1.3.18.0.2.6.380
@@ -152,7 +152,7 @@ objectclass (
 	ABSTRACT
 	MUST ( ibm-eimRegistryName $ ibm-eimRegistryType )
 	MAY ( description $ ibm-eimRegistryAliases )
-)
+	)
 
 objectclass (
 	1.3.18.0.2.6.382
@@ -160,7 +160,7 @@ objectclass (
 	DESC 'Represents a set of users that is meant to be used with a particular application.'
 	SUP ibm-eimRegistry
 	MUST ibm-eimRegistryEntryName
-)
+	)
 
 objectclass (
 	1.3.18.0.2.6.381
@@ -168,7 +168,7 @@ objectclass (
 	DESC 'Represents a physical or operating system registry of users.'
 	SUP ibm-eimRegistry
 	MAY labeledURI
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.2006
@@ -177,7 +177,7 @@ attributetype (
 	EQUALITY 2.5.13.14
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
 	SINGLE-VALUE
-)
+	)
 
 objectclass (
 	1.3.18.0.2.6.379
@@ -186,7 +186,7 @@ objectclass (
 	SUP top
 	MUST ( ibm-eimDomainName $ ibm-eimDomainVersion )
 	MAY description
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.2992
@@ -195,7 +195,7 @@ attributetype (
 	EQUALITY 2.5.13.2
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.2993
@@ -204,7 +204,7 @@ attributetype (
 	EQUALITY 2.5.13.5
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE
-)
+	)
 
 objectclass (
 	1.3.18.0.2.6.548
@@ -213,7 +213,7 @@ objectclass (
 	SUP top
 	MUST cn
 	MAY ( ibm-eimFilterType $ ibm-eimFilterValue )
-)
+	)
 
 attributetype (
 	1.3.18.0.2.4.2994
@@ -221,7 +221,7 @@ attributetype (
 	DESC 'Identifies the status of policies that are supported by the entry containing this attribute.'
 	EQUALITY 2.5.13.2
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
-)
+	)
 
 objectclass (
 	1.3.18.0.2.6.550
@@ -230,7 +230,7 @@ objectclass (
 	SUP top
 	AUXILIARY
 	MAY ibm-eimPolicyStatus
-)
+	)
 
 objectclass (
 	1.3.18.0.2.6.549
@@ -239,5 +239,5 @@ objectclass (
 	SUP top
 	MUST cn
 	MAY ibm-eimPolicyStatus
-)
+	)
 
