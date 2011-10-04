@@ -137,23 +137,23 @@ public class SchemaFile
 	 */
 	public boolean read ()
 	{
+		this.error = true;
 		if (!this.exists())
 		{
 			return false;
 		}
 		try
 		{
-			BufferedReader entree = new BufferedReader(
-				new FileReader(new File(this.filename)));
+			BufferedReader entree = new BufferedReader(new FileReader(new File(this.filename)));
 			this.reader.setInput(entree);
 			Schema s = this.reader.parse(this.reader.read());
 			entree.close();
 			if (s != null)
 			{
+				this.error = false;
 				this.schema = s;
 				return true;
 			}
-			this.error = true;
 		}
 		catch (Exception e)
 		{

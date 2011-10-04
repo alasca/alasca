@@ -34,6 +34,7 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.net.URL;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 /**
  * Cette classe écoute tous les événements qui interviennent sur
@@ -97,7 +98,15 @@ public class ManagerListener implements ActionListener, MouseListener, WindowLis
 						this.managerFrame,
 						this.managerFrame.getManager().getSchemaManager()
 					);
-					sf.loadFile(file, syntaxe);
+					if (!sf.loadFile(file, syntaxe))
+					{
+						JOptionPane.showMessageDialog(
+							managerFrame,
+							sf.getErrorMessage(),
+							"Erreur",
+							JOptionPane.ERROR_MESSAGE
+						);
+					}
 				}
 			}
 		}

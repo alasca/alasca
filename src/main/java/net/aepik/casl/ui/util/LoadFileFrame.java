@@ -25,6 +25,7 @@ import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.core.util.Pref;
 import net.aepik.casl.ui.ManagerFrame;
 import net.aepik.casl.ui.util.DescriptiveInternalFrame;
+import org.apache.commons.lang3.text.WordUtils;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -114,6 +115,7 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 		this.boutonOpenFile = new JButton("...");
 		this.boutonOk = new JButton("Charger");
 		this.boutonAnnuler = new JButton("Annuler");
+		this.errorMessage = "";
 		initFrame();
 	}
 
@@ -149,7 +151,7 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 			{
 				JOptionPane.showMessageDialog(
 					this,
-					this.errorMessage,
+					this.getErrorMessage(),
 					"Erreur",
 					JOptionPane.ERROR_MESSAGE
 				);
@@ -163,6 +165,15 @@ public class LoadFileFrame extends JDialog implements ActionListener, WindowList
 		{
 			windowClosing(null);
 		}
+	}
+
+	/**
+	 * Return a error message.
+	 * @return String
+	 */
+	public String getErrorMessage ()
+	{
+		return WordUtils.wrap(this.errorMessage, 80);
 	}
 
 	/**

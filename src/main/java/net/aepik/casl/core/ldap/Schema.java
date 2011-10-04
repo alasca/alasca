@@ -254,7 +254,7 @@ public class Schema extends Observable
 	public static SchemaFile createAndLoad ( SchemaSyntax syntax, String filename, boolean load )
 	{
 		SchemaFileReader sReader = syntax.createSchemaReader();
-		SchemaFile sFile = new SchemaFile(filename,sReader, null);
+		SchemaFile sFile = new SchemaFile(filename, sReader, null);
 		if (load)
 		{
 			sFile.read();
