@@ -26,6 +26,7 @@ import net.aepik.casl.core.util.Config;
 import net.aepik.casl.core.sddl.SDDL_ACLString;
 import net.aepik.casl.ui.util.NoEditableTableModel;
 import net.aepik.casl.ui.sddl.SDDL_ACLEditListener;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jdesktop.swingx.JXHeader;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -437,8 +438,20 @@ public class SchemaObjectEditorFrame extends JFrame implements ActionListener, W
 				           ? objetSchema.getValue(params_name[i]).toString()
 				           : param_values[0];
 
+				if (!ArrayUtils.contains(param_values, tmp))
+				{
+					Vector<String> list = new Vector<String>();
+					for (String param_value : param_values)
+					{
+						list.add(param_value);
+					}
+					list.add(0,tmp);
+					param_values = list.toArray(new String[0]);
+				}	
+
 				label = new JLabel(params_name[i]);
 				composant = new JComboBox(param_values);
+				((JComboBox) composant).setEditable(true);
 				((JComboBox) composant).setSelectedItem(tmp);
 				parametresEffectues.add(params_name[i]);
 				checkbox.setSelected(objetSchema.isKeyExists(params_name[i]));
