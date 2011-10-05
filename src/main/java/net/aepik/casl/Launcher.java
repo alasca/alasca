@@ -55,6 +55,8 @@ public class Launcher
 
 	private JProgressBar loadingStatus;
 
+	private String currentVersion;
+
 	public Launcher () throws Exception
 	{
 		this.loadingStatus = new JProgressBar(0, 3);
@@ -78,15 +80,10 @@ public class Launcher
 	{
 		synchronized (loadingStatus)
 		{
-			try
-			{
-				(new Thread()).sleep(200);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			manager = new Manager(this.configFile);
+			this.manager = new Manager(this.configFile);
+			this.currentVersion = Version.getCurrent();
+			this.manager.setUpdateAvailable(!Version.isCurrent(this.currentVersion));
+			printVersion();
 			updateLoadingStatus();
 		}
 		synchronized (loadingStatus)
@@ -152,6 +149,15 @@ public class Launcher
 		creditsFrame.setVisible(true);
 	}
 
+	private void printVersion ()
+	{
+		System.out.println("CASL " + Version.get());
+		if (!Version.isCurrent(this.currentVersion))
+		{
+			System.out.println("New release " + this.currentVersion + " is available!");
+		}
+	}
+
 	public void updateLoadingStatus ()
 	{
 		if (SwingUtilities.isEventDispatchThread())
@@ -188,7 +194,6 @@ public class Launcher
 			m = new Launcher();
 			m.openLoadingFrame();
 			f = (ManagerFrame) m.loadApplication();
-			System.out.println("CASL " + f.getManager().getProperty("Version"));
 			m.closeLoadingFrame();
 			m.disposeLoadingFrame();
 			f.setVisible(true);

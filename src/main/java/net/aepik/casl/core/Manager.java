@@ -49,14 +49,21 @@ public class Manager
 	private PluginManager plugins;
 
 	/**
+	 * Update is available or not.
+	 * @var boolean
+	 */
+	private boolean updateAvailable;
+
+	/**
 	 * Create a new Manager object.
 	 * @param String configFile The XML configuration file.
 	 */
 	public Manager (String configFile) throws IOException
 	{
-		schemas = new SchemaManager(this);
-		plugins = new PluginManager(this, Config.getPluginPath());
-		properties = new Properties();
+		this.schemas = new SchemaManager(this);
+		this.plugins = new PluginManager(this, Config.getPluginPath());
+		this.properties = new Properties();
+		this.updateAvailable = false;
 		loadProperties(configFile);
 	}
 
@@ -66,7 +73,7 @@ public class Manager
 	 */
 	public PluginManager getPluginManager ()
 	{
-		return plugins;
+		return this.plugins;
 	}
 
 	/**
@@ -78,7 +85,7 @@ public class Manager
 	{
 		if (key != null)
 		{
-			return properties.getProperty(key);
+			return this.properties.getProperty(key);
 		}
 		return null;
 	}
@@ -89,7 +96,16 @@ public class Manager
 	 */
 	public SchemaManager getSchemaManager ()
 	{
-		return schemas;
+		return this.schemas;
+	}
+
+	/**
+	 * Return if there is update.
+	 * @return boolean
+	 */
+	public boolean getUpdateAvailable ()
+	{
+		return this.updateAvailable;
 	}
 
 	/**
@@ -130,6 +146,15 @@ public class Manager
 			e.printStackTrace();
 			throw new IOException("Unexpected error on loading configuration file");
 		}
+	}
+
+       /**
+	 * Set that an update is available.
+	 * @param boolean True or false
+	 */
+	public void setUpdateAvailable ( boolean b )
+	{
+		this.updateAvailable = b;
 	}
 
 }
