@@ -180,6 +180,15 @@ public class ManagerListener implements ActionListener, MouseListener, WindowLis
 
 	public void windowOpened ( WindowEvent e )
 	{
+		if (managerFrame.getManager().getUpdateAvailable())
+		{
+			JOptionPane.showMessageDialog(
+				managerFrame,
+				"Une nouvelle version de CASL est disponible!",
+				"Mise à jour",
+				JOptionPane.INFORMATION_MESSAGE
+			);
+		}
 	}
 
 }
