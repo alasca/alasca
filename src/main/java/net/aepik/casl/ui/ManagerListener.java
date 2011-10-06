@@ -33,6 +33,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.net.URL;
+import javax.swing.JEditorPane;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
@@ -182,10 +183,14 @@ public class ManagerListener implements ActionListener, MouseListener, WindowLis
 	{
 		if (managerFrame.getManager().getUpdateAvailable())
 		{
+			JEditorPane text = new JEditorPane();
+			text.setContentType("text/html; charset=UTF-8");
+			text.setText("<p>Une nouvelle version est disponible en ligne<br/>"
+			           + "<a href=\"http://alasca.aepik.net\">http://alasca.aepik.net</a></p><br/>");
 			JOptionPane.showMessageDialog(
 				managerFrame,
-				"Une nouvelle version de CASL est disponible!",
-				"Mise à jour",
+				text,
+				"Mise à jour disponible",
 				JOptionPane.INFORMATION_MESSAGE
 			);
 		}
