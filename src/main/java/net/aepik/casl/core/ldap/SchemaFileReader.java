@@ -64,6 +64,12 @@ public abstract class SchemaFileReader
 	protected int errorLine;
 
 	/**
+	 * Schema name.
+	 * @var String
+	 */
+	protected String schemaName;
+
+	/**
 	 * Construit un nouveau parser sans entrée.
 	 * @param syntax La syntaxe.
 	 */
@@ -112,6 +118,15 @@ public abstract class SchemaFileReader
 	}
 
 	/**
+	 * Return the name of the readed schema.
+	 * @return String
+	 */
+	public String getSchemaName ()
+	{
+		return this.schemaName;
+	}
+
+	/**
 	 * Parse input lines to return schema objects.
 	 * @param String[] Input lines
 	 * @return Schema
@@ -151,6 +166,15 @@ public abstract class SchemaFileReader
 	public void setInput (BufferedReader input)
 	{
 		this.input = input;
+	}
+
+	/**
+	 * Set the name of the schema.
+	 * @param String The name of the schema.
+	 */
+	public void setSchemaName ( String name )
+	{
+		this.schemaName = name;
 	}
 
 }

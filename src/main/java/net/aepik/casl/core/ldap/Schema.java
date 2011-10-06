@@ -62,6 +62,12 @@ public class Schema extends Observable
 	private boolean isSyntaxChanged;
 
 	/**
+	 * Schema name.
+	 * @var String
+	 */
+	private String name;
+
+	/**
 	 * L'historique d'ordre des objets
 	 */
 	private History objectsOrder;
@@ -78,9 +84,12 @@ public class Schema extends Observable
 
 	/**
 	 * Construit un schema vide.
+	 * @param name Schema name
+	 * @param s Schema syntax
 	 */
-	public Schema ( SchemaSyntax s )
-	{	
+	public Schema ( String name, SchemaSyntax s )
+	{
+		this.name = name;
 		objets = new Hashtable<String,SchemaObject>();
 		proprietes = new Properties();
 		syntax = s;
@@ -93,10 +102,13 @@ public class Schema extends Observable
 	/**
 	 * Construit un schema en le remplissant
 	 * d'objets SchemaObject.
-	 * @param objets Des objets du schema.
+	 * @param name Schema name
+	 * @param s Schema syntax
+	 * @param objs Des objets du schema.
 	 */
-	public Schema ( SchemaSyntax s, Vector<SchemaObject> objs )
+	public Schema ( String name, SchemaSyntax s, Vector<SchemaObject> objs )
 	{
+		this.name = name;
 		objets = new Hashtable<String,SchemaObject>() ;
 		proprietes = new Properties();
 		syntax = s ;
@@ -306,6 +318,15 @@ public class Schema extends Observable
 	public History getHistory ()
 	{
 		return objectsOrder;
+	}
+
+	/**
+	 * Get the name of this schema.
+	 * @return String
+	 */
+	public String getName ()
+	{
+		return this.name;
 	}
 
 	/**
@@ -538,7 +559,7 @@ public class Schema extends Observable
 	 */
 	public static String getSyntaxPackageName ()
 	{
-		Schema s = new Schema(null);
+		Schema s = new Schema("", null);
 		return s.getClass().getPackage().getName() + ".syntax";
 	}
 
@@ -702,6 +723,15 @@ public class Schema extends Observable
 	{
 		setChanged();
 		notifyObservers(Boolean.valueOf(force));
+	}
+
+	/**
+	 * Set a name for this schema.
+	 * @param String A name.
+	 */
+	public void setName ( String name )
+	{
+		this.name = name;
 	}
 
 	/**

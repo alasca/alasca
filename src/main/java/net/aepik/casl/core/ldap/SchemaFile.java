@@ -144,10 +144,18 @@ public class SchemaFile
 		}
 		try
 		{
-			BufferedReader entree = new BufferedReader(new FileReader(new File(this.filename)));
+			File file = new File(this.filename);
+			int index = file.getName().lastIndexOf('.');
+			String name = file.getName();
+			int namei = name.lastIndexOf('.');
+			name = (namei > 0 && namei <= name.length() - 2) ? name.substring(0, namei) : name;
+
+			BufferedReader entree = new BufferedReader(new FileReader(file));
 			this.reader.setInput(entree);
+			this.reader.setSchemaName(name);
 			Schema s = this.reader.parse(this.reader.read());
 			entree.close();
+
 			if (s != null)
 			{
 				this.error = false;
