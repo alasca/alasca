@@ -36,7 +36,13 @@ public class Version
 	 * Public URL where to find latest version.
 	 * @var String
 	 */
-	public static final String url = "http://alasca.aepik.net/version/current/";
+	public static final String urlVersion = "http://alasca.aepik.net/version/current/";
+
+	/**
+	 * Public URL of the website.
+	 * @var String
+	 */
+	public static final String urlWebsite = "http://www.aepik.net/projects/casl/start";
 
 	/**
 	 * Current major number.
@@ -74,7 +80,7 @@ public class Version
 		String line;
 		try
 		{
-			URL u = new URL(url);
+			URL u = new URL(urlVersion);
 			HttpURLConnection connection = (HttpURLConnection) u.openConnection();
 			connection.setRequestMethod("GET");
 			connection.connect();
