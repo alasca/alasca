@@ -50,7 +50,7 @@ public class RFCReader extends SchemaFileReader
 			return null;
 		}
 
-		Schema schema = new Schema(syntax);
+		Schema schema = new Schema(this.getSchemaName(), syntax);
 		Vector<SchemaObject> objects = new Vector<SchemaObject>();
 
 		int errorLineNumber = -1;

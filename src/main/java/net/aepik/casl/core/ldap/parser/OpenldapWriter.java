@@ -39,27 +39,6 @@ public class OpenldapWriter extends RFCWriter
 	}
 
 	/**
-	 * Write contents onto output flow.
-	 */
-	public void write ( Schema schema ) throws IOException
-	{
-		if (output == null)
-		{
-			return;
-		}
-		if (schema == null)
-		{
-			return;
-		}
-		if (schema.getSyntax() == null)
-		{
-			return;
-		}
-		output.newLine();
-		super.write(schema);
-	}
-
-	/**
 	 * Return the string representation of a SchemaObject object.
 	 * @param object A SchemaObject object.
 	 * @return String Its String representation.

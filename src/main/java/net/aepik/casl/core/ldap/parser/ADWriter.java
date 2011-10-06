@@ -1,7 +1,5 @@
 /*
- * ADWriter.java		0.2		29/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,31 +24,28 @@ import net.aepik.casl.core.ldap.SchemaFileWriter;
 import net.aepik.casl.core.ldap.SchemaObject;
 import net.aepik.casl.core.ldap.SchemaSyntax;
 import net.aepik.casl.core.ldap.SchemaValue;
-
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
 
-public class ADWriter extends SchemaFileWriter {
+public class ADWriter extends SchemaFileWriter
+{
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
-
-	public ADWriter() {
+	/**
+	 * Build a new ADWrite object.
+	 */
+	public ADWriter ()
+	{
 		super();
 	}
-
-////////////////////////////////
-// Methodes publiques
-////////////////////////////////
 
 	/**
 	 * Ecrit l'ensemble des objets du schema dans le flux de sortie.
 	 * @param schema Le schema.
-	**/
-	public void write( Schema schema ) throws IOException {
+	 */
+	public void writeObjects ( Schema schema ) throws IOException
+	{
 
 		if( output==null || schema==null || schema.getSyntax()==null )
 			return ;
@@ -329,32 +324,35 @@ public class ADWriter extends SchemaFileWriter {
 		return object.toString();
 	}
 
-////////////////////////////////
-// Methodes privées
-////////////////////////////////
-
 	/**
 	 * Permet de supprimer espaces et quotes entourant une chaîne de caractères.
 	 * @param str Une chaîne de caractères.
 	 * @return String La chaîne de caractères sans espaces et quotes.
-	**/
-	private String stripQuotes( String str ) {
-
-		if( str==null || str.length()==0 )
+	 */
+	private String stripQuotes ( String str )
+	{
+		if (str == null || str.length() == 0)
+		{
 			return "";
+		}
 
-		int firstQuote, secondQuote ;
+		int firstQuote, secondQuote;
 		String result = str.trim();
 
 		// On cherche le premier quote. S'il n'y en a pas => faux.
-		if( ( firstQuote = result.indexOf( 39 ) )<0 )
+		if ((firstQuote = result.indexOf(39)) < 0)
+		{
 			return str;
+		}
 
 		// Si il y en a un, cherche le suivant. Si aucun suivant => faux.
-		if( ( secondQuote = result.indexOf( 39, firstQuote+1 ) )<0 )
+		if ((secondQuote = result.indexOf(39, firstQuote+1)) < 0)
+		{
 			return str;
+		}
 
-		return result.substring( firstQuote+1, secondQuote );
+		return result.substring(firstQuote+1, secondQuote);
 	}
 
 }
+

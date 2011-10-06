@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006-2010 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,23 +25,16 @@ import net.aepik.casl.core.ldap.SchemaValue;
 import java.io.IOException;
 
 /**
- * Write ldap definitions in a Openldap compliant format.
+ * Write ldap definitions in a Openldap 2.4 compliant format.
  */
-public class Openldap24Writer extends RFCWriter
+public class Openldap24Writer extends OpenldapWriter
 {
 
 	/**
-	 * Build a new Openldap24Writer object.
-	 */
-	public Openldap24Writer ()
-	{
-		super();
-	}
-
-	/**
 	 * Write contents onto output flow.
+	 * @param Schema
 	 */
-	public void write ( Schema schema ) throws IOException
+	public void writeObjects ( Schema schema ) throws IOException
 	{
 		if (output == null)
 		{
@@ -55,10 +48,13 @@ public class Openldap24Writer extends RFCWriter
 		{
 			return;
 		}
+		String eol = System.getProperty("line.separator");
+		String str = "dn: cn=" + schema.getName() + ",cn=schema,cn=config" + eol
+		           + "objectClass: olcSchemaConfig" + eol
+		           + "cn: " + schema.getName() + eol;
+		output.write(str, 0, str.length());
+		super.writeObjects(schema);
 		output.newLine();
-		//String name = schema.getProperties().getProperty("dn");
-		//name = name != null ? name : "casl";
-		super.write(schema);
 	}
 
 	/**
