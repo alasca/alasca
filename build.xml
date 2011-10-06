@@ -8,7 +8,7 @@
 	<property name="CASL_TARGETDIR" value="${CASL_DISTDIR}/target" />
 	<property name="CASL_NAME" value="casl" />
 	<property name="CASL_VERSION" value="0.3" />
-	<property name="CASL_PLUGINLIST" value="adct-autogen,schema-converter,schema-reorganizer,schema-query,sddl-autogen,uuid-autogen" />
+	<property name="CASL_PLUGINLIST" value="adct-autogen,schema-converter,schema-reorganizer,schema-query,uuid-autogen" />
 
 	<property name="COMPILE.DEBUG" value="true" />
 	<property name="COMPILE.DEPRECATION" value="true" />
