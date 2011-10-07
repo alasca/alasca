@@ -740,12 +740,29 @@ public class Schema extends Observable
 	 */
 	public void setObjectsIdentifiers ( Properties newOIDs )
 	{
+		// Order properties by oid (for instance, an oid 1.2.3.4 have to be before
+		// an oid a:1.2, because oid that contains references refered to previously
+		// declared oid. Take care also of reference of references, for example
+		// oid b:2 should be declared after b, because it uses it.
+		Properties sortedNewOIDs = new Properties();
+		for (Enumeration keys = newOIDS.propertyNames(); keys.hasMoreElements();)
+		{
+			String id = (String) keys.nextElement();
+			String value = newOIDs.getProperty(id);
+			if (this.syntax.isNumericOid(value))
+			{
+				// See if we could add property at 0 or at end.
+				sortedNewOIDs.addProperty(id, value);
+			}
+		}
+		// Now delete existing oid.
 		SchemaObject[] oids = this.getObjectsInOrder(this.getSyntax().getObjectIdentifierType());
 		for (SchemaObject object : oids)
 		{
 			this.delObject(object.getId());
 		}
-		for (Enumeration keys = newOIDs.propertyNames(); keys.hasMoreElements();)
+		// And reimport the new one.
+		for (Enumeration keys = sortedNewOIDs.propertyNames(); keys.hasMoreElements();)
 		{
 			String id = (String) keys.nextElement();
 			SchemaValue v = this.getSyntax().createSchemaValue(
