@@ -20,6 +20,7 @@
 package net.aepik.casl.core.ldap;
 
 import net.aepik.casl.core.History;
+import org.apache.commons.lang3.ArrayUtils;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -28,8 +29,11 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Properties;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.Vector;
 import java.util.jar.*;
 
@@ -744,17 +748,17 @@ public class Schema extends Observable
 		// an oid a:1.2, because oid that contains references refered to previously
 		// declared oid. Take care also of reference of references, for example
 		// oid b:2 should be declared after b, because it uses it.
-		Properties sortedNewOIDs = new Properties();
-		for (Enumeration keys = newOIDS.propertyNames(); keys.hasMoreElements();)
+		String[][] tab = new String[newOIDs.size()][2];
+		int tab_index = 0;
+		for (Enumeration keys = newOIDs.propertyNames(); keys.hasMoreElements();)
 		{
 			String id = (String) keys.nextElement();
 			String value = newOIDs.getProperty(id);
-			if (this.syntax.isNumericOid(value))
-			{
-				// See if we could add property at 0 or at end.
-				sortedNewOIDs.addProperty(id, value);
-			}
+			String[] oid = {id, value};
+			tab[tab_index] = oid;
+			tab_index++;
 		}
+		TreeMap tree = new TreeMap(ArrayUtils.toMap(tab));
 		// Now delete existing oid.
 		SchemaObject[] oids = this.getObjectsInOrder(this.getSyntax().getObjectIdentifierType());
 		for (SchemaObject object : oids)
@@ -762,9 +766,9 @@ public class Schema extends Observable
 			this.delObject(object.getId());
 		}
 		// And reimport the new one.
-		for (Enumeration keys = sortedNewOIDs.propertyNames(); keys.hasMoreElements();)
+		String[] sortedNewOIDs = ((Set<String>) tree.keySet()).toArray(new String[0]);
+		for (String id : sortedNewOIDs)
 		{
-			String id = (String) keys.nextElement();
 			SchemaValue v = this.getSyntax().createSchemaValue(
 				this.getSyntax().getObjectIdentifierType(),
 				id,
