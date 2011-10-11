@@ -63,6 +63,25 @@ public class Oid implements SchemaValue
 	}
 
 	/**
+	 * Return the prefix of this oid.
+	 * @return String
+	 */
+	public String getPrefix ()
+	{
+		if (this.isNumeric)
+		{
+			return null;
+		}
+		// Search for the : character
+		int pos = this.value.indexOf(58);
+		if (pos <= 0)
+		{
+			return null;
+		}
+		return this.value.substring(pos);
+	}
+
+	/**
 	 * Retourne la valeur du paramêtre.
 	 * @return String La valeur du paramêtre sous forme de chaîne de caractères.
 	 */
