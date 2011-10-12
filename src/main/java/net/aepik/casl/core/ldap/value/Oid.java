@@ -78,7 +78,7 @@ public class Oid implements SchemaValue
 		{
 			return null;
 		}
-		return this.value.substring(pos);
+		return this.value.substring(0, pos);
 	}
 
 	/**

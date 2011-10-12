@@ -143,7 +143,7 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 		schema = s;
 		properties = (Properties) schema.getProperties().clone();
 		propertiesList = new JList();
-		objectsIdentifiers = (Properties) schema.getObjectsIdentifiers().clone();;
+		objectsIdentifiers = (Properties) schema.getObjectsIdentifiers().clone();
 		objectsIdentifiersList = new JList();
 
 		updateList();
@@ -457,9 +457,9 @@ public class SchemaPropertiesFrame extends JDialog implements ActionListener, Li
 			String value = properties.getProperty(key);
 			propertiesModel.addElement(key + ":" + value);
 		}
-		for (Enumeration keys = objectsIdentifiers.propertyNames(); keys.hasMoreElements();)
+		String[] oidsk = this.schema.getSortedObjectsIdentifiersKeys(objectsIdentifiers);
+		for (String key : this.schema.getSortedObjectsIdentifiersKeys(objectsIdentifiers))
 		{
-			String key = (String) keys.nextElement();
 			String value = objectsIdentifiers.getProperty(key);
 			objectsIdentifiersModel.addElement(key + " " + value);
 		}

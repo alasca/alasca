@@ -20,6 +20,7 @@
 package net.aepik.casl.core.ldap;
 
 import net.aepik.casl.core.History;
+import net.aepik.casl.core.ldap.value.Oid;
 import org.apache.commons.lang3.ArrayUtils;
 import java.io.File;
 import java.lang.reflect.Field;
@@ -29,11 +30,9 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.Vector;
 import java.util.jar.*;
 
@@ -468,6 +467,24 @@ public class Schema extends Observable
 			result[position] = e.nextElement();
 			position++;
 		}
+		if (type.equals(this.getSyntax().getObjectIdentifierType()))
+		{
+			Properties oids = getObjectsIdentifiers(result);
+			String[] oidsk = getSortedObjectsIdentifiersKeys(oids);
+			result = new SchemaObject[oidsk.length];
+			for (int i = 0; i < oidsk.length; i++)
+			{
+				for (Enumeration<SchemaObject> e = v.elements(); e.hasMoreElements();)
+				{
+					SchemaObject o = (SchemaObject) e.nextElement();
+					String[] okeys = o.getKeys();
+					if (okeys[0].compareTo(oidsk[i]) == 0)
+					{
+						result[i] = o;
+					}
+				}
+			}
+		}
 		return result;
 	}
 
@@ -477,8 +494,17 @@ public class Schema extends Observable
 	 */
 	public Properties getObjectsIdentifiers ()
 	{
+		return getObjectsIdentifiers(this.getObjects(this.getSyntax().getObjectIdentifierType()));
+	}
+
+	/**
+	 * Returns objects identifiers.
+	 * @param oids SchemaObject array
+	 * @return Properties All objects identifiers.
+	 */
+	public static Properties getObjectsIdentifiers ( SchemaObject[] oids )
+	{
 		Properties objectsIdentifiers = new Properties();
-		SchemaObject[] oids = this.getObjectsInOrder(this.getSyntax().getObjectIdentifierType());
 		for (SchemaObject object : oids)
 		{
 			String[] keys = object.getKeys();
@@ -486,6 +512,40 @@ public class Schema extends Observable
 			objectsIdentifiers.setProperty(keys[0], value.toString());
 		}
 		return objectsIdentifiers;
+	}
+
+	/**
+	 * Get sorted object identifiers keys, to loop on object identifiers
+	 * into a valid order.
+	 * @param oids Object identifiers.
+	 * @return String[] Sorted keys
+	 */
+	public static String[] getSortedObjectsIdentifiersKeys ( Properties oids )
+	{
+		Hashtable<String, String> ht = new Hashtable<String,String>();
+		for (Enumeration keys = oids.propertyNames(); keys.hasMoreElements();)
+		{
+			String k = (String) keys.nextElement();
+			Oid o = new Oid(oids.getProperty(k));
+			String v = o.toString();
+			String p = o.getPrefix();
+			while (p != null)
+			{
+				v = v.replaceFirst(p+":", oids.getProperty(p)+".");
+				p = (new Oid(oids.getProperty(p))).getPrefix();
+			}
+			ht.put(v, k);
+		}
+		String[] st = ht.keySet().toArray(new String[0]);
+		Arrays.sort(st);
+		String[] result = new String[st.length];
+		int result_index = 0;
+		for (String k : st)
+		{
+			result[result_index] = ht.get(k);
+			result_index++;
+		}
+		return result;
 	}
 
 	/**
@@ -744,21 +804,6 @@ public class Schema extends Observable
 	 */
 	public void setObjectsIdentifiers ( Properties newOIDs )
 	{
-		// Order properties by oid (for instance, an oid 1.2.3.4 have to be before
-		// an oid a:1.2, because oid that contains references refered to previously
-		// declared oid. Take care also of reference of references, for example
-		// oid b:2 should be declared after b, because it uses it.
-		String[][] tab = new String[newOIDs.size()][2];
-		int tab_index = 0;
-		for (Enumeration keys = newOIDs.propertyNames(); keys.hasMoreElements();)
-		{
-			String id = (String) keys.nextElement();
-			String value = newOIDs.getProperty(id);
-			String[] oid = {id, value};
-			tab[tab_index] = oid;
-			tab_index++;
-		}
-		TreeMap tree = new TreeMap(ArrayUtils.toMap(tab));
 		// Now delete existing oid.
 		SchemaObject[] oids = this.getObjectsInOrder(this.getSyntax().getObjectIdentifierType());
 		for (SchemaObject object : oids)
@@ -766,9 +811,9 @@ public class Schema extends Observable
 			this.delObject(object.getId());
 		}
 		// And reimport the new one.
-		String[] sortedNewOIDs = ((Set<String>) tree.keySet()).toArray(new String[0]);
-		for (String id : sortedNewOIDs)
+		for (Enumeration keys = newOIDs.propertyNames(); keys.hasMoreElements();)
 		{
+			String id = (String) keys.nextElement();
 			SchemaValue v = this.getSyntax().createSchemaValue(
 				this.getSyntax().getObjectIdentifierType(),
 				id,
