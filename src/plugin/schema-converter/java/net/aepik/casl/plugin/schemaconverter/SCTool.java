@@ -103,7 +103,7 @@ public class SCTool {
 	{
 		String dictionnary = null;
 		String syntaxTo    = null;
-		Translator traduc  = Translator.create(Config.getResourcesPath() + "/traduc.xml");
+		Translator traduc  = Translator.create(Config.getResourcesPath() + "/schema-converter/dictionary.xml");
 
 		String[] dictionnaries = traduc.getAvailableDictionnaries();
 
@@ -144,7 +144,7 @@ public class SCTool {
 	 */
 	private static Schema convertSchema ( Schema schema, String dictionnary, String outSyntax )
 	{
-		Translator traduc = Translator.create(Config.getResourcesPath() + "/traduc.xml");
+		Translator traduc = Translator.create(Config.getResourcesPath() + "/schema-converter/dictionary.xml");
 		SchemaConverter converter = new SchemaConverter(schema, traduc);
 		try
 		{

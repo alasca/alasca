@@ -50,7 +50,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * |  |_ source2...
  * |
  * |_ DESTINATION
- * |  |_ destiantion1
+ * |  |_ destination1
  * |  |_ destination2...
  * |
  * |_ KEY
@@ -330,6 +330,7 @@ public class Translator
 		}
 		catch (Throwable t)
 		{
+			t.printStackTrace();
 		}
 		return false;
 	}
@@ -379,15 +380,16 @@ public class Translator
 			}
 			else if (nomElement.equals(SYNTAX))
 			{
-				Node src = new Node(SOURCE);
-				Node srcStr = new Node(attrs.getValue(SOURCE));
-				src.add(srcStr);
-				Node dst = new Node(DESTINATION);
-				Node dstStr = new Node(attrs.getValue(DESTINATION));
-				dst.add(dstStr);
 				tempCurrentDictionnary = new Node(attrs.getValue(SYNTAX_VALUE_NAME));
-				tempCurrentDictionnary.add(dst);
-				tempCurrentDictionnary.add(src);
+				for (String type : new String[] {DESTINATION,SOURCE})
+				{
+					Node n = new Node(type);
+					for (String s : attrs.getValue(type).split(","))
+					{
+						n.add(new Node(s));
+					}
+					tempCurrentDictionnary.add(n);
+				}
 				tempCurrentDictionnary.add(new Node(KEY));
 			}
 			else if (nomElement.equals(KEY))

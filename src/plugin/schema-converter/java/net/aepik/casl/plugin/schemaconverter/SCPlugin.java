@@ -96,7 +96,7 @@ public class SCPlugin extends PluginImpl
 	 */
 	public void run ()
 	{
-		Translator traduc = Translator.create(Config.getResourcesPath() + "/traduc.xml");
+		Translator traduc = Translator.create(Config.getResourcesPath() + "/schema-converter/dictionary.xml");
 		if (traduc != null && this.canRun())
 		{
 			try
