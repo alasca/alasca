@@ -1,7 +1,5 @@
 /*
- * Translator.java		0.1		08/06/2006
- * 
- * Copyright (C) 2006 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +20,6 @@
 package net.aepik.casl.plugin.schemaconverter.core;
 
 import net.aepik.casl.core.util.Node;
-
 import java.io.File;
 import java.util.Enumeration;
 import javax.xml.parsers.SAXParserFactory;
@@ -67,90 +64,99 @@ import org.xml.sax.helpers.DefaultHandler;
  *    |_ key2...
  * </pre>
  * <br/><br/>
-**/
+ */
+public class Translator
+{
 
-public class Translator {
+	private static String DESTINATION = "destination";
 
-////////////////////////////////
-// Constantes
-////////////////////////////////
+	private static String KEY = "key";
 
-	private static String DESTINATION = "destination" ;
-	private static String KEY = "key" ;
-	private static String KEY_EQUIV = "keyequiv" ;
-	private static String KEY_EQUIV_VALUE = "value" ;
-	private static String KEY_NAME = "keyname" ;
-	private static String KEY_NAME_VALUE = "value" ;
-	private static String SOURCE = "source" ;
-	private static String SYNTAX = "syntax" ;
-	private static String SYNTAX_VALUE_NAME = "name" ;
-	private static String TRANSLATOR = "translator" ;
+	private static String KEY_EQUIV = "keyequiv";
 
-////////////////////////////////
-// Attributs
-////////////////////////////////
+	private static String KEY_EQUIV_VALUE = "value";
 
-	/** Le nom du fichier XML **/
-	private String filename ;
-	/** Le dictionnaire **/
-	private Node dictionnaries ;
-	/** Le dictionnaire en cours d'utilisation **/
-	private Node currentDictionnary ;
+	private static String KEY_NAME = "keyname";
 
-////////////////////////////////
-// Constructeurs
-////////////////////////////////
+	private static String KEY_NAME_VALUE = "value";
+
+	private static String SOURCE = "source";
+
+	private static String SYNTAX = "syntax";
+
+	private static String SYNTAX_VALUE_NAME = "name";
+
+	private static String TRANSLATOR = "translator";
+
+	/**
+	 * Le nom du fichier XML
+	 * @var String
+	 */
+	private String filename;
+
+	/**
+	 * Le dictionnaire
+	 * @var Node
+	 */
+	private Node dictionnaries;
+
+	/**
+	 * Le dictionnaire en cours d'utilisation
+	 * @var Node
+	 */
+	private Node currentDictionnary;
 
 	/**
 	 * Construit une nouvelle instance d'un traducteur.
 	 * @param f Le nom du fichier contenant toutes les traductions.
-	**/
-	public Translator( String f ) {
-
-		filename = f ;
-		dictionnaries = null ;
-		currentDictionnary = null ;
+	 */
+	public Translator ( String f )
+	{
+		filename = f;
+		dictionnaries = null;
+		currentDictionnary = null;
 	}
-
-////////////////////////////////
-// Methodes publiques
-////////////////////////////////
 
 	/**
 	 * Créer un traducteur depuis un fichier XML.
 	 * @param filename Le nom du fichier XML.
 	 * @return Translator Un nouveau translator.
-	**/
-	public static Translator create( String filename ) {
-
-		Translator traduc = new Translator( filename );
-		if( traduc.load() )
+	 */
+	public static Translator create ( String filename )
+	{
+		Translator traduc = new Translator(filename);
+		if (traduc.load())
+		{
 			return traduc;
-		return null ;
+		}
+		return null;
 	}
 
 	/**
 	 * Retourne l'ensemble des noms de dictionnaires disponibles
 	 * pour ce traducteur.
 	 * @return String[] L'ensemble des noms de dictionnaires.
-	**/
-	public String[] getAvailableDictionnaries() {
-
-		if( dictionnaries!=null )
+	 */
+	public String[] getAvailableDictionnaries ()
+	{
+		if (dictionnaries != null)
+		{
 			return dictionnaries.getNodesValue();
+		}
 		return null;
 	}
 
 	/**
 	 * Retourne l'ensemble des noms de syntaxes source.
 	 * @return String[] L'ensemble des noms de syntaxes source.
-	**/
-	public String[] getDestinationSyntaxes() {
-		
-		if( currentDictionnary==null )
+	 */
+	public String[] getDestinationSyntaxes ()
+	{		
+		if (currentDictionnary == null)
+		{
 			return null;
-
-		Node n = currentDictionnary.getNode( DESTINATION );
+		}
+		Node n = currentDictionnary.getNode(DESTINATION);
 		return n.getNodesValue();
 	}
 
@@ -158,12 +164,14 @@ public class Translator {
 	 * Retourne les valeurs d'une clef.
 	 * @param key L'identifiant de clef (dans le retour de getKeys par ex).
 	 * @return String[] Un ensemble de valeurs pour une clef.
-	**/
-	public String[] getKeyValues( String key ) {
-
-		Node n = currentDictionnary.getNode( key );
-		if( n!=null )
-			return n.getNodeValues( KEY_NAME_VALUE );
+	 */
+	public String[] getKeyValues ( String key )
+	{
+		Node n = currentDictionnary.getNode(key);
+		if (n != null)
+		{
+			return n.getNodeValues(KEY_NAME_VALUE);
+		}
 		return null;
 	}
 
@@ -175,29 +183,36 @@ public class Translator {
 	 * @param keyValue La valeur de la clef, car une clef peut être définie par
 	 *		son nom de clef ET sa valeur.
 	 * @return String[] Un ensemble de clefs équivalentes.
-	**/
-	public String[] getKeyEquivs( String key, String keyValue ) {
-
-		Node[] nodes = currentDictionnary.getNode( KEY ).getNodes( key );
-		if( nodes!=null || nodes.length!=0 ) {
-
+	 */
+	public String[] getKeyEquivs ( String key, String keyValue )
+	{
+		Node[] nodes = currentDictionnary.getNode(KEY).getNodes(key);
+		if (nodes != null || nodes.length != 0)
+		{
 			Node n = null;
-			for( int i=0; i<nodes.length && n==null; i++ ) {
-				if( keyValue==null ) {
+			for (int i = 0; i < nodes.length && n == null; i++)
+			{
+				if (keyValue == null)
+				{
 					n = nodes[i];
-				} else {
-					String[] tmp = nodes[i].getNodeValues( KEY_NAME_VALUE );
-					for( int j=0; tmp!=null && n==null && j<tmp.length; j++ ) {
-						if( tmp[j].equals( keyValue ) )
+				}
+				else
+				{
+					String[] tmp = nodes[i].getNodeValues(KEY_NAME_VALUE);
+					for (int j = 0; tmp != null && n == null && j < tmp.length; j++)
+					{
+						if (tmp[j].equals(keyValue))
+						{
 							n = nodes[i];
+						}
 					}
 				}
 			}
-
-			if( n!=null )
-				return n.getNode( KEY_EQUIV ).getNodesValue();
+			if (n != null)
+			{
+				return n.getNode(KEY_EQUIV).getNodesValue();
+			}
 		}
-
 		return null;
 	}
 
@@ -208,53 +223,59 @@ public class Translator {
 	 *		son nom de clef ET sa valeur.
 	 * @param keyEquiv Une clef équivalente.
 	 * @return String[] Les valeurs de cette clef équivalente.
-	**/
-	public String[] getKeyEquivValues( String key, String keyValue, String keyEquiv ) {
-
-		Node[] nodes = currentDictionnary.getNode( KEY ).getNodes( key );
-		if( nodes!=null || nodes.length!=0 ) {
-
+	 */
+	public String[] getKeyEquivValues ( String key, String keyValue, String keyEquiv )
+	{
+		Node[] nodes = currentDictionnary.getNode(KEY).getNodes(key);
+		if (nodes != null || nodes.length != 0)
+		{
 			Node n = null;
-			for( int i=0; i<nodes.length && n==null; i++ ) {
-				if( keyValue==null ) {
+			for (int i = 0; i < nodes.length && n == null; i++)
+			{
+				if (keyValue == null)
+				{
 					n = nodes[i];
-				} else {
-					String[] tmp = nodes[i].getNodeValues( KEY_NAME_VALUE );
-					for( int j=0; tmp!=null && n==null && j<tmp.length; j++ ) {
-						if( tmp[j].equals( keyValue ) )
+				}
+				else
+				{
+					String[] tmp = nodes[i].getNodeValues(KEY_NAME_VALUE);
+					for (int j = 0; tmp != null && n == null && j < tmp.length; j++)
+					{
+						if (tmp[j].equals(keyValue))
+						{
 							n = nodes[i];
+						}
 					}
 				}
 			}
-
-			if( n!=null ) {
-				return n.getNode( KEY_EQUIV ).getNodeValues( keyEquiv );
+			if (n != null)
+			{
+				return n.getNode(KEY_EQUIV).getNodeValues(keyEquiv);
 			}
 		}
-
-		System.out.println( "pas ok" );
-
 		return null;
 	}
 
 	/**
 	 * Retourne l'ensemble des clefs contenues dans le dictionnaire courant.
 	 * @return String[] Un ensemble de chaîne de caractères.
-	**/
-	public String[] getKeys() {
-		return currentDictionnary.getNodeValues( KEY );
+	 */
+	public String[] getKeys ()
+	{
+		return currentDictionnary.getNodeValues(KEY);
 	}
 
 	/**
 	 * Retourne l'ensemble des noms de syntaxes source.
 	 * @return String[] L'ensemble des noms de syntaxes source.
-	**/
-	public String[] getSourceSyntaxes() {
-		
-		if( currentDictionnary==null )
+	 */
+	public String[] getSourceSyntaxes ()
+	{	
+		if (currentDictionnary == null)
+		{
 			return null;
-
-		Node n = currentDictionnary.getNode( SOURCE );
+		}
+		Node n = currentDictionnary.getNode(SOURCE);
 		return n.getNodesValue();
 	}
 
@@ -262,9 +283,10 @@ public class Translator {
 	 * Teste si une entrée pour une clef donnée existe dans le dictionnaire courant.
 	 * @param key Une clef.
 	 * @return boolean True si l'entrée existe, false sinon.
-	**/
-	public boolean isKeyExists( String key ) {
-		return currentDictionnary.getNode( KEY ).contains( key );
+	 */
+	public boolean isKeyExists ( String key )
+	{
+		return currentDictionnary.getNode(KEY).contains(key);
 	}
 
 	/**
@@ -273,39 +295,42 @@ public class Translator {
 	 * @param key Une clef.
 	 * @param value Une valeur.
 	 * @return boolean True si l'entrée existe, false sinon.
-	**/
-	public boolean isKeyExists( String key, String value ) {
-
-		Node n = currentDictionnary.getNode( KEY );
-		Node[] tmp = n.getNodes( key );
-
-		boolean ok = false ;
-		for( int i=0; tmp!=null && i<tmp.length && !ok; i++ ) {
-			String[] values = n.getNodeValues( KEY_NAME_VALUE );
-			for( int j=0; values!=null && j<values.length && !ok; j++ ) {
-				if( values[j].equals( value ) )
-					ok = true ;
+	 */
+	public boolean isKeyExists ( String key, String value )
+	{
+		Node n = currentDictionnary.getNode(KEY);
+		Node[] tmp = n.getNodes(key);
+		boolean ok = false;
+		for (int i = 0; tmp != null && i < tmp.length && !ok; i++)
+		{
+			String[] values = n.getNodeValues(KEY_NAME_VALUE);
+			for (int j = 0; values != null && j < values.length && !ok; j++)
+			{
+				if (values[j].equals(value))
+				{
+					ok = true;
+				}
 			}
 		}
-
-		return ok ;
+		return ok;
 	}
 
 	/**
 	 * Charge les données XML en mémoire.
 	 * @return boolean True si l'opération est un succès, false sinon.
-	**/
-	public boolean load() {
-
+	 */
+	public boolean load ()
+	{
 		SAXParserFactory factory = SAXParserFactory.newInstance();
-
-		try {
+		try
+		{
 			SAXParser saxParser = factory.newSAXParser();
-			saxParser.parse( new File( filename ), new TranslatorParser() );
-			return true ;
-
-		} catch( Throwable t ) {}
-
+			saxParser.parse(new File(filename), new TranslatorParser());
+			return true;
+		}
+		catch (Throwable t)
+		{
+		}
 		return false;
 	}
 
@@ -313,139 +338,167 @@ public class Translator {
 	 * Sélectionne le dictionnaire en cours d'utilisation.
 	 * @param dictionnaryName Le nom du dictionnaire à sélectionner.
 	 * @return boolean True si la sélection réussie, false sinon.
-	**/
-	public boolean setSelectedDictionnary( String dictionnaryName ) {
-
-		if( dictionnaries.contains( dictionnaryName ) ) {
-			currentDictionnary = dictionnaries.getNode( dictionnaryName ) ;
-			return true ;
+	 */
+	public boolean setSelectedDictionnary ( String dictionnaryName )
+	{
+		if (dictionnaries.contains(dictionnaryName))
+		{
+			currentDictionnary = dictionnaries.getNode(dictionnaryName);
+			return true;
 		}
-
-		return false ;
+		return false;
 	}
 
-////////////////////////////////
-// Methodes SAX
-////////////////////////////////////////////////////////////////
-// La classe suivante va nous permettrent de lire
-// correctement le fichier XML, et de créer notre traducteur.
-////////////////////////////////////////////////////////////////
+	/**
+	 * La classe privée suivante va nous permettrent de lire
+	 * correctement le fichier XML, et de créer notre traducteur.
+	 */
+	private class TranslatorParser extends DefaultHandler
+	{
 
-	private class TranslatorParser extends DefaultHandler {
+		private Node tempDictionnaries = null;
 
-		private Node tempDictionnaries = null ;
-		private Node tempCurrentDictionnary = null ;
-		private Node tempCurrentKey = null ;
-		private Node tempCurrentKeyEquiv = null ;
-		private Node tempCurrentKeys = null ;
-		private Node tempCurrentKeysEquiv = null ;
-		private String buffer = null ;
+		private Node tempCurrentDictionnary = null;
 
-		public void startElement( String namespaceURI, String simpleName, String qualifiedName, Attributes attrs ) throws SAXException {
+		private Node tempCurrentKey = null;
 
-			String nomElement = simpleName.equals("") ? qualifiedName : simpleName ;
+		private Node tempCurrentKeyEquiv = null;
 
-			if( nomElement.equals( TRANSLATOR ) ) {
+		private Node tempCurrentKeys = null;
+
+		private Node tempCurrentKeysEquiv = null;
+
+		private String buffer = null;
+
+		public void startElement ( String namespaceURI, String simpleName, String qualifiedName, Attributes attrs ) throws SAXException
+		{
+			String nomElement = simpleName.equals("") ? qualifiedName : simpleName;
+			if (nomElement.equals(TRANSLATOR))
+			{
 				tempDictionnaries = new Node();
-
-			} else if( nomElement.equals( SYNTAX ) ) {
-				Node src = new Node( SOURCE );
-				Node srcStr = new Node( attrs.getValue( SOURCE ) );
-				src.add( srcStr );
-				Node dst = new Node( DESTINATION );
-				Node dstStr = new Node( attrs.getValue( DESTINATION ) );
-				dst.add( dstStr );
-
-				tempCurrentDictionnary = new Node( attrs.getValue( SYNTAX_VALUE_NAME ) );
-				tempCurrentDictionnary.add( dst );
-				tempCurrentDictionnary.add( src );
-				tempCurrentDictionnary.add( new Node( KEY ) );
-
-			} else if( nomElement.equals( KEY ) ) {
+			}
+			else if (nomElement.equals(SYNTAX))
+			{
+				Node src = new Node(SOURCE);
+				Node srcStr = new Node(attrs.getValue(SOURCE));
+				src.add(srcStr);
+				Node dst = new Node(DESTINATION);
+				Node dstStr = new Node(attrs.getValue(DESTINATION));
+				dst.add(dstStr);
+				tempCurrentDictionnary = new Node(attrs.getValue(SYNTAX_VALUE_NAME));
+				tempCurrentDictionnary.add(dst);
+				tempCurrentDictionnary.add(src);
+				tempCurrentDictionnary.add(new Node(KEY));
+			}
+			else if (nomElement.equals(KEY))
+			{
 				tempCurrentKeys = new Node();
-				tempCurrentKeysEquiv = new Node( KEY_EQUIV );
-
-			} else if( nomElement.equals( KEY_NAME ) ) {
+				tempCurrentKeysEquiv = new Node(KEY_EQUIV);
+			}
+			else if (nomElement.equals(KEY_NAME))
+			{
 				tempCurrentKey = new Node();
-				Node n1 = new Node( KEY_NAME_VALUE, new Node[]{ new Node( attrs.getValue( KEY_NAME_VALUE ) ) } );
-				tempCurrentKey.add( n1 );
-				buffer = null ;
-
-			} else if( nomElement.equals( KEY_EQUIV ) ) {
+				Node n1 = new Node(KEY_NAME_VALUE, new Node[]{new Node(attrs.getValue(KEY_NAME_VALUE))});
+				tempCurrentKey.add(n1);
+				buffer = null;
+			}
+			else if (nomElement.equals(KEY_EQUIV))
+			{
 				tempCurrentKeyEquiv = new Node();
-				Node n1 = new Node( attrs.getValue( KEY_EQUIV_VALUE ) );
-				tempCurrentKeyEquiv.add( n1 );
-				buffer = null ;
+				Node n1 = new Node(attrs.getValue(KEY_EQUIV_VALUE));
+				tempCurrentKeyEquiv.add(n1);
+				buffer = null;
 			}
 		}
 
-		public void endElement( String namespaceURI, String simpleName, String qualifiedName ) throws SAXException {
-
-			String nomElement = simpleName.equals("") ? qualifiedName : simpleName ;
-
-			if( nomElement.equals( TRANSLATOR ) ) {
+		public void endElement ( String namespaceURI, String simpleName, String qualifiedName ) throws SAXException
+		{
+			String nomElement = simpleName.equals("") ? qualifiedName : simpleName;
+			if (nomElement.equals(TRANSLATOR))
+			{
 				Translator.this.dictionnaries = tempDictionnaries;
 				tempDictionnaries = null;
-
-			} else if( nomElement.equals( SYNTAX ) ) {
-				if( tempDictionnaries.contains( tempCurrentDictionnary.getValue() ) ) {
-					throw new SAXException( "Erreur de syntaxe XML: 2 syntaxes de noms identiques" );
-
-				} else {
-					tempDictionnaries.add( tempCurrentDictionnary );
-					tempCurrentDictionnary = null ;
+			}
+			else if (nomElement.equals(SYNTAX))
+			{
+				if (tempDictionnaries.contains(tempCurrentDictionnary.getValue()))
+				{
+					throw new SAXException("Erreur de syntaxe XML: 2 syntaxes de noms identiques");
 				}
-
-			} else if( nomElement.equals( KEY ) ) {
-				if( tempCurrentDictionnary==null ) {
-					throw new SAXException( "Erreur de syntaxe XML" );
-
-				} else {
-					Node keys = tempCurrentDictionnary.getNode( KEY );
+				else
+				{
+					tempDictionnaries.add(tempCurrentDictionnary);
+					tempCurrentDictionnary = null;
+				}
+			}
+			else if (nomElement.equals(KEY))
+			{
+				if (tempCurrentDictionnary == null)
+				{
+					throw new SAXException("Erreur de syntaxe XML");
+				}
+				else
+				{
+					Node keys = tempCurrentDictionnary.getNode(KEY);
 					Node[] keysNode = tempCurrentKeys.getNodes();
-
-					for( int i=0; keysNode!=null && i<keysNode.length; i++ ) {
-						boolean ajout = true ;
-						String[] val1 = keysNode[i].getNodeValues( KEY_NAME_VALUE );
-						Node tmp = keys.getNode( keysNode[i].getValue() );
-
-						if( tmp!=null ) {
-							String[] val2 = tmp.getNodeValues( KEY_NAME_VALUE );
-							if( val2.length==1 && val1.length==1 && val1[0].equals( val2[0] ) )
+					for (int i = 0; keysNode != null && i < keysNode.length; i++)
+					{
+						boolean ajout = true;
+						String[] val1 = keysNode[i].getNodeValues(KEY_NAME_VALUE);
+						Node tmp = keys.getNode(keysNode[i].getValue());
+						if (tmp != null)
+						{
+							String[] val2 = tmp.getNodeValues(KEY_NAME_VALUE);
+							if (val2.length == 1 && val1.length == 1 && val1[0].equals(val2[0]))
+							{
 								ajout = false;
+							}
 						}
-
-						if( ajout ) {
-							keysNode[i].add( tempCurrentKeysEquiv );
-							keys.add( keysNode[i] );
+						if (ajout)
+						{
+							keysNode[i].add(tempCurrentKeysEquiv);
+							keys.add(keysNode[i]);
 						}
 					}
-
-					tempCurrentKeys = null ;
-					tempCurrentKeysEquiv = null ;
+					tempCurrentKeys = null;
+					tempCurrentKeysEquiv = null;
 				}
-
-			} else if( nomElement.equals( KEY_NAME ) ) {
-				tempCurrentKey.setValue( buffer );
-				tempCurrentKeys.add( tempCurrentKey );
-				tempCurrentKey = null ;
-				buffer = null ;
-
-			} else if( nomElement.equals( KEY_EQUIV ) ) {
-				tempCurrentKeyEquiv.setValue( buffer );
-				tempCurrentKeysEquiv.add( tempCurrentKeyEquiv );
-				tempCurrentKeyEquiv = null ;
+			}
+			else if (nomElement.equals(KEY_NAME))
+			{
+				tempCurrentKey.setValue(buffer);
+				tempCurrentKeys.add(tempCurrentKey);
+				tempCurrentKey = null;
+				buffer = null;
+			}
+			else if (nomElement.equals(KEY_EQUIV))
+			{
+				tempCurrentKeyEquiv.setValue(buffer);
+				tempCurrentKeysEquiv.add(tempCurrentKeyEquiv);
+				tempCurrentKeyEquiv = null;
 				buffer = null;
 			}
 		}
 	
-		public void characters( char buf[], int offset, int len ) throws SAXException {
-			buffer = new String( buf, offset, len );
+		public void characters ( char buf[], int offset, int len ) throws SAXException
+		{
+			buffer = new String(buf, offset, len);
 		}
 	
-		public void error( SAXParseException e ) throws SAXParseException { throw e; }
-		public void startDocument() throws SAXException { }
-		public void endDocument() throws SAXException { }
+		public void error ( SAXParseException e ) throws SAXParseException
+		{
+			throw e;
+		}
+
+		public void startDocument () throws SAXException
+		{
+		}
+
+		public void endDocument () throws SAXException
+		{
+		}
+
 	}
 
 }
+
