@@ -476,7 +476,7 @@ public class Schema extends Observable
 			{
 				for (Enumeration<SchemaObject> e = v.elements(); e.hasMoreElements();)
 				{
-					SchemaObject o = (SchemaObject) e.nextElement();
+					SchemaObject o = e.nextElement();
 					String[] okeys = o.getKeys();
 					if (okeys[0].compareTo(oidsk[i]) == 0)
 					{
