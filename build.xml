@@ -135,7 +135,8 @@
 		</copy>
 		<ac:for list="${CASL_PLUGINLIST}" param="plugin" keepgoing="true">
 			<sequential>
-				<copy todir="${CASL_TARGETDIR}/lib/resources" failonerror="false">
+				<mkdir dir="${CASL_TARGETDIR}/lib/resources/@{plugin}" />
+				<copy todir="${CASL_TARGETDIR}/lib/resources/@{plugin}" failonerror="false">
 					<fileset dir="src/plugin/@{plugin}/resources" />
 				</copy>
 			</sequential>
