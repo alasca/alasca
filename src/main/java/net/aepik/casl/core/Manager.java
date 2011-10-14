@@ -18,6 +18,7 @@
 
 package net.aepik.casl.core;
 
+import net.aepik.casl.Version;
 import net.aepik.casl.core.util.Config;
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,7 +65,7 @@ public class Manager
 		this.plugins = new PluginManager(this, Config.getPluginPath());
 		this.properties = new Properties();
 		this.updateAvailable = false;
-		loadProperties(configFile);
+		this.loadProperties();
 	}
 
 	/**
@@ -128,24 +129,14 @@ public class Manager
 	 * Load properties.
 	 * @param String configFile The XML configuration file path.
 	 */
-	private boolean loadProperties (String configFile) throws IOException
+	private void loadProperties ()
 	{
-		try
-		{
-			FileInputStream in = new FileInputStream(new File(configFile));
-			properties.loadFromXML(in);
-			in.close();
-			return true;
-		}
-		catch (InvalidPropertiesFormatException e)
-		{
-			throw new IOException("Error loading configuration file:\nFormat error [" + e + "]");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new IOException("Unexpected error on loading configuration file");
-		}
+		this.properties = new Properties();
+		this.properties.setProperty("FrameTitle", Version.getProjectName() + " " + Version.getVersion());
+		this.properties.setProperty("FrameStatus", "");
+		this.properties.setProperty("IconFile", Config.getResourcesPath() + "/casl.png");
+		this.properties.setProperty("PluginDir", Config.getPluginPath());
+		this.properties.setProperty("Version", Version.getVersion());
 	}
 
        /**

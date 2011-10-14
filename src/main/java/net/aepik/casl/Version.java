@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Thomas Chemineau
+ * Copyright (C) 2006-2011 Thomas Chemineau
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,9 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 package net.aepik.casl;
-
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -33,54 +31,50 @@ public class Version
 {
 
 	/**
+	 * Project name.
+	 */
+	public static final String PROJECT_NAME = "Alasca";
+
+	/**
 	 * Public URL where to find latest version.
 	 * @var String
 	 */
-	public static final String urlVersion = "http://alasca.aepik.net/version/current/";
+	public static final String URL_VERSION = "http://alasca.aepik.net/version/current/";
 
 	/**
 	 * Public URL of the website.
 	 * @var String
 	 */
-	public static final String urlWebsite = "http://www.aepik.net/projects/casl/start";
+	public static final String URL_WEBSITE = "http://alasca.aepik.net/";
 
 	/**
 	 * Current major number.
 	 * @var int
 	 */
-	public static final String major = "0";
+	public static final String MAJOR = "0";
 
 	/**
 	 * Current minor number.
 	 * @var int
 	 */
-	public static final String minor = "3";
+	public static final String MINOR = "4";
 
 	/**
 	 * Current revision number.
 	 * @var int
 	 */
-	public static final String revision = "0";
-
-	/**
-	 * Get version.
-	 * @return String
-	 */
-	public static String get ()
-	{
-		return Version.major + "." + Version.minor + "." + Version.revision;
-	}
+	public static final String REVISION = "0";
 
 	/**
 	 * Get current version.
 	 * @return String
 	 */
-	public static String getCurrent ()
+	public static String getCurrentVersion ()
 	{
 		String line;
 		try
 		{
-			URL u = new URL(urlVersion);
+			URL u = new URL(Version.URL_VERSION);
 			HttpURLConnection connection = (HttpURLConnection) u.openConnection();
 			connection.setRequestMethod("GET");
 			connection.connect();
@@ -105,16 +99,34 @@ public class Version
 	}
 
 	/**
+	 * Retrieve the project name.
+	 * @return String
+	 */
+	public static String getProjectName ()
+	{
+		return Version.PROJECT_NAME;
+	}
+
+	/**
+	 * Get version.
+	 * @return String
+	 */
+	public static String getVersion ()
+	{
+		return Version.MAJOR + "." + Version.MINOR + "." + Version.REVISION;
+	}
+
+	/**
 	 * Check if update available.
 	 * @return boolean
 	 */
-	public static boolean isCurrent ( String currentVersion )
+	public static boolean isCurrentVersion ( String currentVersion )
 	{
 		if (currentVersion == null)
 		{
 			return true;
 		}
-		if (Version.normalize(Version.get()) >= Version.normalize(currentVersion))
+		if (Version.normalizeVersion(Version.getVersion()) >= Version.normalizeVersion(currentVersion))
 		{
 			return true;
 		}
@@ -126,7 +138,7 @@ public class Version
 	 * @param String
 	 * @return int
 	 */
-	public static int normalize ( String v )
+	public static int normalizeVersion ( String v )
 	{
 		String[] s = v.split("\\.");
 		if (s.length != 3)

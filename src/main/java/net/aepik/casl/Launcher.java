@@ -81,8 +81,8 @@ public class Launcher
 		synchronized (loadingStatus)
 		{
 			this.manager = new Manager(this.configFile);
-			this.currentVersion = Version.getCurrent();
-			this.manager.setUpdateAvailable(!Version.isCurrent(this.currentVersion));
+			this.currentVersion = Version.getCurrentVersion();
+			this.manager.setUpdateAvailable(!Version.isCurrentVersion(this.currentVersion));
 			printVersion();
 			updateLoadingStatus();
 		}
@@ -151,8 +151,8 @@ public class Launcher
 
 	private void printVersion ()
 	{
-		System.out.println("CASL " + Version.get());
-		if (!Version.isCurrent(this.currentVersion))
+		System.out.println(Version.getProjectName() + " " + Version.getVersion());
+		if (!Version.isCurrentVersion(this.currentVersion))
 		{
 			System.out.println("New release " + this.currentVersion + " is available!");
 		}
