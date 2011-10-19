@@ -9,7 +9,7 @@ CASL_BIN_FILENAME="`cd \"${CASL_BIN_PATH}\" 2>/dev/null && pwd || echo \"${CASL_
 CASL_ROOT_PATH="`dirname ${CASL_BIN_FILENAME}`"
 CASL_ROOT_PATH="`dirname ${CASL_ROOT_PATH}`"
 CASL_LIB_PATH="${CASL_ROOT_PATH}/lib"
-CASL_DEBUG_ON="0"
+CASL_DEBUG_ON=0
 
 JAVA_BIN_PATH="`which java`"
 JAVA_VERSION="`${JAVA_BIN_PATH} -version 2>&1 | head -n 1 | sed -e 's/java version "\(.*\)"/\1/'`"
@@ -27,7 +27,7 @@ fi
 case "$1" in
   "--debug")
     shift
-    CASL_DEBUG_ON="1"
+    CASL_DEBUG_ON=1
     ;;
 esac
 
@@ -37,7 +37,7 @@ esac
 
 CASL_JAR="`find ${CASL_LIB_PATH} -name *.jar -print | perl -p0e 's/\n/:/g;s/:$//g'`"
 
-if [ "${CASL_DEBUG_ON}" == "1" ]; then
+if [ ${CASL_DEBUG_ON} -eq 1 ]; then
   java -cp ${CASL_JAR} net.aepik.casl.Launcher $*
 else
   java -cp ${CASL_JAR} net.aepik.casl.Launcher $* > /dev/null 2>&1
