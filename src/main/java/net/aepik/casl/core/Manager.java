@@ -59,7 +59,7 @@ public class Manager
 	 * Create a new Manager object.
 	 * @param String configFile The XML configuration file.
 	 */
-	public Manager (String configFile) throws IOException
+	public Manager () throws IOException
 	{
 		this.schemas = new SchemaManager(this);
 		this.plugins = new PluginManager(this, Config.getPluginPath());
