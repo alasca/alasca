@@ -7,7 +7,7 @@ Alasca is a tool that allows system administrators to edit and/or convert LDAP s
 Latest version
 --------------
 
-The latest stable version is 0.3, which is available for download.
+The latest stable version is 0.3, which is [available for download](https://github.com/tchemineau/alasca/downloads "Download Alasca").
 
 Features
 --------
