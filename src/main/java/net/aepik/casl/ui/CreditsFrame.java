@@ -53,7 +53,7 @@ public class CreditsFrame extends JDialog {
 
 		// - Le Logo du header -
 
-		Image imageTmp = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() +  "/casl.png" );
+		Image imageTmp = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() +  "/alasca.png" );
 		ImageIcon image = new ImageIcon( imageTmp );
 		image = new ImageIcon( imageTmp.getScaledInstance(
 				image.getIconWidth()*3/4, image.getIconHeight()*3/4, Image.SCALE_SMOOTH ) );

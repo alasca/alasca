@@ -134,7 +134,7 @@ public class Manager
 		this.properties = new Properties();
 		this.properties.setProperty("FrameTitle", Version.getProjectName() + " " + Version.getVersion());
 		this.properties.setProperty("FrameStatus", "");
-		this.properties.setProperty("IconFile", Config.getResourcesPath() + "/casl.png");
+		this.properties.setProperty("IconFile", Config.getResourcesPath() + "/alasca.png");
 		this.properties.setProperty("PluginDir", Config.getPluginPath());
 		this.properties.setProperty("Version", Version.getVersion());
 	}

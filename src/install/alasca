@@ -4,12 +4,12 @@
 #  AUTOLOAD
 # -----------------------------------------------------------------------------
 
-CASL_BIN_PATH="`dirname "$0"`"
-CASL_BIN_FILENAME="`cd \"${CASL_BIN_PATH}\" 2>/dev/null && pwd || echo \"${CASL_BIN_PATH}\"`/`basename "$0"`"
-CASL_ROOT_PATH="`dirname ${CASL_BIN_FILENAME}`"
-CASL_ROOT_PATH="`dirname ${CASL_ROOT_PATH}`"
-CASL_LIB_PATH="${CASL_ROOT_PATH}/lib"
-CASL_DEBUG_ON=0
+ALASCA_BIN_PATH="`dirname "$0"`"
+ALASCA_BIN_FILENAME="`cd \"${ALASCA_BIN_PATH}\" 2>/dev/null && pwd || echo \"${ALASCA_BIN_PATH}\"`/`basename "$0"`"
+ALASCA_ROOT_PATH="`dirname ${ALASCA_BIN_FILENAME}`"
+ALASCA_ROOT_PATH="`dirname ${ALASCA_ROOT_PATH}`"
+ALASCA_LIB_PATH="${ALASCA_ROOT_PATH}/lib"
+ALASCA_DEBUG_ON=0
 
 JAVA_BIN_PATH="`which java`"
 JAVA_VERSION="`${JAVA_BIN_PATH} -version 2>&1 | head -n 1 | sed -e 's/java version "\(.*\)"/\1/'`"
@@ -20,14 +20,14 @@ JAVA_VERSION_SHORT="`echo ${JAVA_VERSION} | cut -d "." -f 1,2 | sed -e 's/\.//'`
 # -----------------------------------------------------------------------------
 
 if [ ${JAVA_VERSION_SHORT} -lt 15 ]; then
-  export CASL_LIB_PATH
-  cd "${CASL_DIR}"
+  export ALASCA_LIB_PATH
+  cd "${ALASCA_DIR}"
 fi
 
 case "$1" in
   "--debug")
     shift
-    CASL_DEBUG_ON=1
+    ALASCA_DEBUG_ON=1
     ;;
 esac
 
@@ -35,11 +35,11 @@ esac
 #  RUN
 # -----------------------------------------------------------------------------
 
-CASL_JAR="`find ${CASL_LIB_PATH} -name *.jar -print | perl -p0e 's/\n/:/g;s/:$//g'`"
+ALASCA_JAR="`find ${ALASCA_LIB_PATH} -name *.jar -print | perl -p0e 's/\n/:/g;s/:$//g'`"
 
-if [ ${CASL_DEBUG_ON} -eq 1 ]; then
-  java -cp ${CASL_JAR} net.aepik.casl.Launcher $*
+if [ ${ALASCA_DEBUG_ON} -eq 1 ]; then
+  java -cp ${ALASCA_JAR} net.aepik.casl.Launcher $*
 else
-  java -cp ${CASL_JAR} net.aepik.casl.Launcher $* > /dev/null 2>&1
+  java -cp ${ALASCA_JAR} net.aepik.casl.Launcher $* > /dev/null 2>&1
 fi
 

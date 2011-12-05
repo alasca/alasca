@@ -88,7 +88,7 @@ public class Launcher
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(loadingStatus);
 		panel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		this.icon = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() + "/casl.png");
+		this.icon = Toolkit.getDefaultToolkit().getImage(Config.getResourcesPath() + "/alasca.png");
 		this.creditsFrame = new CreditsFrame(null, new Manager(), panel, false);
 		this.creditsFrame.setSize(300, 155);
 		this.creditsFrame.setUndecorated(true);

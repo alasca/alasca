@@ -1,0 +1,15 @@
+#!/bin/sh
+
+ALASCA_BIN_PATH="`dirname "$0"`"
+ALASCA_BIN_FILENAME="`cd \"${ALASCA_BIN_PATH}\" 2>/dev/null && pwd || echo \"${ALASCA_BIN_PATH}\"`/`basename "$0"`"
+ALASCA_ROOT_PATH="`dirname ${ALASCA_BIN_FILENAME}`"
+ALASCA_ROOT_PATH="`dirname ${ALASCA_ROOT_PATH}`"
+ALASCA_LIB_PATH="${ALASCA_ROOT_PATH}/lib"
+
+# For JDK < 1.5
+#export ALASCA_LIB_PATH
+#cd "${ALASCA_DIR}"
+
+ALASCA_JAR="`find ${ALASCA_LIB_PATH} -name *.jar -print | perl -p0e 's/\n/:/g;s/:$//g'`"
+java -cp ${ALASCA_JAR} net.aepik.casl.plugin.schemaconverter.SCTool $*
+

@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <project name="Build CASL" default="make" xmlns:ac="antlib:net.sf.antcontrib">
 
-	<property file="casl.properties" />
+	<property file="alasca.properties" />
 
-	<property name="CASL_DISTDIR" value="dist" />
-	<property name="CASL_BUILDDIR" value="${CASL_DISTDIR}/tmp" />
-	<property name="CASL_TARGETDIR" value="${CASL_DISTDIR}/target" />
-	<property name="CASL_NAME" value="casl" />
-	<property name="CASL_VERSION" value="0.4" />
-	<property name="CASL_PLUGINLIST" value="adct-autogen,schema-converter,schema-reorganizer,schema-query,uuid-autogen" />
+	<property name="ALASCA_DISTDIR" value="dist" />
+	<property name="ALASCA_BUILDDIR" value="${ALASCA_DISTDIR}/tmp" />
+	<property name="ALASCA_TARGETDIR" value="${ALASCA_DISTDIR}/target" />
+	<property name="ALASCA_NAME" value="alasca" />
+	<property name="ALASCA_VERSION" value="0.4" />
+	<property name="ALASCA_PLUGINLIST" value="adct-autogen,schema-converter,schema-reorganizer,schema-query,uuid-autogen" />
 
 	<property name="COMPILE.DEBUG" value="true" />
 	<property name="COMPILE.DEPRECATION" value="true" />
@@ -16,7 +16,7 @@
 	<property name="COMPILE.ENCODING" value="UTF8" />
 
 	<path id="compile.classpath">
-		<pathelement path="${CASL_BUILDDIR}/main" />
+		<pathelement path="${ALASCA_BUILDDIR}/main" />
 		<fileset dir="lib">
 			<include name="**/*.jar"/>
 		</fileset>
@@ -39,31 +39,31 @@
 	<taskdef name="jacobe" classname="com.tiobe.jacobe.JacobeTask" classpathref="compile.classpath"/>
 
 	<target name="clean">
-		<delete dir="${CASL_DISTDIR}" failonerror="false" />
+		<delete dir="${ALASCA_DISTDIR}" failonerror="false" />
 	</target>
 
 	<target name="prepare">
-		<mkdir dir="${CASL_TARGETDIR}/bin" />
-		<mkdir dir="${CASL_TARGETDIR}/lib/plugin" />
-		<mkdir dir="${CASL_BUILDDIR}/main" />
-		<mkdir dir="${CASL_BUILDDIR}/plugin" />
-		<mkdir dir="${CASL_BUILDDIR}/reports" />
-		<ac:for list="${CASL_PLUGINLIST}" param="plugin">
+		<mkdir dir="${ALASCA_TARGETDIR}/bin" />
+		<mkdir dir="${ALASCA_TARGETDIR}/lib/plugin" />
+		<mkdir dir="${ALASCA_BUILDDIR}/main" />
+		<mkdir dir="${ALASCA_BUILDDIR}/plugin" />
+		<mkdir dir="${ALASCA_BUILDDIR}/reports" />
+		<ac:for list="${ALASCA_PLUGINLIST}" param="plugin">
 			<sequential>
-				<mkdir dir="${CASL_BUILDDIR}/plugin/@{plugin}" />
+				<mkdir dir="${ALASCA_BUILDDIR}/plugin/@{plugin}" />
 			</sequential>
 		</ac:for>
 	</target>
 
 	<target name="check" depends="prepare">
 		<pmd rulesetfiles="basic,imports,unusedcode,strings,braces,codesize">
-			<formatter type="text" toFile="${CASL_BUILDDIR}/reports/pmd_report.log"/>
-			<formatter type="xml" toFile="${CASL_BUILDDIR}/reports/pmd_report.xml"/>
+			<formatter type="text" toFile="${ALASCA_BUILDDIR}/reports/pmd_report.log"/>
+			<formatter type="xml" toFile="${ALASCA_BUILDDIR}/reports/pmd_report.xml"/>
 			<fileset dir="src">
 				<include name="**/*.java"/>
 			</fileset>
 		</pmd>
-		<loadfile srcFile="${CASL_BUILDDIR}/reports/pmd_report.log" property="pmdreports"/>
+		<loadfile srcFile="${ALASCA_BUILDDIR}/reports/pmd_report.log" property="pmdreports"/>
 		<echo message="${pmdreports}"/>
 	</target>
 
@@ -73,7 +73,7 @@
 
 	<target name="compile" depends="prepare,check">
 		<javac srcdir="src/main"
-			destdir="${CASL_BUILDDIR}/main"
+			destdir="${ALASCA_BUILDDIR}/main"
 			debug="${COMPILE.DEBUG}"
 			debuglevel="lines,vars,source"
 			deprecation="${COMPILE.DEPRECATION}"
@@ -84,10 +84,10 @@
 			<compilerarg value="-Xlint"/>
 			<classpath refid="compile.classpath"/>
 		</javac>
-		<ac:for list="${CASL_PLUGINLIST}" param="plugin" keepgoing="true">
+		<ac:for list="${ALASCA_PLUGINLIST}" param="plugin" keepgoing="true">
 			<sequential>
 				<javac srcdir="src/plugin/@{plugin}"
-					destdir="${CASL_BUILDDIR}/plugin/@{plugin}"
+					destdir="${ALASCA_BUILDDIR}/plugin/@{plugin}"
 					debug="${COMPILE.DEBUG}"
 					debuglevel="lines,vars,source"
 					deprecation="${COMPILE.DEPRECATION}"
@@ -103,19 +103,19 @@
 	</target>
 
 	<target name="makejar" depends="clean,compile">
-		<jar destfile="${CASL_TARGETDIR}/${CASL_NAME}-${CASL_VERSION}.jar">
+		<jar destfile="${ALASCA_TARGETDIR}/${ALASCA_NAME}-${ALASCA_VERSION}.jar">
 			<manifest>
 				<attribute name="Main-Class" value="net.aepik.casl.Launcher" />
 				<attribute name="Class-Path" value="${manifest.classpath}" />
 			</manifest>
-			<fileset dir="${CASL_BUILDDIR}/main">
+			<fileset dir="${ALASCA_BUILDDIR}/main">
 				<include name="**/*.class" />
 			</fileset>
 		</jar>
-		<ac:for list="${CASL_PLUGINLIST}" param="plugin" keepgoing="true">
+		<ac:for list="${ALASCA_PLUGINLIST}" param="plugin" keepgoing="true">
 			<sequential>
-				<jar destfile="${CASL_TARGETDIR}/lib/plugin/@{plugin}-${CASL_VERSION}.jar">
-					<fileset dir="${CASL_BUILDDIR}/plugin/@{plugin}">
+				<jar destfile="${ALASCA_TARGETDIR}/lib/plugin/@{plugin}-${ALASCA_VERSION}.jar">
+					<fileset dir="${ALASCA_BUILDDIR}/plugin/@{plugin}">
 						<include name="**/*.class" />
 					</fileset>
 				</jar>
@@ -124,39 +124,39 @@
 	</target>
 
 	<target name="make" depends="makejar">
-		<move file="${CASL_TARGETDIR}/${CASL_NAME}-${CASL_VERSION}.jar" todir="${CASL_TARGETDIR}/lib" />
-		<copy todir="${CASL_TARGETDIR}/lib">
+		<move file="${ALASCA_TARGETDIR}/${ALASCA_NAME}-${ALASCA_VERSION}.jar" todir="${ALASCA_TARGETDIR}/lib" />
+		<copy todir="${ALASCA_TARGETDIR}/lib">
 			<fileset dir="lib">
 				<exclude name="build/**"/>
 			</fileset>
 		</copy>
-		<copy todir="${CASL_TARGETDIR}/lib/resources">
+		<copy todir="${ALASCA_TARGETDIR}/lib/resources">
 			<fileset dir="src/main/resources"/>
 		</copy>
-		<ac:for list="${CASL_PLUGINLIST}" param="plugin" keepgoing="true">
+		<ac:for list="${ALASCA_PLUGINLIST}" param="plugin" keepgoing="true">
 			<sequential>
-				<mkdir dir="${CASL_TARGETDIR}/lib/resources/@{plugin}" />
-				<copy todir="${CASL_TARGETDIR}/lib/resources/@{plugin}" failonerror="false">
+				<mkdir dir="${ALASCA_TARGETDIR}/lib/resources/@{plugin}" />
+				<copy todir="${ALASCA_TARGETDIR}/lib/resources/@{plugin}" failonerror="false">
 					<fileset dir="src/plugin/@{plugin}/resources" />
 				</copy>
 			</sequential>
 		</ac:for>
-		<copy todir="${CASL_TARGETDIR}/bin">
+		<copy todir="${ALASCA_TARGETDIR}/bin">
 			<fileset dir="src/install"/>
 		</copy>
 		<chmod perm="755">
-			<fileset dir="${CASL_TARGETDIR}/bin"/>
+			<fileset dir="${ALASCA_TARGETDIR}/bin"/>
 		</chmod>
 	</target>
 
 	<target name="package" depends="make">
-		<tar destfile="${CASL_DISTDIR}/${CASL_NAME}-${CASL_VERSION}.tar.gz" compression="gzip">
-			<tarfileset prefix="/${CASL_NAME}-${CASL_VERSION}/bin" dir="${CASL_TARGETDIR}/bin" filemode="755" />
-			<tarfileset prefix="/${CASL_NAME}-${CASL_VERSION}/lib" dir="${CASL_TARGETDIR}/lib"/>
-			<tarfileset prefix="/${CASL_NAME}-${CASL_VERSION}/share" dir="misc"/>
+		<tar destfile="${ALASCA_DISTDIR}/${ALASCA_NAME}-${ALASCA_VERSION}.tar.gz" compression="gzip">
+			<tarfileset prefix="/${ALASCA_NAME}-${ALASCA_VERSION}/bin" dir="${ALASCA_TARGETDIR}/bin" filemode="755" />
+			<tarfileset prefix="/${ALASCA_NAME}-${ALASCA_VERSION}/lib" dir="${ALASCA_TARGETDIR}/lib"/>
+			<tarfileset prefix="/${ALASCA_NAME}-${ALASCA_VERSION}/share" dir="misc"/>
 		</tar>
-		<delete dir="${CASL_BUILDDIR}" failonerror="false" />
-		<delete dir="${CASL_TARGETDIR}" failonerror="false" />
+		<delete dir="${ALASCA_BUILDDIR}" failonerror="false" />
+		<delete dir="${ALASCA_TARGETDIR}" failonerror="false" />
 	</target>
 
 </project>
