@@ -40,12 +40,21 @@ Alasca is the new name of the project CASL (for Convertisseur Automatique de Sch
 
 The first private version of CASL was release in 2006. In 2010, this project is released under GPL license with a new roadmap. In 2011, the name of the project has been changed. The main objective is to translate the software into English, and to support internationalization. The project is also migrated to Github.
 
-Authors
--------
+Community
+---------
 
-Thomas Chemineau - thomas.chemineau@gmail.com
+Lists:
+
+* alasca-users@googlegroups.com - General discussions and help - Start here!
+* alasca-dev@googlegroups.com - Development and project discussions
+* alasca-announce@googlegroups.com - Announcements only - Low volume
+
+Developers:
+
+* Thomas Chemineau - thomas.chemineau@gmail.com
 
 License
 -------
 
 Alasca is covered by the GPL 2 license.
+
