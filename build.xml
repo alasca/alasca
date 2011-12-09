@@ -1,27 +1,28 @@
 <?xml version="1.0"?>
-<project name="Build CASL" default="make" xmlns:ac="antlib:net.sf.antcontrib">
+<project name="Build Alasca" default="make" xmlns:ac="antlib:net.sf.antcontrib">
 
+	<!-- ================== Initialize Property Values ================= -->
+
+	<!-- Set global properties for this build -->
 	<property file="alasca.properties" />
-
 	<property name="ALASCA_DISTDIR" value="dist" />
-	<property name="ALASCA_BUILDDIR" value="${ALASCA_DISTDIR}/tmp" />
+	<property name="ALASCA_BUILDDIR" value="${ALASCA_DISTDIR}/build" />
 	<property name="ALASCA_TARGETDIR" value="${ALASCA_DISTDIR}/target" />
 	<property name="ALASCA_NAME" value="alasca" />
 	<property name="ALASCA_VERSION" value="0.4" />
 	<property name="ALASCA_PLUGINLIST" value="adct-autogen,schema-converter,schema-reorganizer,schema-query,uuid-autogen" />
-
 	<property name="COMPILE.DEBUG" value="true" />
 	<property name="COMPILE.DEPRECATION" value="true" />
 	<property name="COMPILE.OPTIMIZE" value="true" />
 	<property name="COMPILE.ENCODING" value="UTF8" />
 
+	<!-- Classpaths -->
 	<path id="compile.classpath">
 		<pathelement path="${ALASCA_BUILDDIR}/main" />
 		<fileset dir="lib">
 			<include name="**/*.jar"/>
 		</fileset>
 	</path>
-
 	<pathconvert property="manifest.classpath" pathsep=" ">
 		<path>
 			<fileset dir="lib">
@@ -31,18 +32,31 @@
 		<flattenmapper />
 	</pathconvert>
 
-	<typedef uri="antlib:net.sf.antcontrib">
-		 <classpath refid="compile.classpath" />
-	</typedef>
-
+	<!-- Types -->
+	<typedef uri="antlib:net.sf.antcontrib"><classpath refid="compile.classpath" /></typedef>
 	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="compile.classpath" />
 	<taskdef name="jacobe" classname="com.tiobe.jacobe.JacobeTask" classpathref="compile.classpath"/>
 
+	<!-- ======================== Main targets ======================== -->
+
+	<!-- Verify code -->
+	<target name="check" depends="clean,code-check" />
+
+	<!-- Clean directories -->
 	<target name="clean">
 		<delete dir="${ALASCA_DISTDIR}" failonerror="false" />
 	</target>
 
-	<target name="prepare">
+	<!-- Build sources -->
+	<target name="make" depends="clean,build-make" />
+
+	<!-- Make packages -->
+	<target name="package" depends="clean,build-packages" />
+
+	<!-- ======================== Build targets ======================== -->
+
+	<!-- Prepare environment -->
+	<target name="build-prepare">
 		<mkdir dir="${ALASCA_TARGETDIR}/bin" />
 		<mkdir dir="${ALASCA_TARGETDIR}/lib/plugin" />
 		<mkdir dir="${ALASCA_BUILDDIR}/main" />
@@ -55,23 +69,8 @@
 		</ac:for>
 	</target>
 
-	<target name="check" depends="prepare">
-		<pmd rulesetfiles="basic,imports,unusedcode,strings,braces,codesize">
-			<formatter type="text" toFile="${ALASCA_BUILDDIR}/reports/pmd_report.log"/>
-			<formatter type="xml" toFile="${ALASCA_BUILDDIR}/reports/pmd_report.xml"/>
-			<fileset dir="src">
-				<include name="**/*.java"/>
-			</fileset>
-		</pmd>
-		<loadfile srcFile="${ALASCA_BUILDDIR}/reports/pmd_report.log" property="pmdreports"/>
-		<echo message="${pmdreports}"/>
-	</target>
-
-	<target name="beautify">
-		<jacobe input="src" cfg="src/build/jacobe.cfg" javadoc="private" quiet="false" overwrite="true" nobackup="true" />
-	</target>
-
-	<target name="compile" depends="prepare,check">
+	<!-- Compile main sources and plugins -->
+	<target name="build-compile" depends="build-prepare">
 		<javac srcdir="src/main"
 			destdir="${ALASCA_BUILDDIR}/main"
 			debug="${COMPILE.DEBUG}"
@@ -102,7 +101,8 @@
 		</ac:for>
 	</target>
 
-	<target name="makejar" depends="clean,compile">
+	<!-- Creating jar files -->
+	<target name="build-makejar" depends="build-compile">
 		<jar destfile="${ALASCA_TARGETDIR}/${ALASCA_NAME}-${ALASCA_VERSION}.jar">
 			<manifest>
 				<attribute name="Main-Class" value="net.aepik.alasca.Launcher" />
@@ -123,7 +123,8 @@
 		</ac:for>
 	</target>
 
-	<target name="make" depends="makejar">
+	<!-- Build sources -->
+	<target name="build-make" depends="build-makejar">
 		<move file="${ALASCA_TARGETDIR}/${ALASCA_NAME}-${ALASCA_VERSION}.jar" todir="${ALASCA_TARGETDIR}/lib" />
 		<copy todir="${ALASCA_TARGETDIR}/lib">
 			<fileset dir="lib">
@@ -149,14 +150,42 @@
 		</chmod>
 	</target>
 
-	<target name="package" depends="make">
-		<tar destfile="${ALASCA_DISTDIR}/${ALASCA_NAME}-${ALASCA_VERSION}.tar.gz" compression="gzip">
+	<!-- Make binaries and sources pckages -->
+	<target name="build-packages" depends="build-make">
+		<tar destfile="${ALASCA_DISTDIR}/${ALASCA_NAME}-${ALASCA_VERSION}-bin.tar.gz" compression="gzip">
 			<tarfileset prefix="/${ALASCA_NAME}-${ALASCA_VERSION}/bin" dir="${ALASCA_TARGETDIR}/bin" filemode="755" />
 			<tarfileset prefix="/${ALASCA_NAME}-${ALASCA_VERSION}/lib" dir="${ALASCA_TARGETDIR}/lib"/>
 			<tarfileset prefix="/${ALASCA_NAME}-${ALASCA_VERSION}/share" dir="misc"/>
 		</tar>
+		<tar destfile="${ALASCA_DISTDIR}/${ALASCA_NAME}-${ALASCA_VERSION}-src.tar.gz" compression="gzip">
+			<tarfileset prefix="/${ALASCA_NAME}-${ALASCA_VERSION}-src" dir=".">
+				<include name="**/*.*"/>
+				<exclude name="**/.*"/>
+				<exclude name="dist/**"/>
+			</tarfileset>
+		</tar>
 		<delete dir="${ALASCA_BUILDDIR}" failonerror="false" />
 		<delete dir="${ALASCA_TARGETDIR}" failonerror="false" />
+	</target>
+
+	<!-- ======================= Quality targets ======================= -->
+
+	<!-- Cleaning code -->
+	<target name="code-beautify">
+		<jacobe input="src" cfg="src/build/jacobe.cfg" javadoc="private" quiet="false" overwrite="true" nobackup="true" />
+	</target>
+
+	<!-- Verify code complexity -->
+	<target name="code-check" depends="build-prepare">
+		<pmd rulesetfiles="basic,imports,unusedcode,strings,braces,codesize">
+			<formatter type="text" toFile="${ALASCA_BUILDDIR}/reports/pmd_report.log"/>
+			<formatter type="xml" toFile="${ALASCA_BUILDDIR}/reports/pmd_report.xml"/>
+			<fileset dir="src">
+				<include name="**/*.java"/>
+			</fileset>
+		</pmd>
+		<loadfile srcFile="${ALASCA_BUILDDIR}/reports/pmd_report.log" property="pmdreports"/>
+		<echo message="${pmdreports}"/>
 	</target>
 
 </project>
