@@ -19,7 +19,7 @@
 
 package net.aepik.alasca.plugin.schemaconverter.core;
 
-import net.aepik.alasca.core.util.Node;
+import net.aepik.alasca.util.Node;
 import java.io.File;
 import java.util.Enumeration;
 import javax.xml.parsers.SAXParserFactory;

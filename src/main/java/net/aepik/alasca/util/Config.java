@@ -17,7 +17,7 @@
  */
 
 
-package net.aepik.alasca.core.util;
+package net.aepik.alasca.util;
 
 import java.io.File;
 import java.util.Map;

@@ -19,7 +19,7 @@
 package net.aepik.alasca;
 
 import net.aepik.alasca.core.Manager;
-import net.aepik.alasca.core.util.Config;
+import net.aepik.alasca.util.Config;
 import net.aepik.alasca.gui.CreditsFrame;
 import net.aepik.alasca.gui.ManagerFrame;
 import net.aepik.alasca.gui.ManagerListener;

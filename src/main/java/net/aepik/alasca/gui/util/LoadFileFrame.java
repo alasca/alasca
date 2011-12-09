@@ -22,7 +22,7 @@ import net.aepik.alasca.core.ldap.Schema;
 import net.aepik.alasca.core.ldap.SchemaFile;
 import net.aepik.alasca.core.SchemaManager;
 import net.aepik.alasca.core.ldap.SchemaSyntax;
-import net.aepik.alasca.core.util.Pref;
+import net.aepik.alasca.util.Pref;
 import net.aepik.alasca.gui.ManagerFrame;
 import net.aepik.alasca.gui.util.DescriptiveInternalFrame;
 import org.apache.commons.lang3.text.WordUtils;

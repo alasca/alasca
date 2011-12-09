@@ -26,7 +26,7 @@ import net.aepik.alasca.core.ldap.SchemaFile;
 import net.aepik.alasca.core.ldap.SchemaFileWriter;
 import net.aepik.alasca.core.SchemaManager;
 import net.aepik.alasca.core.ldap.SchemaSyntax;
-import net.aepik.alasca.core.util.Config;
+import net.aepik.alasca.util.Config;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;

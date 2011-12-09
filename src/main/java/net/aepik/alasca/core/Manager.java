@@ -19,7 +19,7 @@
 package net.aepik.alasca.core;
 
 import net.aepik.alasca.Version;
-import net.aepik.alasca.core.util.Config;
+import net.aepik.alasca.util.Config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

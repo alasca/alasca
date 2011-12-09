@@ -17,7 +17,7 @@
  */
 
 
-package net.aepik.alasca.core.util;
+package net.aepik.alasca.util;
 
 import java.util.prefs.Preferences;
 import java.util.Vector;

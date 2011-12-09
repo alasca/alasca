@@ -21,7 +21,7 @@ package net.aepik.alasca.gui;
 
 import net.aepik.alasca.Version;
 import net.aepik.alasca.core.Manager;
-import net.aepik.alasca.core.util.Config;
+import net.aepik.alasca.util.Config;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;

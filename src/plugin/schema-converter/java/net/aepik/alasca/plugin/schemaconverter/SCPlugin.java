@@ -24,7 +24,7 @@ import net.aepik.alasca.plugin.schemaconverter.core.Translator;
 import net.aepik.alasca.plugin.schemaconverter.gui.SchemaConverterFrame;
 import net.aepik.alasca.plugin.schemaconverter.gui.SchemaConverterListener;
 import net.aepik.alasca.core.PluginImpl;
-import net.aepik.alasca.core.util.Config;
+import net.aepik.alasca.util.Config;
 import net.aepik.alasca.core.ldap.Schema;
 import net.aepik.alasca.core.SchemaManager;
 import net.aepik.alasca.core.ldap.SchemaSyntax;

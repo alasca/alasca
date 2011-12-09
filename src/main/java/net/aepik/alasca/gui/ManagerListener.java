@@ -20,8 +20,8 @@
 package net.aepik.alasca.gui;
 
 import net.aepik.alasca.core.Manager;
-import net.aepik.alasca.core.util.Config;
-import net.aepik.alasca.core.util.Pref;
+import net.aepik.alasca.util.Config;
+import net.aepik.alasca.util.Pref;
 import net.aepik.alasca.gui.ldap.SchemaManagerListener;
 import net.aepik.alasca.gui.ldap.SchemaManagerPanel;
 import net.aepik.alasca.gui.util.LoadFileFrame;
