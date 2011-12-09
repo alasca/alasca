@@ -11,5 +11,5 @@ ALASCA_LIB_PATH="${ALASCA_ROOT_PATH}/lib"
 #cd "${ALASCA_DIR}"
 
 ALASCA_JAR="`find ${ALASCA_LIB_PATH} -name *.jar -print | perl -p0e 's/\n/:/g;s/:$//g'`"
-java -cp ${ALASCA_JAR} net.aepik.casl.plugin.schemaquery.SchemaQueryTool $*
+java -cp ${ALASCA_JAR} net.aepik.alasca.plugin.schemaquery.SchemaQueryTool $*
 

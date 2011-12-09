@@ -38,8 +38,8 @@ esac
 ALASCA_JAR="`find ${ALASCA_LIB_PATH} -name *.jar -print | perl -p0e 's/\n/:/g;s/:$//g'`"
 
 if [ ${ALASCA_DEBUG_ON} -eq 1 ]; then
-  java -cp ${ALASCA_JAR} net.aepik.casl.Launcher $*
+  java -cp ${ALASCA_JAR} net.aepik.alasca.Launcher $*
 else
-  java -cp ${ALASCA_JAR} net.aepik.casl.Launcher $* > /dev/null 2>&1
+  java -cp ${ALASCA_JAR} net.aepik.alasca.Launcher $* > /dev/null 2>&1
 fi
 

@@ -105,7 +105,7 @@
 	<target name="makejar" depends="clean,compile">
 		<jar destfile="${ALASCA_TARGETDIR}/${ALASCA_NAME}-${ALASCA_VERSION}.jar">
 			<manifest>
-				<attribute name="Main-Class" value="net.aepik.casl.Launcher" />
+				<attribute name="Main-Class" value="net.aepik.alasca.Launcher" />
 				<attribute name="Class-Path" value="${manifest.classpath}" />
 			</manifest>
 			<fileset dir="${ALASCA_BUILDDIR}/main">
