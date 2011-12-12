@@ -38,7 +38,7 @@ public class Version
 	/**
 	 * Public URL where to find latest version.
 	 */
-	public static final String URL_VERSION = "http://alasca.aepik.net/version/current/";
+	public static final String URL_VERSION = "http://alasca.github.com/VERSION.txt";
 
 	/**
 	 * Public URL of the website.
