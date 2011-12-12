@@ -6,12 +6,14 @@ Alasca is a tool that allows system administrators to edit and/or convert LDAP
 schemas to be used in different LDAP server technologies. Alasca is usefull in
 LDAP migration projects.
 
-More informations are available online at [http://alasca.github.com/].
+More informations are available online at http://alasca.github.com/.
 
 Latest version
 --------------
 
-The latest stable version is 0.4, which is [available for download](https://github.com/alasca/alasca/downloads "Download Alasca").
+The latest stable version is 0.4, which is available for download at
+http://alasca.github.com/download.html.
+
 The release 0.4 corresponds to the name change of the project.
 
 Features
