@@ -9,7 +9,7 @@
 	<property name="ALASCA_BUILDDIR" value="${ALASCA_DISTDIR}/build" />
 	<property name="ALASCA_TARGETDIR" value="${ALASCA_DISTDIR}/target" />
 	<property name="ALASCA_NAME" value="alasca" />
-	<property name="ALASCA_VERSION" value="0.4" />
+	<property name="ALASCA_VERSION" value="0.4.1" />
 	<property name="ALASCA_PLUGINLIST" value="adct-autogen,schema-converter,schema-reorganizer,schema-query,uuid-autogen" />
 	<property name="COMPILE.DEBUG" value="true" />
 	<property name="COMPILE.DEPRECATION" value="true" />

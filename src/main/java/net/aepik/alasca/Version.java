@@ -58,7 +58,7 @@ public class Version
 	/**
 	 * Current revision number.
 	 */
-	public static final String REVISION = "0";
+	public static final String REVISION = "1";
 
 	/**
 	 * Get current version retrieved from website.
